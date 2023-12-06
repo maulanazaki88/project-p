@@ -1,0 +1,108 @@
+import s from "./TaskCard.module.css";
+import React from "react";
+import { TaskPriorityType } from "@/type";
+import Context from "@/context/Store";
+import Image from "next/image";
+import Avatar from "../avatar/Avatar";
+
+interface TaskCardProps {
+  name: string;
+  w_id: string;
+  assigned_member: string[];
+  priority: TaskPriorityType;
+  description: string;
+  deadline: string;
+  comments_count: number;
+}
+
+const color_list = ["#F99370", "#F4D4BE", "#A523A2"];
+
+const TaskCard: React.FC<TaskCardProps> = (props) => {
+  const ctx = React.useContext(Context);
+
+  const user_workspaces = ctx?.user_workspaces_ctx;
+
+  const workspace_name =
+    user_workspaces &&
+    user_workspaces.find((workspace) => workspace.w_id === props.w_id)?.name;
+
+  return (
+    <div className={s.card}>
+      <div className={s.top}>
+        <div className={[s.workspaceName, "bold", "sm", "soft"].join(" ")}>
+          {workspace_name}
+        </div>
+        <div
+          className={s.priority}
+          style={{
+            backgroundColor:
+              props.priority === "HIGH"
+                ? "red"
+                : props.priority === "MED"
+                ? "yellow"
+                : "green",
+          }}
+        >
+          <span className={[s.text, "medium", "sm"].join(" ")}>
+            {props.priority}
+          </span>
+        </div>
+      </div>
+      <div className={s.content}>
+        <h4 className={[s.title, "medium", "md"].join(" ")}>{props.name}</h4>
+        <p className={[s.desc, "sm", "medium"].join(" ")}>
+          {props.description}
+        </p>
+      </div>
+      <div className={s.bottom}>
+        <ul className={s.assigned_member}>
+          {props.assigned_member.map((name, index) => {
+            return (
+              <li
+                className={s.member}
+                style={{ translate: `${index * 15}px 0px` }}
+              >
+                <Avatar
+                  bg_color={
+                    color_list[(index + color_list.length) % color_list.length]
+                  }
+                  txt_color="#fff"
+                  username={name}
+                  withBorder
+                />
+              </li>
+            );
+          })}
+        </ul>
+        <div className={s.info}>
+          <div className={s.subInfo}>
+            <Image
+              src={"/icons/comment.svg"}
+              alt="comment"
+              width={16}
+              height={16}
+              className={s.icon}
+            />
+            <span className={[s.text, "medium", "sm", "blend"].join(" ")}>
+              {props.comments_count}
+            </span>
+          </div>
+          <div className={s.subInfo}>
+            <Image
+              src={"/icons/calendar.svg"}
+              alt="calendar"
+              width={16}
+              height={16}
+              className={s.icon}
+            />
+            <span className={[s.text, "medium", "sm", "blend"].join(" ")}>
+              {props.deadline}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TaskCard;

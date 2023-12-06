@@ -1,0 +1,15 @@
+.btn{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    padding: 0 25px;
+    height: 36px;
+}
+
+.text{
+    position: relative;
+}

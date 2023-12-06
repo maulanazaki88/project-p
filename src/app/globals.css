@@ -87,12 +87,8 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: #fff;
+ 
 }
 
 a {
@@ -105,3 +101,47 @@ a {
     color-scheme: dark;
   }
 }
+
+/* global font */
+@media screen and (max-width: 425px){
+  .x-big{
+    font-size: 30px;
+  }
+
+  .big{
+    font-size: 24px;
+  }
+
+  .md{
+    font-size: 18px;
+  }
+
+  .sm{
+    font-size: 12px;
+  }
+
+  .soft{
+    opacity: 0.5;
+  }
+
+  .blend{
+    opacity: 0.8
+  }
+
+  .light{
+    font-weight: 400;
+  }
+
+  .regular{
+    font-weight: 500;
+  }
+
+  .medium{
+    font-weight: 600;
+  }
+
+  .bold{
+    font-weight: 800
+  }
+}
+

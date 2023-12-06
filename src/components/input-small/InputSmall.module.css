@@ -1,0 +1,58 @@
+.comp{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.label{
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.field{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 88vw;
+    min-width: 200px;
+    background-color: rgba(0, 0, 0, 0.08);
+    border: none;
+    outline: none;
+    border-radius: 8;
+    height: 60px;
+    padding: 0 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.icon{
+    position: relative;
+    display: block;
+    margin-right: 15px;
+    opacity: 0.5;
+}
+
+
+.input{
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: rgba(0, 0, 0, 0.5);
+    
+
+}
+
+.warning{
+    position: relative;
+    color: red;
+    
+}
