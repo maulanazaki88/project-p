@@ -11,6 +11,7 @@ export interface ContextType {
   user_task_handler_ctx: React.Dispatch<TaskType[]>;
   task_comments_ctx: CommentType | null;
   task_comment_handler: React.Dispatch<CommentType>;
+  display_width_ctx: number;
 }
 
 const Context = React.createContext<ContextType | null>(null);
@@ -58,14 +59,14 @@ export function ContextProvider(props: any) {
       activity_list: [],
       assigned_member: ["maulana", "tuslam"],
       category: "Riset",
-      comments_id: "comments-2",
+      comments_id: "comments-2-1",
       comments_count: 0,
       created_at: "",
-      deadline: "2024-01-02",
+      deadline: "2024-1-2",
       description: "Mencari referensi untuk paper kalkulus",
       priority: "HIGH",
       seen_by: [],
-      status: "ON-PROGRESS",
+      status: "IN-PROGRESS",
       t_id: "task-2",
       title: "Mencari Referensi",
       w_id: "workspace-2",
@@ -74,21 +75,119 @@ export function ContextProvider(props: any) {
       activity_list: [],
       assigned_member: ["maulana"],
       category: "Design",
-      comments_id: "comments-1",
+      comments_id: "comments-1-1",
       created_at: "",
-      deadline: "2024-01-02",
+      deadline: "2024-1-2",
       description: "Membuat design power point",
       priority: "HIGH",
       seen_by: [],
-      status: "ON-PROGRESS",
+      status: "IN-PROGRESS",
       t_id: "task-1",
       title: "Design PPT",
       w_id: "workspace-1",
       comments_count: 0,
     },
+
+    {
+      activity_list: [],
+      assigned_member: ["mamet"],
+      category: "Frontend",
+      comments_id: "comments-1-2",
+      created_at: "",
+      deadline: "2024-1-2",
+      description: "Mampus mwehehehe",
+      priority: "HIGH",
+      seen_by: [],
+      status: "REVISED",
+      t_id: "task-2",
+      title: "Coding Frontend",
+      w_id: "workspace-1",
+      comments_count: 0,
+    },
+    {
+      activity_list: [],
+      assigned_member: ["mamet", "jodi"],
+      category: "Backend",
+      comments_id: "comments-1-3",
+      created_at: "",
+      deadline: "2024-1-2",
+      description: "Mampus bgt mwehehehe",
+      priority: "HIGH",
+      seen_by: [],
+      status: "NEXT-UP",
+      t_id: "task-3",
+      title: "Prepare API",
+      w_id: "workspace-1",
+      comments_count: 0,
+    },
+    {
+      activity_list: [],
+      assigned_member: ["mamet", "jodi", "tuslam"],
+      category: "Design",
+      comments_id: "comments-1-4",
+      created_at: "",
+      deadline: "2024-1-2",
+      description: "Modyarrr mwehehehe",
+      priority: "MED",
+      seen_by: [],
+      status: "COMPLETED",
+      t_id: "task-4",
+      title: "Design Logo",
+      w_id: "workspace-1",
+      comments_count: 0,
+    },
+    {
+      activity_list: [],
+      assigned_member: ["jodi", "tuslam"],
+      category: "Dashboard Evaluasi",
+      comments_id: "comments-1-5",
+      created_at: "",
+      deadline: "2024-1-2",
+      description: "Pinjam dulu seratus mwehehehe",
+      priority: "LOW",
+      seen_by: [],
+      status: "IN-PROGRESS",
+      t_id: "task-5",
+      title: "Design Logo",
+      w_id: "workspace-1",
+      comments_count: 0,
+    },
+    {
+      activity_list: [],
+      assigned_member: ["mamet", "jodi", "tuslam"],
+      category: "Login System",
+      comments_id: "comments-1-6",
+      created_at: "",
+      deadline: "2024-1-2",
+      description: "Kiw kiw cukurukuk",
+      priority: "HIGH",
+      seen_by: [],
+      status: "IN-PROGRESS",
+      t_id: "task-6",
+      title: "Design Logo",
+      w_id: "workspace-1",
+      comments_count: 0,
+    },
   ]);
 
-  const [task_comments, set_task_comments] = React.useState<CommentType | null>(null);
+  const [task_comments, set_task_comments] = React.useState<CommentType | null>(
+    null
+  );
+
+  const [display_width, set_display_width] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    const getWidth = () => {
+      const width = window.innerWidth;
+      if (width) {
+        set_display_width(width);
+      }
+    };
+
+    getWidth();
+
+    window.addEventListener("resize", getWidth);
+  }, []);
 
   const context: ContextType = {
     user_data_ctx: user_data,
@@ -98,7 +197,8 @@ export function ContextProvider(props: any) {
     user_task_ctx: user_task,
     user_task_handler_ctx: set_user_task,
     task_comments_ctx: task_comments,
-    task_comment_handler: set_task_comments
+    task_comment_handler: set_task_comments,
+    display_width_ctx: display_width,
   };
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;

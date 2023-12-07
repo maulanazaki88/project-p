@@ -4,6 +4,7 @@ import { TaskPriorityType } from "@/type";
 import Context from "@/context/Store";
 import Image from "next/image";
 import Avatar from "../avatar/Avatar";
+import { useCalendar } from "@/hook/useCalendar";
 
 interface TaskCardProps {
   name: string;
@@ -59,8 +60,9 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
           {props.assigned_member.map((name, index) => {
             return (
               <li
+                key={`member-${index}`}
                 className={s.member}
-                style={{ translate: `${index * 15}px 0px` }}
+                style={{ translate: `${index * -15}px 0px` }}
               >
                 <Avatar
                   bg_color={
@@ -96,7 +98,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
               className={s.icon}
             />
             <span className={[s.text, "medium", "sm", "blend"].join(" ")}>
-              {props.deadline}
+              {useCalendar(props.deadline, ["d", "m"])}
             </span>
           </div>
         </div>

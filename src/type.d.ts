@@ -2,7 +2,7 @@
 
 export type WorkspaceStatusType = "ON-GOING" | "EVALUATION" | "COMPLETE" | "INACTIVE";
 export type TaskPriorityType = "HIGH" | "MED" | "LOW";
-export type ProgressStatusType = "NEXT-UP" | "ON-PROGRESS" | "COMPLETED" | "REVISED";
+export type ProgressStatusType = "NEXT-UP" | "IN-PROGRESS" | "COMPLETED" | "REVISED";
 export type ChatReferenceStatusType = "REPLY" | "DEFAULT";
 export type ChatSentStatusType = "SENT" | "POSTPONED" | "SENDING" | "NOT-SENT";
 export type ActivityType = "CREATE" | "DELETE" | "EDIT" | "READ";

@@ -10,3 +10,12 @@
     
 }
 
+.green_light{
+    position: absolute;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    width: 40%;
+    background-color: rgb(12, 179, 12);
+    bottom: 0%;
+    right: 5%;
+}

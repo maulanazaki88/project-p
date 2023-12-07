@@ -12,7 +12,7 @@ interface WorkspaceCardProps {
   bg_color: string;
 }
 
-const color_list = ["#F99370", "#F4D4BE", "#A523A2"];
+export const color_list = ["#F99370", "#F4D4BE", "#A523A2"];
 
 const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
   return (

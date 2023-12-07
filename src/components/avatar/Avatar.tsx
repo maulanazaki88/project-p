@@ -19,7 +19,10 @@ const Avatar: React.FC<AvatarProps> = (props) => {
       }}
       className={s.avatar}
     >
-      {props.username.toLocaleUpperCase().slice(0, 2)}
+      <span className={s.text}>
+        {props.username.toLocaleUpperCase().slice(0, 2)}
+      </span>
+      {props.isOnline && <div className={s.green_light} />}
     </div>
   );
 };

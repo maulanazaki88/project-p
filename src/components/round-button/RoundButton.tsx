@@ -7,6 +7,7 @@ interface RoundButtonProps {
   opacity: number;
   icon: string;
   rotate?: number;
+  scale?: number;
 }
 
 const RoundButton: React.FC<RoundButtonProps> = (props) => {
@@ -24,7 +25,7 @@ const RoundButton: React.FC<RoundButtonProps> = (props) => {
         width={18}
         height={18}
         className={s.icon}
-        style={{opacity: props.opacity,}}
+        style={{ opacity: props.opacity, scale: props.scale ? props.scale : 1 }}
       />
     </button>
   );
