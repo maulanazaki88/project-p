@@ -1,0 +1,64 @@
+.card{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 88vw;
+    border-radius: 12px;
+    background-color: #BAE0EE;
+}
+
+.label {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 12px 12px 12px 12px;
+    background-color: #3C8FAD;
+    width: 100%;
+    height: 32px;
+}
+
+.date{
+    position: relative;
+    color: #fff;
+    margin-left: 10px;
+}
+
+.content{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.list{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    list-style: none;
+    padding: 10px;
+}
+
+.item{
+    position: relative;
+    display: flex;
+    margin-bottom: 5px;
+    
+}
+
+.name, .workspace{
+    position: relative;
+    color: #000;
+}
+
+.workspace{
+    margin-left: 5px;
+}

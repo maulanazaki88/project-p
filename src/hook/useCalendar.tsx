@@ -13,11 +13,12 @@ export function useCalendar(date: string, type: CalendarType) {
     "Apr",
     "May",
     "Jun",
+    "Jul",
     "Aug",
     "Sep",
     "Oct",
     "Nov",
-    "Des",
+    "Dec",
   ];
 
   if (type.some((c) => c === "y")) {

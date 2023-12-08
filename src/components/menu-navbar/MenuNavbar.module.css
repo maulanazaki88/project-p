@@ -1,8 +1,4 @@
-.ctn{
-    position: relative;
-    width: 100%;
-    display: flex;
-}
+
 .navbar {
     position: fixed;
     display: flex;

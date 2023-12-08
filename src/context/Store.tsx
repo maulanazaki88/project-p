@@ -94,7 +94,7 @@ export function ContextProvider(props: any) {
       category: "Frontend",
       comments_id: "comments-1-2",
       created_at: "",
-      deadline: "2024-1-2",
+      deadline: "2024-2-3",
       description: "Mampus mwehehehe",
       priority: "HIGH",
       seen_by: [],
@@ -110,7 +110,7 @@ export function ContextProvider(props: any) {
       category: "Backend",
       comments_id: "comments-1-3",
       created_at: "",
-      deadline: "2024-1-2",
+      deadline: "2024-2-3",
       description: "Mampus bgt mwehehehe",
       priority: "HIGH",
       seen_by: [],
@@ -126,7 +126,7 @@ export function ContextProvider(props: any) {
       category: "Design",
       comments_id: "comments-1-4",
       created_at: "",
-      deadline: "2024-1-2",
+      deadline: "2024-3-4",
       description: "Modyarrr mwehehehe",
       priority: "MED",
       seen_by: [],
@@ -142,7 +142,7 @@ export function ContextProvider(props: any) {
       category: "Dashboard Evaluasi",
       comments_id: "comments-1-5",
       created_at: "",
-      deadline: "2024-1-2",
+      deadline: "2024-3-4",
       description: "Pinjam dulu seratus mwehehehe",
       priority: "LOW",
       seen_by: [],
@@ -158,7 +158,7 @@ export function ContextProvider(props: any) {
       category: "Login System",
       comments_id: "comments-1-6",
       created_at: "",
-      deadline: "2024-1-2",
+      deadline: "2024-4-5",
       description: "Kiw kiw cukurukuk",
       priority: "HIGH",
       seen_by: [],
@@ -181,6 +181,7 @@ export function ContextProvider(props: any) {
       const width = window.innerWidth;
       if (width) {
         set_display_width(width);
+        console.log("display width: " + width);
       }
     };
 

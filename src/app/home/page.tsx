@@ -7,6 +7,9 @@ import InputSmall from "@/components/input-small/InputSmall";
 import SquareButton from "@/components/square-button/SquareButton";
 import WorkspaceCard from "@/components/workspace-card/WorkspaceCard";
 import TaskCard from "@/components/task-card/TaskCard";
+import CardMenu from "@/components/card-menu/CardMenu";
+import { CalendarCardProps } from "@/components/calender-card/CalendarCard";
+import { NotificationCardProps } from "@/components/notification-card/NotificationCard";
 
 const Home: React.FC = () => {
   const ctx = React.useContext(Context) as ContextType;
@@ -16,16 +19,67 @@ const Home: React.FC = () => {
   const user_task = ctx.user_task_ctx;
 
   const [searchInput, setSearchInput] = React.useState<string>("");
+  const [calendarMenuActive, setCalendarMenuActive] =
+    React.useState<boolean>(true);
+  const [notificationMenuActive, setNotificationMenuActive] =
+    React.useState<boolean>(false);
 
   const color_list = ["#BAE0EE", "#E2D3FE", "rgba(28, 6, 45, 0.2)"];
 
   const searchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   };
+
+  const deadlines =
+    user_task &&
+    user_task.map((task, index) => {
+      return task.deadline;
+    });
+
+  const deadlines_set = new Set(deadlines);
+
+  const deadlines_set_arr = Array.from(deadlines_set);
+
+  const calendar_list =
+    deadlines_set_arr &&
+    deadlines_set_arr.map((d, index) => {
+      return {
+        date: d,
+        task_list: user_task
+          ? user_task.filter((task) => task.deadline === d)
+          : [],
+      } as CalendarCardProps;
+    });
+
+  const notification_list: NotificationCardProps[] = [
+    {
+      date: "2023-12-2",
+      text: "Hey I just changed the whole deadline, check it soon!",
+      username: "maulana",
+      w_id: "workspace-1",
+    },
+    {
+      date: "2023-12-2",
+      text: "Hey I just add new member check it soon!",
+      username: "maulana",
+      w_id: "workspace-2",
+    },
+  ];
+
   if (user_data) {
     return (
       <>
         <HomeNavbar username="maulana" />
+        <CardMenu
+          isActive={calendarMenuActive && !notificationMenuActive}
+          calendar_list={calendar_list}
+          title={"Kalender"}
+        />
+        <CardMenu
+          isActive={!calendarMenuActive && notificationMenuActive}
+          notification_list={notification_list}
+          title={"Notifikasi"}
+        />
         <main className={s.main}>
           <h2 className={[s.header, "big", "medium"].join(" ")}>
             Selamat datang, {user_data.username}!

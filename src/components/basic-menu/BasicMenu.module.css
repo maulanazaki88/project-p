@@ -1,5 +1,5 @@
 .menu {
-    position: absolute;
+    position: fixed;
     display: flex;
     width: 100vw;
     height: 100vh;
@@ -10,6 +10,7 @@
     align-items: center;
     justify-content: flex-start;
     z-index: 99999;
+    transition: all 0.3s ease-out;
     
 }
 

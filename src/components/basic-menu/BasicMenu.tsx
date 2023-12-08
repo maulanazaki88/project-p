@@ -15,7 +15,7 @@ interface BasicMenuProps {
 
 const BasicMenu: React.FC<BasicMenuProps> = (props) => {
   return (
-    <div className={s.menu}>
+    <div className={s.menu} style={{left: props.isActive ? `0` : `100%`}} >
       <MenuNavbar title={props.title} />
       <ul className={s.button_list}>
         {props.button_list.map((btn, index) => {

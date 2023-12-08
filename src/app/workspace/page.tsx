@@ -41,22 +41,26 @@ const WorkspacePage: React.FC = () => {
     }
   };
 
-  const pointerUpHandler = (e: React.TouchEvent<HTMLDivElement>) => {
-    const screen = screenRef.current;
-    if (display_width && screen) {
-      const mid_point = display_width / 2;
-      const scrollLeft = screen.scrollLeft;
-      if (scrollLeft < mid_point) {
-        screen.scrollTo({ left: 0, behavior: "smooth" });
-      } else if (scrollLeft > mid_point && scrollLeft < mid_point * 3) {
-        screen.scrollTo({ left: display_width, behavior: "smooth" });
-      } else if (scrollLeft > mid_point * 3 && scrollLeft < mid_point * 5) {
-        screen.scrollTo({ left: display_width * 2, behavior: "smooth" });
-      } else if (scrollLeft > mid_point * 5) {
-        screen.scrollTo({ left: display_width * 3, behavior: "smooth" });
+  const pointerUpHandler = React.useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      const screen = screenRef.current;
+      if (display_width && screen) {
+        const mid_point = display_width / 2;
+        const scrollLeft = screen.scrollLeft;
+        if (scrollLeft < mid_point) {
+          
+          screen.scrollTo({ left: 0, behavior: "smooth" });
+        } else if (scrollLeft > mid_point && scrollLeft < mid_point * 3) {
+          screen.scrollTo({ left: display_width, behavior: "smooth" });
+        } else if (scrollLeft > mid_point * 3 && scrollLeft < mid_point * 5) {
+          screen.scrollTo({ left: display_width * 2, behavior: "smooth" });
+        } else if (scrollLeft > mid_point * 5) {
+          screen.scrollTo({ left: display_width * 3, behavior: "smooth" });
+        }
       }
-    }
-  };
+    },
+    [display_width]
+  );
 
   const NextUpViews = next_up ? (
     next_up.map((task, index) => {
@@ -165,7 +169,6 @@ const WorkspacePage: React.FC = () => {
       color: "",
       text: "Salin Link",
       icon: "/icons/copy_black.svg",
-      
     },
   ];
 
@@ -188,7 +191,7 @@ const WorkspacePage: React.FC = () => {
     },
   ];
 
-  const [isMenuActive, setIsMenuActive] = React.useState<boolean>(true);
+  const [isMenuActive, setIsMenuActive] = React.useState<boolean>(false);
 
   return (
     <>
