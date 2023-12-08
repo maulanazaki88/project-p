@@ -1,5 +1,3 @@
-import React from "react";
-
 type CalendarType = ("y" | "m" | "d")[];
 
 export function useCalendar(date: string, type: CalendarType) {
@@ -25,6 +23,6 @@ export function useCalendar(date: string, type: CalendarType) {
   if (type.some((c) => c === "y")) {
     return `${year}-${month}-${day}`;
   } else {
-    return `${day} ${months[month]}`;
+    return `${day} ${months[month - 1]}`;
   }
 }

@@ -6,6 +6,9 @@ import Navbar from "@/components/navbar/Navbar";
 import OnlineBar from "@/components/online-bar/OnlineBar";
 import Context from "@/context/Store";
 import TaskCard from "@/components/task-card/TaskCard";
+import BasicMenu from "@/components/basic-menu/BasicMenu";
+import { ButtonLargeProps } from "@/components/button-large/ButtonLarge";
+import { ActivityLogType } from "@/type";
 
 const WorkspacePage: React.FC = () => {
   const ctx = React.useContext(Context);
@@ -143,9 +146,60 @@ const WorkspacePage: React.FC = () => {
     </span>
   );
 
+  const menu_list: ButtonLargeProps[] = [
+    {
+      bg_color: "",
+      color: "",
+      text: "Edit Workspace",
+      icon: "/icons/edit_black.svg",
+    },
+    {
+      bg_color: "",
+      color: "",
+      text: "Antrian Masuk",
+      icon: "/icons/queue_black.svg",
+      notification: 2,
+    },
+    {
+      bg_color: "",
+      color: "",
+      text: "Salin Link",
+      icon: "/icons/copy_black.svg",
+      
+    },
+  ];
+
+  const log_list: ActivityLogType[] = [
+    {
+      a_id: "",
+      activity_desc: "maulana open this task",
+      created_at: "2023-2-2",
+      t_id: "",
+      u_id: "",
+      w_id: "",
+    },
+    {
+      a_id: "",
+      activity_desc: "tuslam open this task",
+      created_at: "2023-2-2",
+      t_id: "",
+      u_id: "",
+      w_id: "",
+    },
+  ];
+
+  const [isMenuActive, setIsMenuActive] = React.useState<boolean>(true);
+
   return (
     <>
       <Navbar title="Workspace 1" subtitle="Task list" />
+      <BasicMenu
+        button_list={menu_list}
+        isActive={isMenuActive}
+        title="Workspace Menu"
+        delete_text="Delete Workspace"
+        log_list={log_list}
+      />
       <main className={s.main}>
         <div className={s.task_board}>
           <OnlineBar users={workspace ? workspace.member_list : []} />
@@ -153,7 +207,6 @@ const WorkspacePage: React.FC = () => {
             className={s.selection_screen}
             ref={screenRef}
             onTouchEnd={pointerUpHandler}
-
           >
             <div className={s.selection_display}>
               <section className={s.stage}>

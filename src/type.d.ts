@@ -72,13 +72,12 @@ export interface CommentType{
 
 }
 
-
-export interface ActivityType {
+export interface ActivityLogType {
   a_id: string;
-  task_id: string;
-  activity_type: ActivityType
+  t_id: string;
+  activity_desc: string
   created_at: string;
-  workspace_id: string;
+  w_id: string;
   u_id: string;
 }
 

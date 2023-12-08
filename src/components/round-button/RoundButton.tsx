@@ -8,6 +8,7 @@ interface RoundButtonProps {
   icon: string;
   rotate?: number;
   scale?: number;
+  notification?: number;
 }
 
 const RoundButton: React.FC<RoundButtonProps> = (props) => {
@@ -27,6 +28,7 @@ const RoundButton: React.FC<RoundButtonProps> = (props) => {
         className={s.icon}
         style={{ opacity: props.opacity, scale: props.scale ? props.scale : 1 }}
       />
+      {props.notification && <div className={s.notification} />}
     </button>
   );
 };

@@ -5,12 +5,14 @@ import local from "next/font/local";
 
 const inter = local({ src: "../fonts/Inter-VariableFont_slnt,wght.ttf" });
 
-interface ButtonLargeProps {
+export interface ButtonLargeProps {
   text: string;
   color: string;
   bg_color: string;
   icon?: string;
-  notification?: string | null;
+  notification?: number | null;
+  rowReverse?: boolean;
+  onClick?: (e: any | null) => void;
 }
 
 const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
@@ -24,11 +26,20 @@ const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
     />
   );
   const notifViews = props.notification && (
-    <div className={s.notif}>{props.notification}</div>
+    <div className={[s.notif, "reguler", "sm"].join(" ")}>
+      {props.notification}
+    </div>
   );
 
   return (
-    <button className={s.btn}>
+    <button
+      className={s.btn}
+      style={{
+        backgroundColor: props.bg_color,
+        color: props.color,
+        flexDirection: props.rowReverse ? "row-reverse" : "row",
+      }}
+    >
       <p className={[s.txt, "medium", "blend", inter.className].join(" ")}>
         {props.text}
       </p>

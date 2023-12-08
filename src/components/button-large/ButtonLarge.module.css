@@ -4,20 +4,20 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: #080726;
     border-radius: 12px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25);
     width: 88vw;
     min-width: 200px;
     height: 54px;
     outline: none;
     border: none;
+    font-family: inherit;
 }
 
 .txt{
     position: relative;
     display: block;
-    color: #fff;
+    
     opacity: 0.8;
     font-size: 15px;
 }
@@ -27,7 +27,23 @@
     height: 14px;
     width: auto;
     object-fit: fill;
-    margin-left: 7px;
+    margin: 0 7px;
     opacity: 0.7;
     
+}
+
+.notif{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: yellow;
+    color: #000;
+    font-family: inherit;
+    width: 25px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    top: -0;
+    right: 0;
+    translate: 50% -50%;
 }
