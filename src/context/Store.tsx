@@ -6,24 +6,24 @@ export interface ContextType {
   user_data_ctx: UserType | null;
   user_data_handler_ctx: React.Dispatch<UserType>;
   user_workspaces_ctx: WorkspaceType[] | null;
-  user_workspaces_handler_ctx: React.Dispatch< WorkspaceType[] | null>;
+  user_workspaces_handler_ctx: React.Dispatch<WorkspaceType[] | null>;
   user_task_ctx: TaskType[] | null;
   user_task_handler_ctx: React.Dispatch<TaskType[]>;
   display_width_ctx: number;
   task_comments_ctx: CommentType[] | null;
-  task_comments_handler_ctx: React.Dispatch<CommentType[]>
+  task_comments_handler_ctx: React.Dispatch<CommentType[]>;
 }
 
-export enum UserActionKind {
-
-}
+export enum UserActionKind {}
 
 const Context = React.createContext<ContextType | null>(null);
 
 export function ContextProvider(props: any) {
   const [user_data, set_user_data] = React.useState<UserType | null>(null);
 
-  const [user_workspaces, set_user_workspaces] = React.useState<WorkspaceType[] | null>(null);
+  const [user_workspaces, set_user_workspaces] = React.useState<
+    WorkspaceType[] | null
+  >(null);
 
   const [user_task, set_user_task] = React.useState<TaskType[] | null>([]);
 
@@ -47,6 +47,26 @@ export function ContextProvider(props: any) {
     window.addEventListener("resize", getWidth);
   }, []);
 
+  React.useEffect(() => {
+    if (user_workspaces) {
+      const workspace = user_workspaces[user_workspaces?.length - 1];
+
+      if (workspace?.w_id) {
+        fetch(`/api/update-workspace/${workspace.w_id}`, {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(workspace)
+        })
+          .then((res) => res.json())
+          .then((data) => console.log(data));
+      } else {
+      }
+    } else {
+    }
+  }, [user_workspaces]);
+
   const context: ContextType = {
     user_data_ctx: user_data,
     user_data_handler_ctx: set_user_data,
@@ -56,7 +76,7 @@ export function ContextProvider(props: any) {
     user_task_handler_ctx: set_user_task,
     display_width_ctx: display_width,
     task_comments_ctx: task_comments,
-    task_comments_handler_ctx: set_task_comments
+    task_comments_handler_ctx: set_task_comments,
   };
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;

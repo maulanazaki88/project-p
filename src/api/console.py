@@ -85,7 +85,7 @@ def insert_workspace():
         ],
         'status': "ON-GOING",
         'admin_list': ['mau-1-usr'],
-        'member_list' : [{"u_id": 'mau-1-usr', 'username': 'maulana'}, {'u_id': 'far-2-usr', 'username': 'faridha'}, {'u_id': 'rak-3-usr', 'username': 'rakhman'}],
+        'member_list': [{"u_id": 'mau-1-usr', 'username': 'maulana'}, {'u_id': 'far-2-usr', 'username': 'faridha'}, {'u_id': 'rak-3-usr', 'username': 'rakhman'}],
         'task_ids': [
             "pap-1-1-tsk",
             "pap-1-2-tsk",
@@ -136,7 +136,7 @@ def insert_workspace():
         ],
         'status': "ON-GOING",
         'admin_list': ['far-2-usr'],
-        'member_list' : [{"u_id": 'mau-1-usr', 'username': 'maulana'}, {'u_id': 'far-2-usr', 'username': 'faridha'}, {'u_id': 'rak-3-usr', 'username': 'rakhman'}],
+        'member_list': [{"u_id": 'mau-1-usr', 'username': 'maulana'}, {'u_id': 'far-2-usr', 'username': 'faridha'}, {'u_id': 'rak-3-usr', 'username': 'rakhman'}],
         'task_ids': ["pbo-2-1-tsk", "pbo-2-2-tsk"],
         'activity_list': [
             {
@@ -544,9 +544,10 @@ def insert_task():
 
 
 def get_user():
-     user = users_collection.aggregate([{'$match': {'username': 'maulana'}}, {'$lookup': {'from': 'workspaces', 'localField': 'workspace_ids', 'foreignField': 'w_id', 'pipeline': [
-                                      {'$lookup': {'from': 'tasks', 'localField': 'task_ids', 'foreignField': 't_id', 'pipeline': [{'$project': {'_id': 0}}], 'as': 'task_list'}}, {'$project': {"_id": 0}}], 'as': 'workspace_list'}}, {'$project': {'_id': 0}}])
-     print(json.dumps(list(user)[0]))
+    user = users_collection.aggregate([{'$match': {'username': 'maulana'}}, {'$lookup': {'from': 'workspaces', 'localField': 'workspace_ids', 'foreignField': 'w_id', 'pipeline': [
+        {'$lookup': {'from': 'tasks', 'localField': 'task_ids', 'foreignField': 't_id', 'pipeline': [{'$project': {'_id': 0}}], 'as': 'task_list'}}, {'$project': {"_id": 0}}], 'as': 'workspace_list'}}, {'$project': {'_id': 0}}])
+    print(json.dumps(list(user)[0]))
+
 
 def get_workspace():
     workspace = workspaces_collection.aggregate([{'$match': {'w_id': 'pap-1-wks'}}, {'$lookup': {
@@ -555,7 +556,98 @@ def get_workspace():
     print(json.dumps(list(workspace[0])))
 
 
-insert_user()
+def sign_in():
+    data = {
+        "username": "maulana",
+        "password": "maulana123"
+    }
+
+    get_records = users_collection.find_one(
+        {"username": data["username"]}, {'_id': 0})
+
+    if get_records["password"] == data['password']:
+        print(get_records)
+    else:
+        print("😭"
+)
+
+def update_task():
+    data = {
+        "t_id": "20231211102737260950-tsk",
+        "title": "Referensi Design",
+        "description": "Mencari referensi design di internet",
+        'assigned_member': [{"u_id": 'mau-1-usr', 'username': 'maulana'}, {'u_id': 'far-2-usr', 'username': 'faridha'}, {'u_id': 'rak-3-usr', 'username': 'rakhman'}],
+        'deadline':  '2023-12-20-12:51:00',
+        'priority': 'LOW',
+        'created_at': '2023-12-10-12:51:00',
+        'activity_list': [
+            {
+                'a_id': 'pbo-2-1-tsk-1-act',
+                'activity_desc': 'maulana seen this task',
+                'created_at': '2023-12-10-12:51:00',
+                'activity_type': "READ"
+            },
+            {
+                'a_id': 'pbo-2-1-tsk-2-act',
+                'activity_desc': 'faridha seen this task',
+                'created_at': '2023-12-10-12:51:00',
+                'activity_type': "READ"
+            },
+            {
+                'a_id': 'pbo-2-1-tsk-3-act',
+                'activity_desc': 'rakhman seen this task',
+                'created_at': '2023-12-10-12:51:00',
+                'activity_type': "READ"
+            },
+        ],
+        'w_id': "pbo-2-wks",
+        'seen_by': [{"u_id": 'mau-1-usr', 'username': 'maulana'}, {'u_id': 'far-2-usr', 'username': 'faridha'}, {'u_id': 'rak-3-usr', 'username': 'rakhman'}],
+        'comments': [
+            {
+                "c_id": "pbo-2-1-tsk-1-c",
+                'username': 'faridha',
+                'message': 'Halo!',
+                'time': '2023-12-10-12:51:00',
+            },
+            {
+                "c_id": "pbo-2-1-tsk-2-c",
+                'username': 'maulana',
+                'message': 'Biar silaturahmi tidak terputus...',
+                'time': '2023-12-10-12:51:00',
+            },
+            {
+                "c_id": "pbo-2-1-tsk-3-c",
+                'username': 'faridha',
+                'message': 'Pinjam dulu seratus 💵',
+                'time': '2023-12-10-12:51:00',
+            },
+            {
+                "c_id": "pbo-2-1-tsk-4-c",
+                'username': 'rakhman',
+                'message': 'cuaks 🤙',
+                'time': '2023-12-10-12:51:00',
+            },
+        ],
+        'status': 'IN-PROGRESS',
+        'updated_at': '2023-12-10-12:51:00',
+        'author': 'faridha'
+    }
+    
+
+    updated = tasks_collection.replace_one(
+        {"t_id": "20231211102737260950-tsk"}, data)
+
+    updated_count = updated.raw_result["nModified"]
+
+    print(json.dumps({"updated_count": updated_count}))
+
+
+update_task()
+
+# sign_in()
+
+
+# insert_user()
 # insert_workspace()
 # insert_task()
 

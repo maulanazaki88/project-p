@@ -86,35 +86,85 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
   const [isCommentsActive, setIsCommentsActive] =
     React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    return function cleanUp() {
+  //   React.useEffect(() => {
+  //     const data: TaskType = {
+  //       ...task,
+  //       priority:
+  //         prioritySelect === 0 ? "LOW" : prioritySelect === 1 ? "MED" : "HIGH",
+  //       status:
+  //         statusSelect === 0
+  //           ? "NEXT-UP"
+  //           : statusSelect === 1
+  //           ? "IN-PROGRESS"
+  //           : statusSelect === 2
+  //           ? "REVISED"
+  //           : "COMPLETED",
+  //     };
+  //     fetch(`/api/update-task/${props.data.t_id}`, {
+  //       headers: {
+  //         "content-type": "application/json",
+  //       },
+  //       method: "PUT",
+  //       body: JSON.stringify(data),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data: any) => {
+  //         console.log(data);
+  //       });
+  //   }, [prioritySelect, statusSelect, task]);
+
+  const backSave = async () => {
+    const data: TaskType = {
+      ...task,
+      priority:
+        prioritySelect === 0 ? "LOW" : prioritySelect === 1 ? "MED" : "HIGH",
+      status:
+        statusSelect === 0
+          ? "NEXT-UP"
+          : statusSelect === 1
+          ? "IN-PROGRESS"
+          : statusSelect === 2
+          ? "REVISED"
+          : "COMPLETED",
+    };
+
+    const response = await fetch(`/api/update-task/${props.data.t_id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    const json = await response.json();
+
+    if (await json) {
+      console.log(json);
       if (workspace_list && workspace_list_handler) {
-        const workspace = workspace_list.find(
-          (workspace) => workspace.w_id === props.data.w_id
-        );
+        const workspace = workspace_list.find((w) => w.w_id == props.data.w_id);
+        if (
+          workspace &&
+          !workspace.task_ids.some((id) => id === props.data.t_id)
+        ) {
+          const updated_task_ids = workspace?.task_ids.concat(props.data.t_id);
 
-        if (workspace) {
-          const task_ids = workspace.task_ids;
-          if (task_ids.some((id) => id === props.data.t_id)) {
-          } else {
-            const updated_workspace = {
-              ...workspace,
-              task_ids: task_ids.concat(props.data.t_id),
-            };
+          const updated_workspace: WorkspaceType = {
+            ...workspace,
+            task_ids: updated_task_ids,
+          };
 
-            const workspace_list_popped = workspace_list.filter(
-              (w) => w.w_id !== props.data.w_id
-            );
+          const updated_state = workspace_list.filter(
+            (w) => w.w_id !== props.data.w_id
+          );
 
-            workspace_list_handler(
-              workspace_list_popped.concat(updated_workspace)
-            );
-          }
+          workspace_list_handler(updated_state.concat(updated_workspace));
         }
       }
-    };
-  }, []);
-  
+      if (json.updated_count === 1) {
+        router.back();
+      }
+    }
+  };
 
   if (task) {
     return (
@@ -123,6 +173,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
           title={"Detail Tugas"}
           subtitle={task.workspace_name}
           menuHandler={() => setIsMenuActive(true)}
+          backSave={backSave}
         />
         <BasicMenu
           button_list={menu_list}

@@ -51,14 +51,14 @@ def create_user():
 
         users_collection.insert_one(record)
 
-        return json.dumps({"message": "success", "u_id" : u_id})
+        return json.dumps({"message": "success", "u_id": u_id})
 
     elif length != 0:
         return json.dumps({"message": "user-exist"})
 
     else:
         return json.dumps({"message": "failed"})
-    
+
 
 @app.route("/api/create-workspace", methods=['POST'])
 def create_workspace():
@@ -77,7 +77,8 @@ def create_workspace():
 
     workspaces_collection.insert_one(record)
 
-    return json.dumps({"message": "success", "w_id" : w_id})
+    return json.dumps({"message": "success", "w_id": w_id})
+
 
 @app.route("/api/create-task", methods=['POST'])
 def create_task():
@@ -96,7 +97,7 @@ def create_task():
 
     tasks_collection.insert_one(record)
 
-    return json.dumps({"message": "success", "t_id" : t_id})
+    return json.dumps({"message": "success", "t_id": t_id})
 
 # READ untuk data user
 
@@ -135,12 +136,36 @@ def get_all_user():
 # UPDATE untuk data user
 
 
-@app.route("/api/update-user/<string:u_id>", methods=['UPDATE'])
+@app.route("/api/update-user/<string:u_id>", methods=['PUT'])
 def update_user(u_id):
     new_record = json.loads(request.data)
 
-    updated = users_collection.update_one(
+    updated = users_collection.replace_one(
         {"u_id": u_id}, new_record)
+
+    updated_count = updated.raw_result["nModified"]
+
+    return json.dumps({"updated_count": updated_count})
+
+
+@app.route("/api/update-workspace/<string:w_id>", methods=['PUT'])
+def update_workspace(w_id):
+    new_record = json.loads(request.data)
+
+    updated = workspaces_collection.replace_one(
+        {"w_id": w_id}, new_record)
+
+    updated_count = updated.raw_result["nModified"]
+
+    return json.dumps({"updated_count": updated_count})
+
+
+@app.route("/api/update-task/<string:t_id>", methods=['PUT'])
+def update_task(t_id):
+    new_record = json.loads(request.data)
+
+    updated = tasks_collection.replace_one(
+        {"t_id": t_id}, new_record)
 
     updated_count = updated.raw_result["nModified"]
 
@@ -157,3 +182,15 @@ def deleteUser(u_id):
     delete_count = delete.raw_result["n"]
 
     return json.dumps({"deleted_count": delete_count})
+
+
+@app.route('/api/sign-in', methods=["POST"])
+def signIn():
+    records = json.loads(request.data)
+    print(records)
+    get_records = users_collection.find_one(
+        {"email": records["email"]}, {'_id': 0})
+    if get_records["password"] == records["password"]:
+        return json.dumps({"message": "success", "u_id": get_records["u_id"]})
+    else:
+        return json.dumps({"message": "failed", "u_id": ""})

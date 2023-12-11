@@ -4,15 +4,21 @@ import React from "react";
 import { UserType } from "@/type";
 import InputSmall from "@/components/input-small/InputSmall";
 import ButtonLarge from "@/components/button-large/ButtonLarge";
+import { useRouter } from "next/navigation";
 
 const SignInPage: React.FC = () => {
+
+  const router = useRouter();
+
   const [data, setData] = React.useState<UserType>({
     created_at: "",
     email: "",
     is_online: 0,
     password: "",
     u_id: "",
+    updated_at: "",
     username: "",
+    workspace_ids: [],
     workspace_list: [],
   });
 
@@ -24,6 +30,8 @@ const SignInPage: React.FC = () => {
     password: "-",
   });
 
+  const [verifyId, setVerifyId] = React.useState<string | null>(null);
+
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData((prev) => {
       return {
@@ -32,12 +40,39 @@ const SignInPage: React.FC = () => {
       };
     });
   };
+
+  const submitHandler: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("/api/sign-in", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const json = await response.json();
+
+    if (await json) {
+      if (json.message === "success") {
+        setVerifyId(json.u_id);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    if(verifyId){
+      router.push(`/home/${verifyId}`)
+    }
+  }, [verifyId])
+
   return (
     <main className={s.main}>
       <div className={s.heading}>
         <h1 className={[s.title, "medium", "big"].join(" ")}>Masuk</h1>
       </div>
-      <form className={s.form}>
+      <form className={s.form} onSubmit={submitHandler}>
         <InputSmall
           icon={"/icons/email_black.svg"}
           onChange={changeHandler}

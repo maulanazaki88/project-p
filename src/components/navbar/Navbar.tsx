@@ -7,6 +7,7 @@ interface NavbarProps {
   title: string;
   subtitle?: string;
   menuHandler: () => void;
+  backSave?: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = (props) => {
@@ -25,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           rotate={180}
           opacity={1}
           scale={0.9}
-          onClick={goBack}
+          onClick={props.backSave ? props.backSave : goBack}
         />
       </div>
       <div className={s.heading}>

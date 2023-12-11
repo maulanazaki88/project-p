@@ -105,6 +105,10 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
     }
   }, [verifyId]);
 
+  React.useEffect(() => {
+    router.refresh();
+  }, []);
+
   return (
     <main className={s.main}>
       <MenuNavbar closeHandler={() => {}} title="Workspace Setup" />
