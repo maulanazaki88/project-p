@@ -51,24 +51,78 @@ def create_user():
 
         users_collection.insert_one(record)
 
-        return json.dumps({"message": "success"})
+        return json.dumps({"message": "success", "u_id" : u_id})
 
     elif length != 0:
         return json.dumps({"message": "user-exist"})
 
     else:
         return json.dumps({"message": "failed"})
+    
+
+@app.route("/api/create-workspace", methods=['POST'])
+def create_workspace():
+    # konversi json ke dictionary
+    workspace_dict = json.loads(request.data)
+    print(workspace_dict)
+    # request.data => data yg dikirimkan oleh klien
+
+    # jumlah data ditemukan
+    # memeriksa apakah sudah ada akun yang memiliki username yang sama
+    w_id = f"{workspace_dict['name'][:3]}-{str(datetime.now()).replace(':', '').replace(' ', '').replace('-', '').replace('.', '')}-wks"
+
+    workspace_dict["w_id"] = w_id
+
+    record = workspace_dict
+
+    workspaces_collection.insert_one(record)
+
+    return json.dumps({"message": "success", "w_id" : w_id})
+
+@app.route("/api/create-task", methods=['POST'])
+def create_task():
+    # konversi json ke dictionary
+    task_dict = json.loads(request.data)
+    print(task_dict)
+    # request.data => data yg dikirimkan oleh klien
+
+    # jumlah data ditemukan
+    # memeriksa apakah sudah ada akun yang memiliki username yang sama
+    t_id = f"{str(datetime.now()).replace(':', '').replace(' ', '').replace('-', '').replace('.', '')}-tsk"
+
+    task_dict["t_id"] = t_id
+
+    record = task_dict
+
+    tasks_collection.insert_one(record)
+
+    return json.dumps({"message": "success", "t_id" : t_id})
 
 # READ untuk data user
 
 
 @app.route("/api/get-user/<string:u_id>", methods=['GET'])
 def get_user(u_id):
-    user = users_collection.find_one({"username": u_id}, {"_id": 0})
+    user = users_collection.aggregate([{'$match': {'u_id': u_id}}, {'$lookup': {'from': 'workspaces', 'localField': 'workspace_ids', 'foreignField': 'w_id', 'pipeline': [
+                                      {'$lookup': {'from': 'tasks', 'localField': 'task_ids', 'foreignField': 't_id', 'pipeline': [{'$project': {'_id': 0}}], 'as': 'task_list'}}, {'$project': {"_id": 0}}], 'as': 'workspace_list'}}, {'$project': {'_id': 0}}])
+    return json.dumps(list(user)[0])
 
-    return json.dumps(user)
 
-## Mengambil semua data user
+@app.route("/api/get-workspace/<string:w_id>", methods=['GET'])
+def get_workspace(w_id):
+    workspace = workspaces_collection.aggregate([{'$match': {'w_id': w_id}}, {'$lookup': {
+                                                'from': 'tasks', 'localField': 'task_ids', 'foreignField': 't_id', 'pipeline': [{'$project': {'_id': 0}}], 'as': 'task_list'}}, {'$project': {'_id': 0}}])
+
+    return json.dumps(list(workspace)[0])
+# Mengambil semua data user
+
+
+@app.route("/api/get-task/<string:t_id>", methods=['GET'])
+def get_task(t_id):
+    task = tasks_collection.aggregate([{'$match': {'t_id': t_id}}, {'$lookup': {'from': 'workspaces', 'localField': 'w_id', 'foreignField': 'w_id', 'pipeline': [
+                                      {'$project': {'_id': 0, 'name': 1}}], 'as': 'workspace'}}, {'$project': {'_id': 0}}, {'$unwind': "$workspace"}])
+
+    return json.dumps(list(task)[0])
 
 
 @app.route("/api/get-all-users", methods=['GET'])
@@ -90,7 +144,7 @@ def update_user(u_id):
 
     updated_count = updated.raw_result["nModified"]
 
-    return json.dumps({"updated_count":updated_count })
+    return json.dumps({"updated_count": updated_count})
 
 
 # DELETE untuk data user

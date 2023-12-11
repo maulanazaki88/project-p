@@ -1,13 +1,21 @@
 import s from "./Navbar.module.css";
 import React from "react";
 import RoundButton from "../round-button/RoundButton";
+import { useRouter } from "next/navigation";
 
 interface NavbarProps {
   title: string;
   subtitle?: string;
+  menuHandler: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = (props) => {
+  const router = useRouter();
+
+  const goBack = () => {
+    router.back();
+  };
+
   return (
     <header className={s.navbar}>
       <div className={s.left}>
@@ -17,6 +25,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           rotate={180}
           opacity={1}
           scale={0.9}
+          onClick={goBack}
         />
       </div>
       <div className={s.heading}>
@@ -32,6 +41,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           color="rgba(0, 0, 0, 0.08)"
           icon="/icons/dot-menu.svg"
           opacity={1}
+          onClick={props.menuHandler}
         />
       </div>
     </header>

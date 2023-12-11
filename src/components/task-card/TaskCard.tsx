@@ -1,19 +1,21 @@
 import s from "./TaskCard.module.css";
 import React from "react";
 import { TaskPriorityType } from "@/type";
-import Context from "@/context/Store";
 import Image from "next/image";
 import Avatar from "../avatar/Avatar";
 import { useCalendar } from "@/hook/useCalendar";
+import { useRouter } from "next/navigation";
+import Context from "@/context/Store";
 
 interface TaskCardProps {
   name: string;
   w_id: string;
-  assigned_member: string[];
+  assigned_member: {u_id: string, username: string}[];
   priority: TaskPriorityType;
   description: string;
   deadline: string;
   comments_count: number;
+  id: string;
 }
 
 const color_list = ["#F99370", "#F4D4BE", "#A523A2"];
@@ -27,8 +29,19 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
     user_workspaces &&
     user_workspaces.find((workspace) => workspace.w_id === props.w_id)?.name;
 
+  const router = useRouter();
+
+  const goToTask = (id: string) => {
+    router.push(`/task/${encodeURIComponent(id)}`);
+  };
+
   return (
-    <div className={s.card}>
+    <div
+      className={s.card}
+      onClick={() => {
+        goToTask(props.id);
+      }}
+    >
       <div className={s.top}>
         <div className={[s.workspaceName, "bold", "sm", "soft"].join(" ")}>
           {workspace_name}
@@ -57,7 +70,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
       </div>
       <div className={s.bottom}>
         <ul className={s.assigned_member}>
-          {props.assigned_member.map((name, index) => {
+          {props.assigned_member.map((member, index) => {
             return (
               <li
                 key={`member-${index}`}
@@ -69,7 +82,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
                     color_list[(index + color_list.length) % color_list.length]
                   }
                   txt_color="#fff"
-                  username={name}
+                  username={member.username}
                   withBorder
                 />
               </li>

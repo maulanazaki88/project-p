@@ -4,13 +4,15 @@ import { UserType } from "@/type";
 
 const UserPage: React.FC = () => {
   const [data, setData] = React.useState<UserType>({
-    u_id: "",
-    username: "",
-    email: "",
-    password: "",
-    workspace_list: [],
-    created_at: "",
-    is_online: 0,
+   created_at: "",
+   email: "",
+   is_online: 0,
+   password: "",
+   u_id: "",
+   updated_at: "",
+   username: "",
+   workspace_ids: [],
+   workspace_list: []
   });
 
   const [tryResponse, setTryResponse] = React.useState<number | string>("wait");

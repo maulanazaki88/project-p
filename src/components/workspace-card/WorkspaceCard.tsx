@@ -3,18 +3,26 @@ import s from "./Workspace.module.css";
 import React from "react";
 import Avatar from "../avatar/Avatar";
 import ButtonMedium from "../button-medium/ButtonMedium";
+import { useRouter } from "next/navigation";
 
 interface WorkspaceCardProps {
   name: string;
   description: string;
   img: string;
-  members: string[];
+  members: { u_id: string; username: string }[];
   bg_color: string;
+  id: string;
 }
 
 export const color_list = ["#F99370", "#F4D4BE", "#A523A2"];
 
 const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
+  const router = useRouter();
+
+  const goToWorkspace = (id: string) => {
+    router.push(`/workspace/${encodeURIComponent(id)}`);
+  };
+
   return (
     <div className={s.card} style={{ backgroundColor: props.bg_color }}>
       <figure className={s.figure}>
@@ -34,15 +42,19 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
           </span>
         </div>
         <ul className={s.assigned_list}>
-          {props.members.map((name, index) => {
+          {props.members.map((member, index) => {
             return (
-              <li className={s.assigned_item} key={`assigned-${index}`} style={{translate: `0px -${index*15}px`}} >
+              <li
+                className={s.assigned_item}
+                key={`assigned-${index}`}
+                style={{ translate: `0px -${index * 15}px` }}
+              >
                 <Avatar
                   bg_color={
                     color_list[(index + color_list.length) % color_list.length]
                   }
                   txt_color="#fff"
-                  username={name}
+                  username={member.username}
                   withBorder
                 />
               </li>
@@ -56,6 +68,9 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
           text="Buka Space"
           accent_color="rgba(255, 255, 255, 0.15)"
           icon={"/icons/arrow_white.svg"}
+          onClick={() => {
+            goToWorkspace(props.id);
+          }}
         />
       </div>
     </div>

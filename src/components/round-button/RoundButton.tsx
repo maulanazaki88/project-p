@@ -9,6 +9,7 @@ interface RoundButtonProps {
   rotate?: number;
   scale?: number;
   notification?: number;
+  onClick?: (e: any | null) => void;
 }
 
 const RoundButton: React.FC<RoundButtonProps> = (props) => {
@@ -19,6 +20,7 @@ const RoundButton: React.FC<RoundButtonProps> = (props) => {
         backgroundColor: props.color,
         rotate: props.rotate ? `${props.rotate}deg` : `0deg`,
       }}
+      onClick={props.onClick}
     >
       <Image
         alt={props.icon}

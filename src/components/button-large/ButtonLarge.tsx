@@ -13,6 +13,7 @@ export interface ButtonLargeProps {
   notification?: number | null;
   rowReverse?: boolean;
   onClick?: (e: any | null) => void;
+  disabled? :boolean
 }
 
 const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
@@ -34,11 +35,13 @@ const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
   return (
     <button
       className={s.btn}
+      disabled={props.disabled}
       style={{
         backgroundColor: props.bg_color,
         color: props.color,
         flexDirection: props.rowReverse ? "row-reverse" : "row",
       }}
+      onClick={props.onClick}
     >
       <p className={[s.txt, "medium", "blend", inter.className].join(" ")}>
         {props.text}

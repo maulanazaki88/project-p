@@ -4,6 +4,7 @@ import RoundButton from "../round-button/RoundButton";
 
 interface MenuNavbarProps {
   title: string;
+  closeHandler: () => void;
 }
 
 const MenuNavbar: React.FC<MenuNavbarProps> = (props) => {
@@ -16,6 +17,7 @@ const MenuNavbar: React.FC<MenuNavbarProps> = (props) => {
           rotate={180}
           opacity={1}
           scale={0.9}
+          onClick={props.closeHandler}
         />
       </div>
       <div className={s.mid}>

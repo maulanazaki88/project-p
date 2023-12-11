@@ -1,18 +1,24 @@
 "use client";
 import s from "./SignUpPage.module.css";
-import React from "react";
+import React, { FormEventHandler } from "react";
 import InputSmall from "@/components/input-small/InputSmall";
 import ButtonLarge from "@/components/button-large/ButtonLarge";
 import { UserType } from "@/type";
+import { createUser } from "@/server/actions";
+import { useRouter } from "next/navigation";
 
 const SignUpPage: React.FC = () => {
-  const [data, setData] = React.useState<UserType>({
+  const router = useRouter();
+
+  const [user_data, set_user_data] = React.useState<UserType>({
     created_at: "",
     email: "",
     is_online: 0,
     password: "",
     u_id: "",
+    updated_at: "",
     username: "",
+    workspace_ids: [],
     workspace_list: [],
   });
 
@@ -26,14 +32,62 @@ const SignUpPage: React.FC = () => {
     password: "-",
   });
 
+  const [verifyId, setVerifyId] = React.useState<string | null>();
+  const [buttonDisabled, setButtonDisabled] = React.useState<boolean>(false);
+
+  const submitData: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    console.log("Submit!!!");
+    setButtonDisabled(true);
+
+    const response = await fetch("/api/create-user", {
+      body: JSON.stringify(user_data),
+      headers: { "content-type": "json/application" },
+      method: "POST",
+    });
+
+    const res = await response.json();
+
+    const message = await res.message;
+
+    if ((await message) == "success" && response.status == 200) {
+      console.log("yeyyy");
+      setVerifyId(await res.u_id);
+    } else if ((await message) == "user-exist") {
+      console.log("nooo");
+      setButtonDisabled(false);
+      setWarning((prev) => {
+        return {
+          ...prev,
+          username: "Sudah ada username dengan nama ini",
+        };
+      });
+    } else {
+      console.log("nooo");
+      setButtonDisabled(false);
+      setWarning((prev) => {
+        return {
+          ...prev,
+          username: "Gagal. Terjadi kesalahan pada jaringan",
+        };
+      });
+    }
+  };
+
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData((prev) => {
+    set_user_data((prev) => {
       return {
         ...prev,
         [e.target.name]: e.target.value,
       };
     });
   };
+
+  React.useEffect(() => {
+    if (verifyId) {
+      router.replace(`/home/${verifyId}`);
+    }
+  }, [verifyId]);
 
   return (
     <main className={s.main}>
@@ -42,14 +96,14 @@ const SignUpPage: React.FC = () => {
           Daftarkan Akun Anda
         </h1>
       </div>
-      <form className={s.form}>
+      <form className={s.form} onSubmit={submitData}>
         <InputSmall
           icon={"/icons/person_black.svg"}
           onChange={changeHandler}
           name="username"
           placeholder="Masukan Nama Pengguna"
           key={"username-input"}
-          value={data.username}
+          value={user_data.username}
           label="Nama Pengguna"
           type="text"
           warning={warning.username}
@@ -59,8 +113,8 @@ const SignUpPage: React.FC = () => {
           onChange={changeHandler}
           name="email"
           placeholder="Masukan Email Anda"
-          key={"username-input"}
-          value={data.email}
+          key={"email-input"}
+          value={user_data.email}
           label="Email"
           type="text"
           warning={warning.email}
@@ -70,8 +124,8 @@ const SignUpPage: React.FC = () => {
           onChange={changeHandler}
           name="password"
           placeholder="Masukan Password Anda"
-          key={"username-input"}
-          value={data.password}
+          key={"password-input"}
+          value={user_data.password}
           label="Password"
           type="password"
           warning={warning.password}
@@ -81,6 +135,8 @@ const SignUpPage: React.FC = () => {
           color="#fff"
           text="Selanjutnya"
           icon="/icons/next_white.svg"
+          onClick={() => {}}
+          disabled={buttonDisabled}
         />
       </form>
     </main>

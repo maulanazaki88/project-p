@@ -1,13 +1,17 @@
 import s from "./ProgressTitle.module.css";
 import React from "react";
 import Image from "next/image";
+import { ProgressStatusType } from "@/type";
 
 interface ProgressTitleProps {
+  type: ProgressStatusType;
   title: string;
   count: number;
   color: string;
   bg_color: string;
   bg_color_accent: string;
+  newTaskHandler: (t: ProgressStatusType) => void;
+  sortHandler?: () => {};
 }
 
 const ProgressTitle: React.FC<ProgressTitleProps> = (props) => {
@@ -28,7 +32,11 @@ const ProgressTitle: React.FC<ProgressTitleProps> = (props) => {
         </div>
       </div>
       <div className={s.tools}>
-        <button className={s.btn}>
+        <button
+          className={s.btn}
+          type="button"
+          onClick={() => props.newTaskHandler(props.type)}
+        >
           <Image alt="filter" src={"/icons/plus.svg"} width={18} height={18} />
         </button>
         <button type="button" className={s.btn}>

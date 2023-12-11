@@ -1,4 +1,3 @@
-
 import "./globals.css";
 import type { Metadata } from "next";
 import local from "next/font/local";
@@ -18,10 +17,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ContextProvider>
-      <html lang="en">
-        <body className={inter.className}>{children}</body>
-      </html>
-    </ContextProvider>
+    <html lang="en">
+      <body className={inter.className}>
+        <ContextProvider>{children}</ContextProvider>
+      </body>
+    </html>
   );
 }

@@ -5,8 +5,8 @@ import Context from "@/context/Store";
 
 export interface NotificationCardProps {
   username: string;
-  text: string;
-  date: string;
+  message: string;
+  created_at: string;
   w_id: string;
 }
 
@@ -37,12 +37,12 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
             {props.username}
           </span>
           <span className={[s.text, "sm", "reguler"].join(" ")}>
-            {props.text}
+            {props.message}
           </span>
         </div>
         <div className={s.info}>
           <span className={[s.time, "sm", "medium", "soft"].join(" ")}>
-            {useCalendar(props.date, ["d", "m"])}
+            {useCalendar(props.created_at, ["d", "m"])}
           </span>
         </div>
       </div>

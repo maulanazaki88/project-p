@@ -8,6 +8,7 @@ interface ButtonMediumProps {
   color: string;
   accent_color?: string;
   rotate_icon?: number;
+  onClick?: (e: any | null) => void;
 }
 
 const ButtonMedium: React.FC<ButtonMediumProps> = (props) => {
@@ -32,7 +33,12 @@ const ButtonMedium: React.FC<ButtonMediumProps> = (props) => {
   );
 
   return (
-    <button className={s.btn} style={{backgroundColor: props.color}}>
+    <button
+      type="button"
+      className={s.btn}
+      style={{ backgroundColor: props.color }}
+      onClick={props.onClick}
+    >
       <span className={[s.text, "medium", "sm"].join(" ")}>{props.text}</span>
       {IconViews}
     </button>

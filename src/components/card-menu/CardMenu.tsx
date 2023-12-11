@@ -11,6 +11,7 @@ interface CardMenuProps {
   notification_list?: NotificationCardProps[];
   isActive: boolean;
   title: string;
+  closeHandler: () => void;
 }
 
 const CardMenu: React.FC<CardMenuProps> = (props) => {
@@ -32,8 +33,8 @@ const CardMenu: React.FC<CardMenuProps> = (props) => {
         return (
           <li className={s.item} key={`notification-item-${index}`}>
             <NotificationCard
-              date={n.date}
-              text={n.text}
+              created_at={n.created_at}
+              message={n.message}
               username={n.username}
               w_id={n.w_id}
             />
@@ -45,7 +46,7 @@ const CardMenu: React.FC<CardMenuProps> = (props) => {
 
   return (
     <div className={s.menu} style={{left: props.isActive ? "0" : '100%'}} >
-      <MenuNavbar title={props.title} />
+      <MenuNavbar title={props.title} closeHandler={props.closeHandler} />
       {CalendarViews}
       {NotificationViews}
     </div>

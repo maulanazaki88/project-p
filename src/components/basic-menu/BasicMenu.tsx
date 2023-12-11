@@ -11,12 +11,13 @@ interface BasicMenuProps {
   log_list?: ActivityLogType[];
   delete_text?: string;
   isActive: boolean;
+  closeHandler: () => void;
 }
 
 const BasicMenu: React.FC<BasicMenuProps> = (props) => {
   return (
-    <div className={s.menu} style={{left: props.isActive ? `0` : `100%`}} >
-      <MenuNavbar title={props.title} />
+    <div className={s.menu} style={{ left: props.isActive ? `0` : `100%` }}>
+      <MenuNavbar title={props.title} closeHandler={props.closeHandler} />
       <ul className={s.button_list}>
         {props.button_list.map((btn, index) => {
           return (

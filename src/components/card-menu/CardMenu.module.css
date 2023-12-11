@@ -1,4 +1,4 @@
-.menu{
+.menu {
     position: fixed;
     top: 0;
     display: flex;
@@ -7,22 +7,24 @@
     justify-content: flex-start;
     width: 100vw;
     height: 100vh;
-    padding: 0 20px;
-    
     z-index: 999;
     background-color: #fff;
+    transition: all 0.2s ease-out;
+    padding: 0 20px;
 }
 
-.list{
+.list {
     position: relative;
     display: flex;
     flex-direction: column;
     list-style: none;
     width: 100%;
     padding-top: 80px;
+    overflow-y: scroll;
+    
 }
 
-.item{
+.item {
     position: relative;
     display: flex;
     align-items: center;

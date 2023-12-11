@@ -6,7 +6,7 @@ import Avatar from "../avatar/Avatar";
 import { color_list } from "../workspace-card/WorkspaceCard";
 
 interface OnlineBarProps {
-  users: string[];
+  users: {u_id: string, username: string}[];
 }
 
 const OnlineBar: React.FC<OnlineBarProps> = (props) => {
@@ -25,11 +25,11 @@ const OnlineBar: React.FC<OnlineBarProps> = (props) => {
                   color_list[(index + color_list.length) % color_list.length]
                 }
                 txt_color="#fff"
-                username={user}
+                username={user.username}
                 isOnline
                 withBorder
               />
-              <span className={[s.username, "reguler", "sm"].join(" ")} >{user}</span>
+              <span className={[s.username, "reguler", "sm"].join(" ")} >{user.username}</span>
             </li>
           );
         })}

@@ -10,7 +10,7 @@ interface UsernameButtonProps {
 
 const UsernameButton: React.FC<UsernameButtonProps> = (props) => {
   return (
-    <button type="button" className={s.btn}>
+    <div className={s.btn}>
       <span className={[s.username, "medium", "sm"].join(" ")}>
         {props.username}
       </span>
@@ -26,7 +26,7 @@ const UsernameButton: React.FC<UsernameButtonProps> = (props) => {
           />
         </div>
       )}
-    </button>
+    </div>
   );
 };
 

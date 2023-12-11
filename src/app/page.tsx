@@ -1,14 +1,22 @@
-"use client"
+"use client";
 import s from "./page.module.css";
 import Image from "next/image";
 import ButtonLarge from "@/components/button-large/ButtonLarge";
 import localFont from "next/font/local";
+import { useRouter } from "next/navigation";
 
 const inter = localFont({
   src: "../components/fonts/Inter-VariableFont_slnt,wght.ttf",
 });
 
 export default function Home() {
+  const router = useRouter();
+
+  const toSignUp = () => {
+    router.push("/sign-up");
+    console.log("huhu")
+  };
+
   return (
     <main className={s.main}>
       <figure className={s.figure}>
@@ -32,7 +40,12 @@ export default function Home() {
             <br /> Simple & Kekinian
           </h2>
         </div>
-        <ButtonLarge bg_color="#080726" color="#fff" text="Daftar" />
+        <ButtonLarge
+          bg_color="#080726"
+          color="#fff"
+          text="Daftar"
+          onClick={toSignUp}
+        />
         <div className={s.suggestion}>
           <p className={[s.suggestion_txt, "sm", "soft"].join(" ")}>
             Sudah memiliki akun?

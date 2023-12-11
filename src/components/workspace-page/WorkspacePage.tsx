@@ -8,29 +8,49 @@ import Context from "@/context/Store";
 import TaskCard from "@/components/task-card/TaskCard";
 import BasicMenu from "@/components/basic-menu/BasicMenu";
 import { ButtonLargeProps } from "@/components/button-large/ButtonLarge";
-import { ActivityLogType } from "@/type";
+import {
+  ActivityLogType,
+  ProgressStatusType,
+  TaskType,
+  WorkspaceType,
+} from "@/type";
+import { useRouter } from "next/navigation";
+import { getWorkspace } from "@/server/actions";
+import { useDateNow } from "@/hook/useDateNow";
 
-const WorkspacePage: React.FC = () => {
+interface WorkspacePageProps {
+  data: WorkspaceType;
+}
+
+const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const ctx = React.useContext(Context);
   const display_width = ctx?.display_width_ctx;
 
-  const workspace = ctx?.user_workspaces_ctx?.find(
-    (workspace) => workspace.w_id === "workspace-1"
-  );
+  const user_data = ctx?.user_data_ctx;
 
-  const user_task = ctx?.user_task_ctx;
+  const router = useRouter();
 
-  const next_up = user_task?.filter(
-    (task) => task.status === "NEXT-UP" && task.w_id === "workspace-1"
+  const task_list = props.data.task_list as TaskType[];
+
+  const next_up = task_list.filter(
+    (task) =>
+      task.status === "NEXT-UP" &&
+      task.w_id === encodeURIComponent(props.data.w_id)
   );
-  const in_progress = user_task?.filter(
-    (task) => task.status === "IN-PROGRESS" && task.w_id === "workspace-1"
+  const in_progress = task_list?.filter(
+    (task) =>
+      task.status === "IN-PROGRESS" &&
+      task.w_id === encodeURIComponent(props.data.w_id)
   );
-  const revised = user_task?.filter(
-    (task) => task.status === "REVISED" && task.w_id === "workspace-1"
+  const revised = task_list?.filter(
+    (task) =>
+      task.status === "REVISED" &&
+      task.w_id === encodeURIComponent(props.data.w_id)
   );
-  const completed = user_task?.filter(
-    (task) => task.status === "COMPLETED" && task.w_id === "workspace-1"
+  const completed = task_list?.filter(
+    (task) =>
+      task.status === "COMPLETED" &&
+      task.w_id === encodeURIComponent(props.data.w_id)
   );
 
   const screenRef = React.useRef<HTMLDivElement | null>(null);
@@ -48,7 +68,6 @@ const WorkspacePage: React.FC = () => {
         const mid_point = display_width / 2;
         const scrollLeft = screen.scrollLeft;
         if (scrollLeft < mid_point) {
-          
           screen.scrollTo({ left: 0, behavior: "smooth" });
         } else if (scrollLeft > mid_point && scrollLeft < mid_point * 3) {
           screen.scrollTo({ left: display_width, behavior: "smooth" });
@@ -68,12 +87,13 @@ const WorkspacePage: React.FC = () => {
         <li className={s.task} key={`next-up-${index}`}>
           <TaskCard
             assigned_member={task.assigned_member}
-            comments_count={task.comments_count}
+            comments_count={task.comments.length}
             deadline={task.deadline}
             description={task.description}
             name={task.title}
             priority={task.priority}
             w_id={task.w_id}
+            id={task.t_id}
           />
         </li>
       );
@@ -90,12 +110,13 @@ const WorkspacePage: React.FC = () => {
         <li className={s.task} key={`in-progress-${index}`}>
           <TaskCard
             assigned_member={task.assigned_member}
-            comments_count={task.comments_count}
+            comments_count={task.comments.length}
             deadline={task.deadline}
             description={task.description}
             name={task.title}
             priority={task.priority}
             w_id={task.w_id}
+            id={task.t_id}
           />
         </li>
       );
@@ -112,12 +133,13 @@ const WorkspacePage: React.FC = () => {
         <li className={s.task} key={`revised-${index}`}>
           <TaskCard
             assigned_member={task.assigned_member}
-            comments_count={task.comments_count}
+            comments_count={task.comments.length}
             deadline={task.deadline}
             description={task.description}
             name={task.title}
             priority={task.priority}
             w_id={task.w_id}
+            id={task.t_id}
           />
         </li>
       );
@@ -134,12 +156,13 @@ const WorkspacePage: React.FC = () => {
         <li className={s.task} key={`completed-${index}`}>
           <TaskCard
             assigned_member={task.assigned_member}
-            comments_count={task.comments_count}
+            comments_count={task.comments.length}
             deadline={task.deadline}
             description={task.description}
             name={task.title}
             priority={task.priority}
             w_id={task.w_id}
+            id={task.t_id}
           />
         </li>
       );
@@ -172,40 +195,72 @@ const WorkspacePage: React.FC = () => {
     },
   ];
 
-  const log_list: ActivityLogType[] = [
-    {
-      a_id: "",
-      activity_desc: "maulana open this task",
-      created_at: "2023-2-2",
-      t_id: "",
-      u_id: "",
-      w_id: "",
-    },
-    {
-      a_id: "",
-      activity_desc: "tuslam open this task",
-      created_at: "2023-2-2",
-      t_id: "",
-      u_id: "",
-      w_id: "",
-    },
-  ];
-
   const [isMenuActive, setIsMenuActive] = React.useState<boolean>(false);
+  const [verifyId, setVerifyId] = React.useState<string | null>(null);
+
+  const newTaskHandler = async (t: ProgressStatusType) => {
+    const data: TaskType = {
+      activity_list: [],
+      assigned_member: [],
+      author: user_data ? user_data.username : "",
+      comments: [],
+      created_at: useDateNow(),
+      deadline: useDateNow(),
+      description: "",
+      priority: "MED",
+      seen_by: [],
+      status: t,
+      t_id: "",
+      title: "Tanpa Judul",
+      updated_at: useDateNow(),
+      w_id: props.data.w_id,
+      workspace_name: props.data.name,
+    };
+
+    const response = await fetch("/api/create-task", {
+      body: JSON.stringify(data),
+      headers: { "content-type": "json/application" },
+      method: "POST",
+    });
+
+    const res = await response.json();
+
+    const message = await res.message;
+
+    if ((await message) === "success" && response.status == 200) {
+      console.log("yeyyy");
+      setVerifyId(await res.t_id);
+    } else {
+      router.refresh();
+    }
+  };
+
+  React.useEffect(() => {
+    if (verifyId) {
+      router.push(`/task/${verifyId}`);
+    }
+  }, [verifyId]);
 
   return (
     <>
-      <Navbar title="Workspace 1" subtitle="Task list" />
+      <Navbar
+        title={props.data.name}
+        subtitle="Task list"
+        menuHandler={() => setIsMenuActive(true)}
+      />
       <BasicMenu
         button_list={menu_list}
         isActive={isMenuActive}
         title="Workspace Menu"
         delete_text="Delete Workspace"
-        log_list={log_list}
+        log_list={props.data.activity_list}
+        closeHandler={() => {
+          setIsMenuActive(false);
+        }}
       />
       <main className={s.main}>
         <div className={s.task_board}>
-          <OnlineBar users={workspace ? workspace.member_list : []} />
+          <OnlineBar users={props.data.member_list} />
           <div
             className={s.selection_screen}
             ref={screenRef}
@@ -219,6 +274,8 @@ const WorkspacePage: React.FC = () => {
                   color="#fff"
                   count={next_up ? next_up.length : 0}
                   title="Next Up"
+                  type="NEXT-UP"
+                  newTaskHandler={newTaskHandler}
                 />
                 <div className={s.list_screen}>
                   <ul className={s.task_list}>{NextUpViews}</ul>
@@ -231,6 +288,8 @@ const WorkspacePage: React.FC = () => {
                   color="#fff"
                   count={in_progress ? in_progress.length : 0}
                   title="In Progress"
+                  type="IN-PROGRESS"
+                  newTaskHandler={newTaskHandler}
                 />
                 <div className={s.list_screen}>
                   <ul className={s.task_list}>{InProgressViews}</ul>
@@ -243,6 +302,8 @@ const WorkspacePage: React.FC = () => {
                   color="#fff"
                   count={revised ? revised.length : 0}
                   title="Revised"
+                  type="REVISED"
+                  newTaskHandler={newTaskHandler}
                 />
                 <div className={s.list_screen}>
                   <ul className={s.task_list}>{RevisedViews}</ul>
@@ -255,6 +316,8 @@ const WorkspacePage: React.FC = () => {
                   color="#fff"
                   count={completed ? completed.length : 0}
                   title="Completed"
+                  type="COMPLETED"
+                  newTaskHandler={newTaskHandler}
                 />
                 <div className={s.list_screen}>
                   <ul className={s.task_list}>{CompletedViews}</ul>

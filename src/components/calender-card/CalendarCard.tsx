@@ -10,18 +10,6 @@ export interface CalendarCardProps {
 }
 
 const CalendarCard: React.FC<CalendarCardProps> = (props) => {
-  const ctx = React.useContext(Context);
-
-  const workspace_list = ctx?.user_workspaces_ctx;
-
-  const getWorkspaceName = (id: string) => {
-    if (workspace_list) {
-      const name = workspace_list.find((w) => w.w_id === id)?.name;
-      return name;
-    } else {
-      return "No workspace";
-    }
-  };
 
   return (
     <div className={s.card}>
@@ -33,18 +21,20 @@ const CalendarCard: React.FC<CalendarCardProps> = (props) => {
       <div className={s.content}>
         <ul className={s.list}>
           {props.task_list.map((task, index) => {
-            return (
-              <li className={s.item} key={`task-calendar-${index}`}>
-                <span className={[s.name, "medium", "sm"].join(" ")}>
-                  {task.title} |{" "}
-                </span>
-                <span
-                  className={[s.workspace, "medium", "sm", "soft"].join(" ")}
-                >
-                  {getWorkspaceName(task.w_id)}
-                </span>
-              </li>
-            );
+            if (task.status !== "COMPLETED") {
+              return (
+                <li className={s.item} key={`task-calendar-${index}`}>
+                  <span className={[s.name, "medium", "sm"].join(" ")}>
+                    {task.title} |{" "}
+                  </span>
+                  <span
+                    className={[s.workspace, "medium", "sm", "soft"].join(" ")}
+                  >
+                    {task.workspace_name}
+                  </span>
+                </li>
+              );
+            }
           })}
         </ul>
       </div>
