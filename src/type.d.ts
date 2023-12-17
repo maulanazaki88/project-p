@@ -23,7 +23,7 @@ export interface WorkspaceType {
   description: string;
   notification_list: NotificationCardProps[];
   status: WorkspaceStatusType;
-  admin_list: string[];
+  admin_list: { u_id: string; username: string }[];
   member_list: { u_id: string; username: string }[];
   task_ids: string[];
   task_list: TaskType[];
@@ -43,7 +43,7 @@ export interface TaskType {
   activity_list: ActivityLogType[];
   w_id: string;
   workspace_name: string;
-  seen_by: string[];
+  seen_by: { u_id: string; username: string }[];
   comments: ChatBubbleProps[];
   status: ProgressStatusType;
   updated_at: string;

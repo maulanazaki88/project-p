@@ -1,5 +1,7 @@
 Flask==2.2.2
 Werkzeug==2.2.2
+fastapi
+uvicorn[standard]
 Flask_mongoengine
 Flask_PyMongo
 pymongo

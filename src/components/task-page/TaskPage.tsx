@@ -18,6 +18,11 @@ import { useCalendar } from "@/hook/useCalendar";
 import Comments from "@/components/comments/Comments";
 import { ChatBubbleProps } from "@/components/chat-bubble/ChatBubble";
 import { getTask } from "@/server/actions";
+import CalendarInput from "../calender-input/CalendarInput";
+import { useDateNow } from "@/hook/useDateNow";
+import MemberListMenu, {
+  MemberListMenuMemo,
+} from "../member-list-menu/MemberListMenu";
 
 interface TaskPageProps {
   data: TaskType;
@@ -30,6 +35,34 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
 
   const workspace_list = ctx?.user_workspaces_ctx;
   const workspace_list_handler = ctx?.user_workspaces_handler_ctx;
+
+  const getWorkspaceName = (id: string) => {
+    if (workspace_list) {
+      const workspace = workspace_list.find((w) => w.w_id === id);
+      if (workspace) {
+        const name = workspace.name;
+        return name;
+      } else {
+        return "No Workspace";
+      }
+    } else {
+      return "No Workspace";
+    }
+  };
+
+  const getWorkspaceMember = (id: string) => {
+    if (workspace_list) {
+      const workspace = workspace_list.find((w) => w.w_id === id);
+      if (workspace) {
+        const member = workspace.member_list;
+        return member;
+      } else {
+        return [];
+      }
+    } else {
+      return [];
+    }
+  };
 
   const [task, setTask] = React.useState<TaskType>({
     activity_list: props.data.activity_list,
@@ -46,7 +79,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     title: props.data.title,
     updated_at: props.data.updated_at,
     w_id: props.data.w_id,
-    workspace_name: props.data.workspace_name,
+    workspace_name: getWorkspaceName(props.data.w_id),
   });
 
   const changeHandler = (
@@ -82,9 +115,16 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
       : 3
   );
 
+  const [isCalendarActive, setIsCalendarActive] =
+    React.useState<boolean>(false);
+
   const [isMenuActive, setIsMenuActive] = React.useState<boolean>(false);
   const [isCommentsActive, setIsCommentsActive] =
     React.useState<boolean>(false);
+  const [isMemberListMenuActive, setIsMemberListMenuActive] =
+    React.useState<boolean>(false);
+
+  const [startDate, setStartDate] = React.useState<string>(useDateNow);
 
   //   React.useEffect(() => {
   //     const data: TaskType = {
@@ -113,7 +153,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
   //       });
   //   }, [prioritySelect, statusSelect, task]);
 
-  const backSave = async () => {
+  const backSave = React.useCallback(async () => {
     const data: TaskType = {
       ...task,
       priority:
@@ -127,6 +167,8 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
           ? "REVISED"
           : "COMPLETED",
     };
+
+    console.log(data);
 
     const response = await fetch(`/api/update-task/${props.data.t_id}`, {
       method: "PUT",
@@ -164,6 +206,56 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         router.back();
       }
     }
+  }, [task, statusSelect, prioritySelect]);
+
+  React.useEffect(() => {
+    const data: TaskType = {
+      ...task,
+      priority:
+        prioritySelect === 0 ? "LOW" : prioritySelect === 1 ? "MED" : "HIGH",
+      status:
+        statusSelect === 0
+          ? "NEXT-UP"
+          : statusSelect === 1
+          ? "IN-PROGRESS"
+          : statusSelect === 2
+          ? "REVISED"
+          : "COMPLETED",
+    };
+    // router.refresh();
+    console.log(data);
+  }, []);
+
+  React.useEffect(() => {
+    console.log(isCalendarActive);
+  }, [isCalendarActive]);
+
+  React.useEffect(() => {
+    console.log(startDate);
+  }, [startDate]);
+
+  const memberChangeHandler = (
+    payload: { u_id: string; username: string },
+    set: boolean
+  ) => {
+    if (set) {
+      setTask((prev) => {
+        return {
+          ...prev,
+          assigned_member: task.assigned_member.concat(payload),
+        };
+      });
+    } else if (!set) {
+      setTask((prev) => {
+        return {
+          ...prev,
+          assigned_member: task.assigned_member.filter(
+            (m) => m.username !== payload.username
+          ),
+        };
+      });
+    } else {
+    }
   };
 
   if (task) {
@@ -171,7 +263,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
       <>
         <Navbar
           title={"Detail Tugas"}
-          subtitle={task.workspace_name}
+          subtitle={getWorkspaceName(props.data.w_id)}
           menuHandler={() => setIsMenuActive(true)}
           backSave={backSave}
         />
@@ -185,14 +277,25 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
             setIsMenuActive(false);
           }}
         />
+        +
         <Comments
           chat_list={task.comments}
           closeHandler={() => {
             setIsCommentsActive(false);
           }}
           task_name={task.title}
-          workspace_name={task.workspace_name}
+          workspace_name={task.title}
           isActive={isCommentsActive && !isMenuActive}
+        />
+        <MemberListMenuMemo
+          member_list={getWorkspaceMember(task.w_id)}
+          assigned_member={task.assigned_member}
+          show={isMemberListMenuActive}
+          t_id={task.t_id}
+          closeHandler={() => {
+            setIsMemberListMenuActive(false);
+          }}
+          memberClickHandler={memberChangeHandler}
         />
         <main className={s.main}>
           <section className={s.task}>
@@ -223,10 +326,18 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                   color="rgba(0, 0, 0, 0.08)"
                   icon="/icons/calendar.svg"
                   opacity={1}
+                  onClick={() => {
+                    setIsCalendarActive(!isCalendarActive);
+                  }}
                 />
-                <span className={[s.date, "sm", "medium"].join(" ")}>
-                  {useCalendar(task.deadline, ["d", "m"])}
-                </span>
+                <CalendarInput
+                  show={true}
+                  value={`${task.deadline.split("-")[0]}-${
+                    task.deadline.split("-")[1]
+                  }-${task.deadline.split("-")[2]}`}
+                  name={"deadline"}
+                  onChange={changeHandler}
+                />
               </div>
             </div>
             <div className={s.priority}>
@@ -290,6 +401,9 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                   text=""
                   icon="/icons/plus.svg"
                   key={"plus-btn"}
+                  onClick={() => {
+                    setIsMemberListMenuActive(true);
+                  }}
                 />
                 <ul className={s.list}>
                   {task.assigned_member.map((member, index) => {
@@ -299,7 +413,19 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                         key={`assigned-member-${index}`}
                         style={{ marginLeft: index > 0 ? "12px" : "0px" }}
                       >
-                        <UsernameButton username={member.username} withDelete />
+                        <UsernameButton
+                          username={member.username}
+                          withDelete
+                          deleteHandler={(username) => {
+                            memberChangeHandler(
+                              {
+                                u_id: member.u_id,
+                                username: username,
+                              },
+                              false
+                            );
+                          }}
+                        />
                       </li>
                     );
                   })}

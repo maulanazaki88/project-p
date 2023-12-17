@@ -1,0 +1,25 @@
+.calendar {
+    position: relative;
+    display: flex;
+    z-index: 99;
+    font-family: inherit;
+}
+
+.input {
+    position: relative;
+    background-color: #fff;
+    color: #000;
+    outline: none;
+    /* border: 1px solid black; */
+    font-family: inherit;
+    border: none;
+    color-scheme: light;
+    width: min-content;
+    
+}
+
+
+.input::-webkit-inner-spin-button {
+    background-color: #000;
+
+}

@@ -7,8 +7,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "flask-dev": "pip install -r requirements.txt && python -m flask --app src/api/index run -p 8000",
-        "dev": "concurrently \"npm run next-dev\" \"npm run flask-dev\""
+        "uvicorn-dev": "pip install -r requirements.txt && python -m uvicorn main:app --app-dir src/api --port 8000",
+        "dev": "concurrently \"npm run next-dev\" \"npm run uvicorn-dev\""
     },
     "dependencies": {
         "@tanstack/react-query": "^5.13.4",
@@ -16,11 +16,13 @@
         "dotenv": "^16.3.1",
         "next": "13.5.4",
         "react": "^18",
+        "react-datepicker": "^4.24.0",
         "react-dom": "^18"
     },
     "devDependencies": {
         "@types/node": "^20",
         "@types/react": "^18",
+        "@types/react-datepicker": "^4.19.4",
         "@types/react-dom": "^18",
         "eslint": "^8",
         "eslint-config-next": "13.5.4",

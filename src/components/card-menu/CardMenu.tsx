@@ -5,6 +5,7 @@ import MenuNavbar from "../menu-navbar/MenuNavbar";
 import NotificationCard, {
   NotificationCardProps,
 } from "../notification-card/NotificationCard";
+import ButtonLarge from "../button-large/ButtonLarge";
 
 interface CardMenuProps {
   calendar_list?: CalendarCardProps[];
@@ -12,6 +13,7 @@ interface CardMenuProps {
   isActive: boolean;
   title: string;
   closeHandler: () => void;
+  newNotificationHandler?: () => void;
 }
 
 const CardMenu: React.FC<CardMenuProps> = (props) => {
@@ -41,11 +43,20 @@ const CardMenu: React.FC<CardMenuProps> = (props) => {
           </li>
         );
       })}
+      <li className={s.add}>
+        <ButtonLarge
+          bg_color="#fff"
+          color="#000"
+          text="New Notification"
+          icon="/icons/plus.svg"
+          onClick={props.newNotificationHandler}
+        />
+      </li>
     </ul>
   );
 
   return (
-    <div className={s.menu} style={{left: props.isActive ? "0" : '100%'}} >
+    <div className={s.menu} style={{ left: props.isActive ? "0" : "100%" }}>
       <MenuNavbar title={props.title} closeHandler={props.closeHandler} />
       {CalendarViews}
       {NotificationViews}

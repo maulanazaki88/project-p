@@ -25,10 +25,6 @@ const HomePage: React.FC<HomePageProps> = (props) => {
   const set_user_data = ctx?.user_data_handler_ctx;
   const set_workspace_data = ctx?.user_workspaces_handler_ctx;
 
-  if (props.data && set_user_data) {
-    set_user_data(props.data);
-  }
-
   const [searchInput, setSearchInput] = React.useState<string>("");
   const [calendarMenuActive, setCalendarMenuActive] =
     React.useState<boolean>(false);
@@ -36,10 +32,6 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     React.useState<boolean>(false);
 
   const workspace_list = props.data.workspace_list as WorkspaceType[];
-
-  if(props.data && set_workspace_data){
-    set_workspace_data(workspace_list)
-  }
 
   let task_list: TaskType[] = [];
   let notification_list: NotificationCardProps[] = [];
@@ -75,6 +67,16 @@ const HomePage: React.FC<HomePageProps> = (props) => {
         task_list: task_list.filter((task) => task.deadline === d),
       } as CalendarCardProps;
     });
+
+  React.useEffect(() => {
+    if (props.data && set_user_data) {
+      set_user_data(props.data);
+    }
+    if (props.data && set_workspace_data) {
+      set_workspace_data(workspace_list);
+    }
+    router.refresh()
+  }, []);
 
   return (
     <>

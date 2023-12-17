@@ -12,6 +12,7 @@ interface BasicMenuProps {
   delete_text?: string;
   isActive: boolean;
   closeHandler: () => void;
+  deleteHandler?: () => void;
 }
 
 const BasicMenu: React.FC<BasicMenuProps> = (props) => {
@@ -29,6 +30,7 @@ const BasicMenu: React.FC<BasicMenuProps> = (props) => {
                 icon={btn.icon}
                 notification={btn.notification}
                 rowReverse
+                onClick={btn.onClick}
               />
             </li>
           );
@@ -47,6 +49,7 @@ const BasicMenu: React.FC<BasicMenuProps> = (props) => {
           text={props.delete_text}
           icon="/icons/delete_white.svg"
           rowReverse
+          onClick={props.deleteHandler}
         />
       )}
     </div>

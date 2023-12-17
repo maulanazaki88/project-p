@@ -6,6 +6,7 @@ import RoundButton from "../round-button/RoundButton";
 interface UsernameButtonProps {
   username: string;
   withDelete?: boolean;
+  deleteHandler?: (username: string) => void;
 }
 
 const UsernameButton: React.FC<UsernameButtonProps> = (props) => {
@@ -23,6 +24,9 @@ const UsernameButton: React.FC<UsernameButtonProps> = (props) => {
             opacity={0.7}
             rotate={45}
             scale={1}
+            onClick={() => {
+              if (props.deleteHandler) props.deleteHandler(props.username);
+            }}
           />
         </div>
       )}

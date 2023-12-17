@@ -1,4 +1,3 @@
-
 import { TaskType, UserType, WorkspaceType } from "@/type";
 
 export const getUser = async (id: string) => {
@@ -7,6 +6,7 @@ export const getUser = async (id: string) => {
     headers: {
       "content-type": "application/json",
     },
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -26,6 +26,7 @@ export const createUser = async (data: UserType) => {
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -46,6 +47,7 @@ export const updateUser = async (id: string, data: UserType) => {
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -63,6 +65,7 @@ export const deleteUser = async (id: string) => {
     headers: {
       "content-type": "application/json",
     },
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -81,6 +84,7 @@ export const createWorkspace = async (data: WorkspaceType) => {
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -98,6 +102,7 @@ export const getWorkspace = async (id: string) => {
     headers: {
       "content-type": "application/json",
     },
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -116,6 +121,7 @@ export const updateWorkspace = async (id: string, data: WorkspaceType) => {
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -133,6 +139,7 @@ export const deleteWorkspace = async (id: string) => {
     headers: {
       "content-type": "application/json",
     },
+    cache: "no-store"
   });
 
   const json = await response.json();
@@ -151,6 +158,7 @@ export const createTask = async (data: TaskType) => {
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -168,6 +176,7 @@ export const getTask = async (id: string) => {
     headers: {
       "content-type": "application/json",
     },
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -186,6 +195,7 @@ export const updateTask = async (id: string, data: TaskType) => {
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
+    cache: "no-store"
   });
 
   const json = await response.json()
@@ -203,6 +213,7 @@ export const deleteTask = async (id: string) => {
     headers: {
       "content-type": "application/json",
     },
+    cache: "no-store"
   });
 
   const json = await response.json()

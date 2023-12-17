@@ -17,6 +17,9 @@ import {
 import { useRouter } from "next/navigation";
 import { getWorkspace } from "@/server/actions";
 import { useDateNow } from "@/hook/useDateNow";
+import CardMenu from "../card-menu/CardMenu";
+import { usePathname } from "next/navigation";
+import FormMenu from "../from-menu/FormMenu";
 
 interface WorkspacePageProps {
   data: WorkspaceType;
@@ -27,8 +30,10 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const display_width = ctx?.display_width_ctx;
 
   const user_data = ctx?.user_data_ctx;
+  const user_workspace = ctx?.user_workspaces_ctx;
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const task_list = props.data.task_list as TaskType[];
 
@@ -179,24 +184,53 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
       color: "",
       text: "Edit Workspace",
       icon: "/icons/edit_black.svg",
+      onClick: () => {
+        router.push(`/workspace-setup/${props.data.w_id}`);
+      },
     },
-    {
-      bg_color: "",
-      color: "",
-      text: "Antrian Masuk",
-      icon: "/icons/queue_black.svg",
-      notification: 2,
-    },
+    // {
+    //   bg_color: "",
+    //   color: "",
+    //   text: "Antrian Masuk",
+    //   icon: "/icons/queue_black.svg",
+    //   notification: 2,
+    // },
     {
       bg_color: "",
       color: "",
       text: "Salin Link",
       icon: "/icons/copy_black.svg",
+      onClick: () => {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(pathname);
+        }
+      },
+    },
+    {
+      bg_color: "",
+      color: "",
+      text: "Notification",
+      icon: "/icons/notification.svg",
+      onClick: () => {
+        setIsNotificationMenuActive(true);
+        console.log("SUMMONED NOTIFICATION MENU");
+      },
     },
   ];
 
   const [isMenuActive, setIsMenuActive] = React.useState<boolean>(false);
+  const [isNotificationMenuActive, setIsNotificationMenuActive] =
+    React.useState<boolean>(false);
+  const [showNotificationForm, setShowNotificationForm] =
+    React.useState<boolean>(false);
   const [verifyId, setVerifyId] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    console.log({
+      workspace: props.data.name,
+      w_id: props.data.w_id,
+    });
+  }, []);
 
   const newTaskHandler = async (t: ProgressStatusType) => {
     const data: TaskType = {
@@ -235,6 +269,15 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     }
   };
 
+  const notificationSubmitHandler = (data: {
+    key: string;
+    value: string;
+  }) => {
+    if(user_workspace){
+
+    }
+  };
+
   React.useEffect(() => {
     if (verifyId) {
       router.push(`/task/${verifyId}`);
@@ -248,6 +291,25 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
         subtitle="Task list"
         menuHandler={() => setIsMenuActive(true)}
       />
+      <FormMenu
+        closeHandler={() => setShowNotificationForm(false)}
+        label="Notification"
+        name="notification"
+        show={showNotificationForm}
+        submitHandler={notificationSubmitHandler}
+        title="New notification"
+      />
+      <CardMenu
+        closeHandler={() => {
+          setIsNotificationMenuActive(false);
+        }}
+        isActive={isNotificationMenuActive}
+        title="Notification"
+        notification_list={props.data.notification_list}
+        newNotificationHandler={() => {
+          setShowNotificationForm(true);
+        }}
+      />
       <BasicMenu
         button_list={menu_list}
         isActive={isMenuActive}
@@ -258,6 +320,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           setIsMenuActive(false);
         }}
       />
+
       <main className={s.main}>
         <div className={s.task_board}>
           <OnlineBar users={props.data.member_list} />

@@ -5,11 +5,21 @@ import RoundButton from "../round-button/RoundButton";
 interface MenuNavbarProps {
   title: string;
   closeHandler: () => void;
+  no_blur?: boolean;
+  transparent?: boolean;
 }
 
 const MenuNavbar: React.FC<MenuNavbarProps> = (props) => {
   return (
-    <div className={s.navbar}>
+    <div
+      className={s.navbar}
+      style={{
+        backgroundColor: !props.no_blur
+          ? "rgba(255, 255, 255, 0.5)"
+          : "transparent",
+        backdropFilter: props.no_blur ? "none" : "blur(10px)"
+      }}
+    >
       <div className={s.left}>
         <RoundButton
           color="rgba(0, 0, 0, 0.08)"

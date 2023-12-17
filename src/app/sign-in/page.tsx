@@ -47,12 +47,14 @@ const SignInPage: React.FC = () => {
     const response = await fetch("/api/sign-in", {
       method: "POST",
       headers: {
-        "content-type": "application/json",
+        "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify(data),
     });
 
     const json = await response.json();
+
+    console.log(await json)
 
     if (await json) {
       if (json.message === "success") {
@@ -89,7 +91,7 @@ const SignInPage: React.FC = () => {
           onChange={changeHandler}
           name="password"
           placeholder="Masukan Password Anda"
-          key={"username-input"}
+          key={"password-input"}
           value={data.password}
           label="Password"
           type="password"
