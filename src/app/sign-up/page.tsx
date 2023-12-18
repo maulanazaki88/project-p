@@ -51,10 +51,11 @@ const SignUpPage: React.FC = () => {
     const message = await res.message;
 
     if ((await message) == "success" && response.status == 200) {
-      console.log("yeyyy");
+      console.log(await res);
       setVerifyId(await res.u_id);
     } else if ((await message) == "user-exist") {
       console.log("nooo");
+      console.log(await res);
       setButtonDisabled(false);
       setWarning((prev) => {
         return {
@@ -64,7 +65,8 @@ const SignUpPage: React.FC = () => {
       });
     } else {
       console.log("nooo");
-      setButtonDisabled(false);
+      console.log(await res);
+      // setButtonDisabled(false);
       setWarning((prev) => {
         return {
           ...prev,

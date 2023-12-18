@@ -10,7 +10,11 @@ import CardMenu from "@/components/card-menu/CardMenu";
 import { CalendarCardProps } from "@/components/calender-card/CalendarCard";
 import { NotificationCardProps } from "@/components/notification-card/NotificationCard";
 import { TaskType, UserType, WorkspaceType } from "@/type";
-import Context from "@/context/Store";
+import Context, {
+  ContextType,
+  TaskInit_Act,
+  WorkspaceInit_Act,
+} from "@/context/Store";
 import { useRouter } from "next/navigation";
 
 interface HomePageProps {
@@ -18,12 +22,18 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = (props) => {
+  const {
+    user_data_ctx,
+    user_data_handler_ctx,
+    initialize_workspaces_ctx,
+    initialize_tasks_ctx,
+    user_workspaces_ctx,
+    user_task_ctx,
+  } = React.useContext(Context) as ContextType;
+
+  const actual_user_data: UserType = user_data_ctx ? user_data_ctx : props.data;
+
   const router = useRouter();
-
-  const ctx = React.useContext(Context);
-
-  const set_user_data = ctx?.user_data_handler_ctx;
-  const set_workspace_data = ctx?.user_workspaces_handler_ctx;
 
   const [searchInput, setSearchInput] = React.useState<string>("");
   const [calendarMenuActive, setCalendarMenuActive] =
@@ -69,13 +79,21 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     });
 
   React.useEffect(() => {
-    if (props.data && set_user_data) {
-      set_user_data(props.data);
+    user_data_handler_ctx(props.data);
+    initialize_workspaces_ctx({
+      workspace_list: props.data.workspace_list,
+    } as WorkspaceInit_Act);
+
+    const tasks: TaskType[] = [];
+
+    for (let workspace of props.data.workspace_list) {
+      for (let task of workspace.task_list) {
+        tasks.push({ ...task, workspace_name: workspace.name });
+      }
     }
-    if (props.data && set_workspace_data) {
-      set_workspace_data(workspace_list);
-    }
-    router.refresh()
+
+    initialize_tasks_ctx({ task_list: tasks } as TaskInit_Act);
+    // router.refresh();
   }, []);
 
   return (

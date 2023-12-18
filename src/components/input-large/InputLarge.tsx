@@ -7,6 +7,7 @@ interface InputLargeProps {
   placeholder: string;
   name: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onBlur?: () => void
 }
 
 const InputLarge: React.FC<InputLargeProps> = (props) => {
@@ -25,6 +26,7 @@ const InputLarge: React.FC<InputLargeProps> = (props) => {
         onChange={props.onChange}
         className={[s.textarea, "sm", "medium"].join(" ")}
         placeholder={props.placeholder}
+        onBlur={props.onBlur}
       />
     </div>
   );

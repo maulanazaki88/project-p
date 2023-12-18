@@ -14,6 +14,7 @@ interface InputSmallProps {
   type: HTMLInputTypeAttribute;
   warning: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
 }
 
 const InputSmall: React.FC<InputSmallProps> = (props) => {
@@ -41,6 +42,7 @@ const InputSmall: React.FC<InputSmallProps> = (props) => {
           className={[s.input, "medium", "sm"].join(" ")}
           name={props.name}
           id={props.name}
+          onBlur={props.onBlur}
         />
       </div>
       <span className={[s.warning, "sm", "regular"].join(" ")} style={{color: props.warning === "-" ? "transparent" : "red"}} >{props.warning}</span>

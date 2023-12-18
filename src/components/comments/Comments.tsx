@@ -4,12 +4,18 @@ import MenuNavbar from "../menu-navbar/MenuNavbar";
 import ChatBubble, { ChatBubbleProps } from "../chat-bubble/ChatBubble";
 import Context from "@/context/Store";
 import RoundButton from "../round-button/RoundButton";
+import { useDateNow } from "@/hook/useDateNow";
 
 interface CommentsProps {
   task_name: string;
   workspace_name: string | undefined;
   chat_list: ChatBubbleProps[];
   closeHandler: () => void;
+  sendComment: (data: {
+    message: string;
+    username: string;
+    time: string;
+  }) => void;
   isActive: boolean;
 }
 
@@ -55,7 +61,13 @@ const Comments: React.FC<CommentsProps> = (props) => {
           color="#79C89F"
           icon="/icons/plane_white.svg"
           opacity={1}
-          onClick={() => {}}
+          onClick={() =>
+            props.sendComment({
+              message: comment_val,
+              username: user_data?.username ? user_data.username : "-",
+              time: useDateNow({ withTime: true }),
+            })
+          }
           scale={1}
         />
       </div>

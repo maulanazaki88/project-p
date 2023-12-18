@@ -4,6 +4,7 @@ import React from "react";
 import Avatar from "../avatar/Avatar";
 import ButtonMedium from "../button-medium/ButtonMedium";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 interface WorkspaceCardProps {
   name: string;
@@ -18,9 +19,12 @@ export const color_list = ["#F99370", "#F4D4BE", "#A523A2"];
 
 const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const goToWorkspace = (id: string) => {
-    router.push(`/workspace/${encodeURIComponent(id)}`);
+
+    router.push(`${pathname}/workspace/${encodeURIComponent(id)}`);
+
   };
 
   return (

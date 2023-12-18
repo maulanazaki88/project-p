@@ -5,12 +5,13 @@ import Image from "next/image";
 import Avatar from "../avatar/Avatar";
 import { useCalendar } from "@/hook/useCalendar";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Context from "@/context/Store";
 
 interface TaskCardProps {
   name: string;
   w_id: string;
-  assigned_member: {u_id: string, username: string}[];
+  assigned_member: { u_id: string; username: string }[];
   priority: TaskPriorityType;
   description: string;
   deadline: string;
@@ -30,9 +31,16 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
     user_workspaces.find((workspace) => workspace.w_id === props.w_id)?.name;
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const goToTask = (id: string) => {
-    router.push(`/task/${encodeURIComponent(id)}`);
+    if (pathname.includes("workspace")) {
+      router.push(`${pathname}/task/${encodeURIComponent(id)}`);
+    } else {
+      router.push(
+        `${pathname}/workspace/${props.w_id}/task/${encodeURIComponent(id)}`
+      );
+    }
   };
 
   return (

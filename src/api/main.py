@@ -13,67 +13,67 @@ app = FastAPI()
 
 
 class ChatBubble(BaseModel):
-    username: str | None 
-    message: str | None 
-    time: str | None
+    username: str | None = None
+    message: str | None = None
+    time: str | None = None
 
 
 class ActivityLog(BaseModel):
-    a_id: str | None
-    activity_desc: str | None
-    created_at: str | None
-    activity_type: str | None
+    a_id: str | None = None
+    activity_desc: str | None = None
+    created_at: str | None = None
+    activity_type: str | None = None
 
 
 class Comment(BaseModel):
-    comment_id: str | None
-    t_id: str | None
-    chat_list: Optional[list[ChatBubble]]
+    comment_id: str | None = None
+    t_id: str | None = None
+    chat_list: Optional[list[ChatBubble]] = None
 
 
 class Task(BaseModel):
-    t_id: str | None
-    title: str | None
-    description: str | None
+    t_id: str | None = None
+    title: str | None = None
+    description: str | None = None
     assigned_member: Optional[list[TypedDict(
-        'assigned_member', {"u_id": str, "username": str})]]
-    deadline: str | None
-    priority: str | None
-    created_at: str | None
-    activity_list: list[ActivityLog] | None
-    w_id: str | None
-    workspace_name: str | None
+        'assigned_member', {"u_id": str, "username": str})]] = None
+    deadline: str | None = None
+    priority: str | None = None
+    created_at: str | None = None
+    activity_list: list[ActivityLog] | None = None
+    w_id: str | None = None
+    workspace_name: str | None = None
     seen_by: Optional[list[TypedDict(
         'assigned_member', {"u_id": str, "username": str})]]
-    comments: Optional[list[ChatBubble]]
-    status: str | None
-    author: str | None
+    comments: Optional[list[ChatBubble]] = None
+    status: str | None = None
+    author: str | None = None
 
 
 class Notification(BaseModel):
-    username: str | None
-    message: str | None
-    created_at: str | None
-    w_id: str | None
+    username: str | None = None
+    message: str | None = None
+    created_at: str | None = None
+    w_id: str | None = None
 
 
 class Workspace(BaseModel):
-    w_id: str | None
-    name: str | None
-    description: str | None
-    notification_list: Optional[list[Notification]]
+    w_id: str | None = None
+    name: str | None = None
+    description: str | None = None
+    notification_list: Optional[list[Notification]] = None
 
 
 class User(BaseModel):
-    u_id: str | None
-    username: str | None
-    email: str | None
-    password: str | None
-    workspace_ids: list[str]
-    workspace_list: Optional[list[Workspace]]
-    created_at: str | None
-    is_online: int | None
-    updated_at: str | None
+    u_id: str | None = None
+    username: str | None = None
+    email: str | None = None
+    password: str | None = None
+    workspace_ids: list[str] = None
+    workspace_list: Optional[list[Workspace]] = None
+    created_at: str | None = None
+    is_online: int | None = None
+    updated_at: str | None = None
 
 
 client = MongoClient(
@@ -90,11 +90,25 @@ tasks_collection = database["tasks"]
 users_collection = database["users"]
 workspaces_collection = database["workspaces"]
 
+################################## USER #####################################################################
+
+
+@app.post('/api/sign-in')
+async def signIn(data: User):
+    records = jsonable_encoder(data)
+    # print(records)
+    get_records = users_collection.find_one(
+        {"email": records["email"]}, {'_id': 0})
+    if get_records["password"] == records["password"]:
+        return {"message": "success", "u_id": get_records["u_id"]}
+    else:
+        return {"message": "failed", "u_id": ""}
+
 
 @app.post("/api/create-user")
-async def create_user(data: Request):
+async def create_user(data: User):
     # konversi json ke dictionary
-    user_dict = json.jsonable_encoder(data)
+    user_dict = jsonable_encoder(data)
     # request.data => data yg dikirimkan oleh klien
 
     # jumlah data ditemukan
@@ -121,6 +135,62 @@ async def create_user(data: Request):
         return json.dumps({"message": "failed"})
 
 
+@app.get("/api/get-user/{u_id}")
+def get_user(u_id: str):
+    user = users_collection.aggregate([{'$match': {'u_id': u_id}}, {'$lookup': {'from': 'workspaces', 'localField': 'workspace_ids', 'foreignField': 'w_id', 'pipeline': [
+                                      {'$lookup': {'from': 'tasks', 'localField': 'task_ids', 'foreignField': 't_id', 'pipeline': [{'$project': {'_id': 0}}], 'as': 'task_list'}}, {'$project': {"_id": 0}}], 'as': 'workspace_list'}}, {'$project': {'_id': 0}}])
+    return list(user)[0]
+
+
+@app.put("/api/update-user/{u_id}")
+async def update_user(u_id: str, item: User):
+    new_record = jsonable_encoder(item)
+
+    updated = users_collection.replace_one(
+        {"u_id": u_id}, new_record)
+
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count}
+
+
+@app.delete("/api/delete-user/{u_id}")
+def deleteUser(u_id: str):
+    delete = users_collection.delete_one({"u_id": u_id})
+
+    delete_count = delete.raw_result["n"]
+
+    return {"deleted_count": delete_count}
+
+
+class WorkspaceIds(BaseModel):
+    w_id: str | None = None
+
+
+@app.put("/api/update-user-add-workspace/{u_id}")
+def update_user_add_workspace_list(u_id: str, item: WorkspaceIds):
+    record = jsonable_encoder(item)
+    updated = users_collection.update_one(
+        {u_id: u_id}, {'$push': {'workspace_ids': record["w_id"]}})
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count}
+
+
+@app.put("/api/update-user-delete-workspace/{u_id}")
+def update_user_delete_workspace_list(u_id: str, item: WorkspaceIds):
+    record = jsonable_encoder(item)
+    updated = users_collection.update_one(
+        {u_id: u_id}, {'$pull': {'workspace_ids': record['w_id']}})
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count}
+
+################################## USER #####################################################################
+
+
+################################## WORKSPACE #####################################################################
+
 @app.post("/api/create-workspace")
 async def create_workspace(data: Workspace):
     # konversi json ke dictionary
@@ -140,6 +210,110 @@ async def create_workspace(data: Workspace):
 
     return json.dumps({"message": "success", "w_id": w_id})
 
+
+class WorkspaceName(BaseModel):
+    name: str | None = None
+    u_id: str | None = None
+
+
+@app.put("/api/update-workspace-name/{w_id}")
+async def update_workspace_name(w_id: str, item: WorkspaceName):
+    new_record = jsonable_encoder(item)
+
+    updated = workspaces_collection.update_one(
+        {"w_id": w_id}, {'$set': {'name': new_record["name"]}})
+
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count}
+
+
+class WorkspaceMemberChange(BaseModel):
+    username: str | None = None
+    u_id: str | None = None
+
+
+@app.put("/api/update-workspace-add-member/{w_id}")
+async def update_workspace_add_member(w_id: str, item: WorkspaceMemberChange):
+    new_record = jsonable_encoder(item)
+
+    updated = workspaces_collection.update_one(
+        {"w_id": w_id}, {'$push': {'member_list': new_record}})
+
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count}
+
+
+@app.put("/api/update-workspace-delete-member/{w_id}")
+async def update_workspace_del_member(w_id: str, item: WorkspaceMemberChange):
+    record = jsonable_encoder(item)
+
+    updated = workspaces_collection.update_one(
+        {"w_id": w_id}, {'$pull': {'member_list': {'u_id': {"$eq": record["u_id"]}}}})
+
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count}
+
+
+@app.get("/api/get-workspace/{w_id}")
+def get_workspace(w_id: str):
+    workspace = workspaces_collection.aggregate([{'$match': {'w_id': w_id}}, {'$lookup': {
+                                                'from': 'tasks', 'localField': 'task_ids', 'foreignField': 't_id', 'pipeline': [{'$project': {'_id': 0}}], 'as': 'task_list'}}, {'$project': {'_id': 0}}])
+
+    return list(workspace)[0]
+
+
+@app.put("/api/update-workspace-create-announcement/{w_id}")
+async def update_workspace_create_announcement(w_id: str, item: Notification):
+    record = jsonable_encoder(item)
+
+    updated = workspaces_collection.update_one(
+        {"w_id": w_id}, {'$push': {'notification_list': {record}}})
+
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count}
+
+
+@app.delete("/api/delete-workspace/{w_id}")
+def deleteUser(w_id: str):
+    delete = workspaces_collection.delete_one({"w_id": w_id})
+
+    delete_count = delete.raw_result["n"]
+
+    return {"deleted_count": delete_count}
+
+
+class TaskIds(BaseModel):
+    t_id: str | None = None
+
+
+@app.put("/api/update-workspace-add-task/{w_id}")
+def update_workspace_add_task(w_id: str, item: TaskIds):
+    record = jsonable_encoder(item)
+    updated = workspaces_collection.update_one(
+        {w_id: w_id}, {'$push': {'task_ids': record["t_id"]}})
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count}
+
+
+@app.put("/api/update-workspace-delete-task/{w_id}")
+def update_workspace_delete_task(w_id: str, item: TaskIds):
+    record = jsonable_encoder(item)
+    updated = workspaces_collection.update_one(
+        {w_id: w_id}, {'$pull': {'task_ids': record["t_id"]}})
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count}
+
+
+################################## WORKSPACE #####################################################################
+
+
+################################## TASK #####################################################################
 
 @app.post("/api/create-task")
 async def create_task(data: Task):
@@ -161,56 +335,6 @@ async def create_task(data: Task):
     return json.dumps({"message": "success", "t_id": t_id})
 
 
-@app.get("/api/get-user/{u_id}")
-def get_user(u_id: str):
-    user = users_collection.aggregate([{'$match': {'u_id': u_id}}, {'$lookup': {'from': 'workspaces', 'localField': 'workspace_ids', 'foreignField': 'w_id', 'pipeline': [
-                                      {'$lookup': {'from': 'tasks', 'localField': 'task_ids', 'foreignField': 't_id', 'pipeline': [{'$project': {'_id': 0}}], 'as': 'task_list'}}, {'$project': {"_id": 0}}], 'as': 'workspace_list'}}, {'$project': {'_id': 0}}])
-    return list(user)[0]
-
-
-
-@app.get("/api/get-workspace/{w_id}")
-def get_workspace(w_id: str):
-    workspace = workspaces_collection.aggregate([{'$match': {'w_id': w_id}}, {'$lookup': {
-                                                'from': 'tasks', 'localField': 'task_ids', 'foreignField': 't_id', 'pipeline': [{'$project': {'_id': 0}}], 'as': 'task_list'}}, {'$project': {'_id': 0}}])
-
-    return list(workspace)[0]
-
-
-@app.get("/api/get-task/{t_id}")
-def get_task(t_id: str):
-    task = tasks_collection.aggregate([{'$match': {'t_id': t_id}}, {'$lookup': {'from': 'workspaces', 'localField': 'w_id', 'foreignField': 'w_id', 'pipeline': [
-                                      {'$project': {'_id': 0, 'name': 1}}], 'as': 'workspace'}}, {'$project': {'_id': 0}}, {'$unwind': "$workspace"}])
-
-    return list(task)[0]
-
-
-@app.put("/api/update-user/{u_id}")
-async def update_user(u_id: str, item: User):
-    new_record = jsonable_encoder(item)
-
-    updated = users_collection.replace_one(
-        {"u_id": u_id}, new_record)
-
-    updated_count = updated.raw_result["nModified"]
-
-    return {"updated_count": updated_count}
-
-
-@app.put("/api/update-workspace/{w_id}")
-async def update_workspace(w_id: str, item: Workspace):
-    new_record = jsonable_encoder(item)
-
-    updated = workspaces_collection.replace_one(
-        {"w_id": w_id}, new_record)
-
-    updated_count = updated.raw_result["nModified"]
-
-    return {"updated_count": updated_count}
-
-@app.put("/api/update-workspace")
-
-
 @app.put("/api/update-task/{t_id}")
 async def update_task(t_id: str, item: Task):
     new_record = jsonable_encoder(item)
@@ -223,22 +347,117 @@ async def update_task(t_id: str, item: Task):
     return {"updated_count": updated_count}
 
 
-@app.delete("/api/delete-user/{u_id}")
-def deleteUser(u_id: str):
-    delete = users_collection.delete_one({"u_id": u_id})
+@app.get("/api/get-task/{t_id}")
+def get_task(t_id: str):
+    task = tasks_collection.aggregate([{'$match': {'t_id': t_id}}, {'$lookup': {'from': 'workspaces', 'localField': 'w_id', 'foreignField': 'w_id', 'pipeline': [
+                                      {'$project': {'_id': 0, 'name': 1}}], 'as': 'workspace'}}, {'$project': {'_id': 0}}, {'$unwind': "$workspace"}])
 
-    delete_count = delete.raw_result["n"]
-
-    return {"deleted_count": delete_count}
+    return list(task)[0]
 
 
-@app.delete("/api/delete-workspace/{w_id}")
-def deleteUser(w_id: str):
-    delete = workspaces_collection.delete_one({"w_id": w_id})
+class TaskTitle(BaseModel):
+    title: str
 
-    delete_count = delete.raw_result["n"]
 
-    return {"deleted_count": delete_count}
+@app.put("/api/update-task-title/{t_id}")
+def update_task_title(t_id: str, item: TaskTitle):
+    record = jsonable_encoder(item)
+    updated = tasks_collection.update_one(
+        {'t_id': t_id}, {'$set': {'title': record['title']}})
+    updated_count = updated.raw_result["nModified"]
+
+    return ({'updated_count', updated_count})
+
+
+class TaskDescription(BaseModel):
+    description: str
+
+
+@app.put("/api/update-task-description/{t_id}")
+def update_task_description(t_id: str, item: TaskDescription):
+    record = jsonable_encoder(item)
+    updated = tasks_collection.update_one(
+        {'t_id': t_id}, {'$set': {'description': record['description']}})
+    updated_count = updated.raw_result["nModified"]
+
+    return ({'updated_count', updated_count})
+
+
+class TaskDeadline(BaseModel):
+    deadline: str
+
+
+@app.put("/api/update-task-deadline/{t_id}")
+def update_task_deadline(t_id: str, item: TaskDeadline):
+    record = jsonable_encoder(item)
+    updated = tasks_collection.update_one(
+        {'t_id': t_id}, {'$set': {'deadline': record['deadline']}})
+    updated_count = updated.raw_result["nModified"]
+
+    return ({'updated_count', updated_count})
+
+
+class TaskPriority(BaseModel):
+    priority: str
+
+
+@app.put("/api/update-task-priority/{t_id}")
+def update_task_priority(t_id: str, item: TaskPriority):
+    record = jsonable_encoder(item)
+    updated = tasks_collection.update_one(
+        {'t_id': t_id}, {'$set': {'priority': record['priority']}})
+    updated_count = updated.raw_result["nModified"]
+
+    return ({'updated_count', updated_count})
+
+
+class TaskParticipants(BaseModel):
+    username: str
+    u_id: str
+
+
+@app.put("/api/update-task-add-participant/{t_id}")
+def update_task_participants(t_id: str, item: TaskParticipants):
+    record = jsonable_encoder(item)
+    updated = tasks_collection.update_one(
+        {'t_id': t_id}, {'$push': {'assigned_member': record}})
+    updated_count = updated.raw_result["nModified"]
+
+    return ({'updated_count', updated_count})
+
+
+@app.put("/api/update-task-delete-participant/{t_id}")
+def update_task_participants(t_id: str, item: TaskParticipants):
+    record = jsonable_encoder(item)
+    updated = tasks_collection.update_one(
+        {'t_id': t_id}, {'$pull': {'assigned_member': {'u_id': {'$eq': record['u_id']}}}})
+    updated_count = updated.raw_result["nModified"]
+
+    return ({'updated_count', updated_count})
+
+
+class TaskStatus(BaseModel):
+    status: str
+
+
+@app.put("/api/update-task-status/{t_id}")
+def update_task_status(t_id: str, item: TaskStatus):
+    record = jsonable_encoder(item)
+    updated = tasks_collection.update_one(
+        {'t_id': t_id}, {'$set': {'status': record['status']}})
+    updated_count = updated.raw_result["nModified"]
+
+    return ({'updated_count', updated_count})
+
+
+@app.put("/api/update-task-add-comment/{t_id}")
+def update_task_add_comment(t_id: str, item: ChatBubble):
+    record = jsonable_encoder(item)
+    updated = tasks_collection.update_one(
+        {'t_id': t_id}, {'$push': {'comments': record}})
+    updated_count = updated.raw_result["nModified"]
+
+    return ({'updated_count', updated_count})
 
 
 @app.delete("/api/delete-task/{t_id}")
@@ -250,15 +469,4 @@ def deleteTask(t_id: str):
     return {"deleted_count": delete_count}
 
 
-@app.post('/api/sign-in')
-async def signIn(data: User):
-    records = jsonable_encoder(data)
-    # print(records)
-    get_records = users_collection.find_one(
-        {"email": records["email"]}, {'_id': 0})
-    if get_records["password"] == records["password"]:
-        return {"message": "success", "u_id": get_records["u_id"]}
-    else:
-        return {"message": "failed", "u_id": ""}
-    
-
+################################## TASK #####################################################################
