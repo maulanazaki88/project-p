@@ -1,5 +1,6 @@
 "use client";
 import s from "./page.module.css";
+import React from "react";
 import Image from "next/image";
 import ButtonLarge from "@/components/button-large/ButtonLarge";
 import localFont from "next/font/local";

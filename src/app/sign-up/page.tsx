@@ -6,9 +6,13 @@ import ButtonLarge from "@/components/button-large/ButtonLarge";
 import { UserType } from "@/type";
 import { createUser } from "@/server/actions";
 import { useRouter } from "next/navigation";
+import { useDateNow } from "@/hook/useDateNow";
+import { useIdGenerator } from "@/hook/useIdGenerator";
 
 const SignUpPage: React.FC = () => {
   const router = useRouter();
+  const id_generator = useIdGenerator();
+  const date_now = useDateNow();
 
   const [user_data, set_user_data] = React.useState<UserType>({
     created_at: "",
@@ -39,10 +43,16 @@ const SignUpPage: React.FC = () => {
     e.preventDefault();
     console.log("Submit!!!");
     setButtonDisabled(true);
+    const date_time = date_now.withTime();
 
-    const response = await fetch("/api/create-user", {
-      body: JSON.stringify(user_data),
-      headers: { "content-type": "json/application" },
+    const response = await fetch(`/api/create-user`, {
+      body: JSON.stringify({
+        ...user_data,
+        created_at: date_time,
+        updated_at: date_time,
+        u_id: id_generator.user(),
+      } as UserType),
+      headers: { "content-type": "application/json" },
       method: "POST",
     });
 

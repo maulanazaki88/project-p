@@ -14,8 +14,12 @@ import { ChatBubbleProps } from "@/components/chat-bubble/ChatBubble";
 export interface ContextType {
   user_data_ctx: UserType | null;
   user_data_handler_ctx: React.Dispatch<UserType>;
-  user_workspaces_ctx: WorkspaceType[] | null;
+  user_workspaces_ctx: WorkspaceType[];
   initialize_workspaces_ctx: (payload: WorkspaceInit_Act) => void;
+  workspace_replace_ctx: (
+    w_id: string,
+    payload: WorkspaceReplace_Act
+  ) => Promise<any>;
   workspace_change_name_ctx: (
     w_id: string,
     payload: WorkspaceChangeName_Act
@@ -29,9 +33,15 @@ export interface ContextType {
     payload: WorkspaceCreateAnnouncement_Act
   ) => void;
 
-  workspace_delete_ctx: (w_id: string, payload: WorkspaceDelete_Act) => void;
-  workspace_create_ctx: (w_id: string, payload: WorkspaceCreate_Act) => void;
-  user_task_ctx: TaskType[] | null;
+  workspace_delete_ctx: (
+    w_id: string,
+    payload: WorkspaceDelete_Act
+  ) => Promise<any>;
+  workspace_create_ctx: (
+    w_id: string,
+    payload: WorkspaceCreate_Act
+  ) => Promise<any>;
+  user_task_ctx: TaskType[];
   initialize_tasks_ctx: (payload: TaskInit_Act) => void;
   task_change_title_ctx: (t_id: string, payload: TaskChangeTitle_Act) => void;
   task_change_description_ctx: (
@@ -52,8 +62,8 @@ export interface ContextType {
   ) => void;
   task_change_status_ctx: (t_id: string, payload: TaskChangeStatus_Act) => void;
   task_add_comment_ctx: (t_id: string, payload: TaskAddComment_Act) => void;
-  task_create_ctx: (t_id: string, payload: TaskCreate_Act) => void;
-  task_delete_ctx: (t_id: string, payload: TaskDelete_Act) => void;
+  task_create_ctx: (t_id: string, payload: TaskCreate_Act) => Promise<any>;
+  task_delete_ctx: (t_id: string, payload: TaskDelete_Act) => Promise<any>;
   display_width_ctx: number;
   task_comments_ctx: CommentType[] | null;
   task_comments_handler_ctx: React.Dispatch<CommentType[]>;
@@ -81,6 +91,10 @@ export type WorkspaceChangeTasks_Act = {
   task: TaskType;
   action: "ADD" | "DEL" | "MOD";
 };
+export type WorkspaceReplace_Act = {
+  u_id: string;
+  workspace: WorkspaceType;
+};
 
 export function isWorkspaceInit(
   payload:
@@ -91,6 +105,7 @@ export function isWorkspaceInit(
     | WorkspaceCreate_Act
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
 ): payload is WorkspaceInit_Act {
   return (payload as WorkspaceInit_Act).workspace_list !== undefined;
 }
@@ -104,6 +119,7 @@ export function isWorkspaceChangeName(
     | WorkspaceCreate_Act
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
 ): payload is WorkspaceChangeName_Act {
   return (payload as WorkspaceChangeName_Act).name !== undefined;
 }
@@ -117,6 +133,7 @@ export function isWorkspaceChangeMember(
     | WorkspaceCreate_Act
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
 ): payload is WorkspaceChangeMember_Act {
   return (payload as WorkspaceChangeMember_Act).action !== undefined;
 }
@@ -130,6 +147,7 @@ export function isWorkspaceCreateAnnouncement(
     | WorkspaceCreate_Act
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
 ): payload is WorkspaceCreateAnnouncement_Act {
   return (
     (payload as WorkspaceCreateAnnouncement_Act).notification !== undefined
@@ -145,6 +163,7 @@ export function isWorkspaceDelete(
     | WorkspaceCreate_Act
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
 ): payload is WorkspaceDelete_Act {
   return (payload as WorkspaceDelete_Act).author_id !== undefined;
 }
@@ -158,6 +177,7 @@ export function isWorkspaceCreate(
     | WorkspaceCreate_Act
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
 ): payload is WorkspaceCreate_Act {
   return (payload as WorkspaceCreate_Act).workspace !== undefined;
 }
@@ -171,8 +191,23 @@ export function isWorkspaceChangeTasks(
     | WorkspaceCreate_Act
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
 ): payload is WorkspaceChangeTasks_Act {
   return (payload as WorkspaceChangeTasks_Act).t_id !== undefined;
+}
+
+export function isWorkspaceReplace(
+  payload:
+    | WorkspaceChangeName_Act
+    | WorkspaceChangeMember_Act
+    | WorkspaceCreateAnnouncement_Act
+    | WorkspaceDelete_Act
+    | WorkspaceCreate_Act
+    | WorkspaceInit_Act
+    | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
+): payload is WorkspaceReplace_Act {
+  return (payload as WorkspaceReplace_Act).workspace !== undefined;
 }
 
 export interface WorkspaceActions {
@@ -184,7 +219,9 @@ export interface WorkspaceActions {
     | "CREATE_ANNOUNCEMENT"
     | "DELETE"
     | "CREATE"
-    | "CHANGE_TASKS";
+    | "CHANGE_TASKS"
+    | "REPLACE"
+    | "REPLACE_LOCAL"
   payload:
     | WorkspaceChangeName_Act
     | WorkspaceChangeMember_Act
@@ -208,6 +245,12 @@ export type TaskCreate_Act = {
   task: TaskType;
 };
 
+export type TaskReplace_Act = {
+  u_id: string;
+  w_id: string;
+  task: TaskType;
+};
+
 export type TaskDelete_Act = {
   u_id: string;
   task: TaskType;
@@ -217,37 +260,44 @@ export type TaskDelete_Act = {
 
 export type TaskChangeTitle_Act = {
   u_id: string;
+  w_id: string;
   title: string;
 };
 
 export type TaskChangeDescription_Act = {
   u_id: string;
+  w_id: string;
   description: string;
 };
 
 export type TaskChangeDeadline_Act = {
   u_id: string;
+  w_id: string;
   deadline: string;
 };
 
 export type TaskChangePriority_Act = {
   u_id: string;
+  w_id: string;
   priority: TaskPriorityType;
 };
 
 export type TaskChangeParticipants_Act = {
   u_id: string;
+  w_id: string;
   member: { u_id: string; username: string };
   action: "ADD" | "DEL";
 };
 
 export type TaskChangeStatus_Act = {
   u_id: string;
+  w_id: string;
   status: ProgressStatusType;
 };
 
 export type TaskAddComment_Act = {
   u_id: string;
+  w_id: string;
   chat: ChatBubbleProps;
 };
 
@@ -263,7 +313,9 @@ export interface TaskActions {
     | "CHANGE_STATUS"
     | "ADD_COMMENT"
     | "CREATE"
-    | "DELETE";
+    | "DELETE"
+    | "REPLACE"
+    | "REPLACE_LOCAL";
   payload:
     | TaskInit_Act
     | TaskChangeTitle_Act
@@ -274,7 +326,8 @@ export interface TaskActions {
     | TaskChangeStatus_Act
     | TaskAddComment_Act
     | TaskCreate_Act
-    | TaskDelete_Act;
+    | TaskDelete_Act
+    | TaskReplace_Act;
 }
 
 export function isTaskInit(
@@ -289,6 +342,7 @@ export function isTaskInit(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskInit_Act {
   return (payload as TaskInit_Act).task_list !== undefined;
 }
@@ -305,6 +359,7 @@ export function isTaskChangeTitle(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskChangeTitle_Act {
   return (payload as TaskChangeTitle_Act).title !== undefined;
 }
@@ -321,6 +376,7 @@ export function isTaskChangeDescription(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskChangeDescription_Act {
   return (payload as TaskChangeDescription_Act).description !== undefined;
 }
@@ -337,6 +393,7 @@ export function isTaskChangeDeadline(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskChangeDeadline_Act {
   return (payload as TaskChangeDeadline_Act).deadline !== undefined;
 }
@@ -353,6 +410,7 @@ export function isTaskChangePriority(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskChangePriority_Act {
   return (payload as TaskChangePriority_Act).priority !== undefined;
 }
@@ -369,6 +427,7 @@ export function isTaskChangeParticipants(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskChangeParticipants_Act {
   return (payload as TaskChangeParticipants_Act).member !== undefined;
 }
@@ -385,6 +444,7 @@ export function isTaskChangeStatus(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskChangeStatus_Act {
   return (payload as TaskChangeStatus_Act).status !== undefined;
 }
@@ -401,6 +461,7 @@ export function isTaskAddComment(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskAddComment_Act {
   return (payload as TaskAddComment_Act).chat !== undefined;
 }
@@ -417,6 +478,24 @@ export function isTaskCreate(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
+): payload is TaskCreate_Act {
+  return (payload as TaskCreate_Act).task !== undefined;
+}
+
+export function isTaskReplace(
+  payload:
+    | TaskChangeTitle_Act
+    | TaskChangeDescription_Act
+    | TaskChangeDeadline_Act
+    | TaskChangePriority_Act
+    | TaskChangeParticipants_Act
+    | TaskChangeStatus_Act
+    | TaskAddComment_Act
+    | TaskCreate_Act
+    | TaskDelete_Act
+    | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskCreate_Act {
   return (payload as TaskCreate_Act).task !== undefined;
 }
@@ -433,6 +512,7 @@ export function isTaskDelete(
     | TaskCreate_Act
     | TaskDelete_Act
     | TaskInit_Act
+    | TaskReplace_Act
 ): payload is TaskDelete_Act {
   return (payload as TaskDelete_Act).delete_id !== undefined;
 }
@@ -540,6 +620,20 @@ export function ContextProvider(props: any) {
           const new_workspace = action.payload.workspace;
 
           updatedState = init.concat(new_workspace);
+
+          set_user_data((prev): UserType | null => {
+            if (prev && isWorkspaceCreate(action.payload)) {
+              return {
+                ...prev,
+                workspace_ids: prev.workspace_ids.concat(action.w_id),
+                workspace_list: prev.workspace_list.concat(
+                  action.payload.workspace
+                ),
+              };
+            } else {
+              return null;
+            }
+          });
         } else {
         }
 
@@ -549,6 +643,22 @@ export function ContextProvider(props: any) {
           const delete_id = action.w_id;
 
           updatedState = init.filter((w) => w.w_id !== delete_id);
+
+          set_user_data((prev): UserType | null => {
+            if (prev && isWorkspaceDelete(action.payload)) {
+              return {
+                ...prev,
+                workspace_ids: prev.workspace_ids.filter(
+                  (w_id) => w_id !== action.w_id
+                ),
+                workspace_list: prev.workspace_list.filter(
+                  (w) => w.w_id !== action.w_id
+                ),
+              };
+            } else {
+              return null;
+            }
+          });
         }
         break;
       case "CHANGE_TASKS":
@@ -610,6 +720,21 @@ export function ContextProvider(props: any) {
           }
         }
         break;
+      case "REPLACE":
+        if (isWorkspaceReplace(action.payload)) {
+          updatedState = init.map((workspace) => {
+            if (
+              workspace.w_id === action.w_id &&
+              isWorkspaceReplace(action.payload)
+            ) {
+              return {
+                ...action.payload.workspace,
+              };
+            } else {
+              return workspace;
+            }
+          });
+        }
       default:
         break;
     }
@@ -629,6 +754,7 @@ export function ContextProvider(props: any) {
     if (workspace) {
       return workspace.admin_list.some((user) => user.u_id === u_id);
     } else {
+      console.log(w_id);
       return false;
     }
   };
@@ -639,6 +765,41 @@ export function ContextProvider(props: any) {
       w_id: "",
       type: "INIT",
     });
+  };
+
+  const workspaceReplaceHandler = async (
+    w_id: string,
+    payload: WorkspaceReplace_Act
+  ) => {
+    if (user_data && workspaces_verify_access(user_data.u_id, w_id)) {
+      dispatchWorkspace({
+        payload: payload,
+        type: "REPLACE",
+        w_id: w_id,
+      });
+    }
+
+    const response = await fetch(`/api/replace-workspace/${w_id}`, {
+      headers: {
+        "Content-type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify(payload.workspace),
+    });
+
+    const json = await response.json();
+
+    if (json && response.status === 200) {
+      console.log(json);
+      return {
+        ...json,
+      };
+    } else {
+      console.log("Update failed 😭");
+      return {
+        message: "error",
+      };
+    }
   };
 
   const workspaceChangeNameHandler = async (
@@ -653,7 +814,7 @@ export function ContextProvider(props: any) {
       });
       const response = await fetch(`/api/update-workspace/${w_id}`, {
         headers: {
-          "Content-type": "json/application",
+          "Content-type": "application/json",
         },
         method: "PUT",
         cache: "no-store",
@@ -685,7 +846,7 @@ export function ContextProvider(props: any) {
       if (payload.action === "ADD") {
         const response = await fetch(`/api/workspace-add-member/${w_id}`, {
           headers: {
-            "Content-type": "json/application",
+            "Content-type": "application/json",
           },
           method: "PUT",
           cache: "no-store",
@@ -707,7 +868,7 @@ export function ContextProvider(props: any) {
         });
         const response = await fetch(`/api/workspace-delete-member/${w_id}`, {
           headers: {
-            "Content-type": "json/application",
+            "Content-type": "application/json",
           },
           method: "PUT",
           cache: "no-store",
@@ -729,30 +890,32 @@ export function ContextProvider(props: any) {
     w_id: string,
     payload: WorkspaceCreateAnnouncement_Act
   ) => {
-    if (workspaces_verify_access(payload.u_id, w_id)) {
-      dispatchWorkspace({
-        payload: payload,
-        w_id: w_id,
-        type: "CREATE_ANNOUNCEMENT",
-      });
-      const new_notification: NotificationCardProps = payload.notification;
+    console.log("NO ANNOUNCE");
+    dispatchWorkspace({
+      payload: payload,
+      w_id: w_id,
+      type: "CREATE_ANNOUNCEMENT",
+    });
+    const new_notification: NotificationCardProps = payload.notification;
 
-      const response = await fetch(`/api/workspace-add-announcement/${w_id}`, {
+    const response = await fetch(
+      `/api/update-workspace-create-announcement/${w_id}`,
+      {
         headers: {
-          "Content-type": "json/application",
+          "Content-type": "application/json",
         },
         method: "PUT",
         cache: "no-store",
         body: JSON.stringify(new_notification),
-      });
-
-      const json = await response.json();
-
-      if (json && response.status == 200) {
-        console.log(json);
-      } else {
-        console.log("Update failed 😭");
       }
+    );
+
+    const json = await response.json();
+
+    if (json && response.status == 200) {
+      console.log(json);
+    } else {
+      console.log("Update failed 😭");
     }
   };
 
@@ -783,7 +946,7 @@ export function ContextProvider(props: any) {
       }
       const response = await fetch(`/api/delete-workspace/${w_id}`, {
         headers: {
-          "Content-type": "json/application",
+          "Content-type": "application/json",
         },
         method: "DELETE",
         cache: "no-store",
@@ -793,6 +956,29 @@ export function ContextProvider(props: any) {
 
       if (json && response.status === 200) {
         console.log(json);
+        const user_response = await fetch(
+          `/api/update-user-add-workspace/${payload.author_id}`,
+          {
+            headers: {
+              "Content-type": "application/json",
+            },
+            method: "PUT",
+            cache: "no-store",
+            body: JSON.stringify({ w_id: w_id }),
+          }
+        );
+
+        const user_json = await user_response.json();
+
+        if (user_json && user_response.status === 200) {
+          console.log(user_json);
+          return {
+            ...json,
+            user_json,
+          };
+        } else {
+          console.log("user update gagal huhu 😭");
+        }
       }
     }
   };
@@ -801,36 +987,59 @@ export function ContextProvider(props: any) {
     w_id: string,
     payload: WorkspaceCreate_Act
   ) => {
-    if (workspaces_verify_access(payload.u_id, w_id)) {
-      dispatchWorkspace({
-        payload: payload,
-        type: "CREATE",
-        w_id: w_id,
-      });
-      set_user_data((prev) => {
-        if (prev) {
-          return {
-            ...prev,
-            workspace_ids: prev.workspace_ids.concat(w_id),
-            workspace_list: prev.workspace_list.concat(payload.workspace),
-          };
-        } else {
-          return null;
-        }
-      });
-      const data: WorkspaceType = payload.workspace;
-      const response = await fetch(`/api/create-workspace/${w_id}`, {
-        headers: {
-          "Content-type": "json/application",
-        },
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      });
-      const json = await response.json();
-      if (json && response.status === 200) {
-        console.log(json)
+    console.log("CREATE WORKSPACE CTX INITIATED");
+    dispatchWorkspace({
+      payload: payload,
+      type: "CREATE",
+      w_id: w_id,
+    });
+    set_user_data((prev) => {
+      if (prev) {
+        return {
+          ...prev,
+          workspace_ids: prev.workspace_ids.concat(w_id),
+          workspace_list: prev.workspace_list.concat(payload.workspace),
+        };
+      } else {
+        return null;
       }
+    });
+    const data: WorkspaceType = payload.workspace;
+    const response = await fetch(`/api/create-workspace/`, {
+      headers: {
+        "Content-type": "application/json",
+      },
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
+    });
+    const json = await response.json();
+    // console.log(json);
+    if (json && response.status === 200) {
+      const user_response = await fetch(
+        `/api/update-user-add-workspace/${payload.u_id}`,
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "PUT",
+          cache: "no-store",
+          body: JSON.stringify({ w_id: w_id }),
+        }
+      );
+
+      const user_json = await user_response.json();
+      // console.log(user_json);
+      if (user_json && user_response.status === 200) {
+        return {
+          ...json,
+          ...user_json,
+        };
+      } else {
+        console.log("user update gagal huhu 😭");
+      }
+    } else {
+      console.log("workspace update gagal huhu 😭");
     }
   };
 
@@ -1000,10 +1209,13 @@ export function ContextProvider(props: any) {
   const tasks_init: TaskType[] = [];
   const [tasks, dispatchTask] = React.useReducer(taskReducer, tasks_init);
 
-  const task_verify_access = (u_id: string, t_id: string) => {
+  const task_verify_access = (u_id: string, t_id: string, w_id: string) => {
     const task = tasks.find((t) => t.t_id === t_id);
-    if (task) {
-      return task.assigned_member.some((m) => m.u_id === u_id);
+    const workspace = workspaces.find((w) => w.w_id === w_id);
+    if (task && task.assigned_member.some((m) => m.u_id === u_id)) {
+      return true;
+    } else if (workspace && workspace.admin_list.some((m) => m.u_id === u_id)) {
+      return true;
     } else {
       return false;
     }
@@ -1017,69 +1229,137 @@ export function ContextProvider(props: any) {
     });
   };
 
-  const taskCreate = async (t_id: string, payload: TaskCreate_Act) => {
-    dispatchTask({
-      payload: payload,
-      t_id: t_id,
-      type: "CREATE",
-    });
-
-    dispatchWorkspace({
-      payload: {
-        action: "ADD",
+  const taskReplace =  async (t_id: string, payload: TaskReplace_Act) => {
+    if(task_verify_access(payload.u_id, t_id, payload.w_id)) {
+      dispatchTask({
+        payload: payload,
         t_id: t_id,
-        task: payload.task,
-        u_id: payload.u_id,
-      } as WorkspaceChangeTasks_Act,
-      type: "CHANGE_TASKS",
-      w_id: payload.w_id,
-    });
-
-    const data = payload.task;
-
-    const response = await fetch(`/api/create-task/${t_id}`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const json = await response.json();
-
-    if (json && response.status === 200) {
-    } else {
-      console.log("Update failed 😭");
+        type: "REPLACE"
+      })
     }
+
+    const new_data = payload.task;
+
+    
+  } 
+
+  const taskCreate = async (t_id: string, payload: TaskCreate_Act) => {
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
+      dispatchTask({
+        payload: payload,
+        t_id: t_id,
+        type: "CREATE",
+      });
+
+      dispatchWorkspace({
+        payload: {
+          action: "ADD",
+          t_id: t_id,
+          task: payload.task,
+          u_id: payload.u_id,
+        } as WorkspaceChangeTasks_Act,
+        type: "CHANGE_TASKS",
+        w_id: payload.w_id,
+      });
+
+      const data = payload.task;
+
+      const response = await fetch(`/api/create-task/`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const json = await response.json();
+
+      if (json && response.status === 200) {
+        console.log(json);
+
+        const workspace_response = await fetch(
+          `/api/update-workspace-add-task/${payload.w_id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({ t_id: t_id }),
+          }
+        );
+
+        const workspace_json = await workspace_response.json();
+
+        if (workspace_json && workspace_response.status == 200) {
+          console.log(workspace_json);
+          return {
+            ...json,
+            ...workspace_json,
+          };
+        } else {
+          console.log("Task Update failed 😭");
+        }
+      } else {
+        console.log("Workspace Update failed 😭");
+      }
+    }
+
+    console.log("Akses dibatasi");
   };
 
   const taskDelete = async (t_id: string, payload: TaskDelete_Act) => {
-    dispatchTask({
-      payload: payload,
-      t_id: t_id,
-      type: "DELETE",
-    });
-
-    dispatchWorkspace({
-      payload: {
-        action: "DEL",
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
+      dispatchTask({
+        payload: payload,
         t_id: t_id,
-        task: payload.task,
-      } as WorkspaceChangeTasks_Act,
-      type: "CHANGE_TASKS",
-      w_id: payload.w_id,
-    });
-    const response = await fetch(`/api/delete-task/${t_id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
+        type: "DELETE",
+      });
 
-    const json = await response.json();
+      dispatchWorkspace({
+        payload: {
+          action: "DEL",
+          t_id: t_id,
+          task: payload.task,
+        } as WorkspaceChangeTasks_Act,
+        type: "CHANGE_TASKS",
+        w_id: payload.w_id,
+      });
+      const response = await fetch(`/api/delete-task/${t_id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
 
-    if (json && response.status == 200) {
-      console.log(json);
+      const json = await response.json();
+
+      if (json && response.status == 200) {
+        console.log(json);
+        const workspace_response = await fetch(
+          `/api/update-workspace-add-task/${payload.w_id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({ t_id: t_id }),
+          }
+        );
+
+        const workspace_json = await workspace_response.json();
+
+        if (workspace_json && workspace_response.status == 200) {
+          console.log(workspace_json);
+          return {
+            ...json,
+            ...workspace_json,
+          };
+        } else {
+          console.log("Task Update failed 😭");
+        }
+      } else {
+        console.log("Workspace Update failed 😭");
+      }
     }
   };
 
@@ -1088,7 +1368,7 @@ export function ContextProvider(props: any) {
     payload: TaskChangeTitle_Act
   ) => {
     dispatchTask({ payload: payload, t_id: t_id, type: "CHANGE_TITLE" });
-    if (task_verify_access(payload.u_id, t_id)) {
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       const data = { title: payload.title };
       const response = await fetch(`/api/update-task-title/${t_id}`, {
         method: "PUT",
@@ -1115,7 +1395,7 @@ export function ContextProvider(props: any) {
       t_id: t_id,
       type: "CHANGE_DESCRIPTION",
     });
-    if (task_verify_access(payload.u_id, t_id)) {
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       const data = { description: payload.description };
       const response = await fetch(`/api/update-task-description/${t_id}`, {
         method: "PUT",
@@ -1137,7 +1417,7 @@ export function ContextProvider(props: any) {
     t_id: string,
     payload: TaskChangeDeadline_Act
   ) => {
-    if (task_verify_access(payload.u_id, t_id)) {
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       dispatchTask({
         payload: payload,
         t_id: t_id,
@@ -1164,7 +1444,7 @@ export function ContextProvider(props: any) {
     t_id: string,
     payload: TaskChangePriority_Act
   ) => {
-    if (task_verify_access(payload.u_id, t_id)) {
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       dispatchTask({
         payload: payload,
         t_id: t_id,
@@ -1191,7 +1471,7 @@ export function ContextProvider(props: any) {
     t_id: string,
     payload: TaskChangeParticipants_Act
   ) => {
-    if (task_verify_access(payload.u_id, t_id)) {
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       if (payload.action === "ADD") {
         dispatchTask({
           payload: payload,
@@ -1252,7 +1532,7 @@ export function ContextProvider(props: any) {
     t_id: string,
     payload: TaskChangeStatus_Act
   ) => {
-    if (task_verify_access(payload.u_id, t_id)) {
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       dispatchTask({
         payload: payload,
         t_id: t_id,
@@ -1276,7 +1556,7 @@ export function ContextProvider(props: any) {
   };
 
   const taskAddComment = async (t_id: string, payload: TaskAddComment_Act) => {
-    if (task_verify_access(payload.u_id, t_id)) {
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       dispatchTask({
         payload: payload,
         t_id: t_id,
@@ -1327,6 +1607,7 @@ export function ContextProvider(props: any) {
     user_data_handler_ctx: set_user_data,
     user_workspaces_ctx: workspaces,
     initialize_workspaces_ctx: workspaceInit,
+    workspace_replace_ctx: workspaceReplaceHandler,
     user_task_ctx: tasks,
     initialize_tasks_ctx: taskInit,
     task_add_comment_ctx: taskAddComment,

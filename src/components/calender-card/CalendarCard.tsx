@@ -10,12 +10,13 @@ export interface CalendarCardProps {
 }
 
 const CalendarCard: React.FC<CalendarCardProps> = (props) => {
+  const calendar = useCalendar();
 
   return (
     <div className={s.card}>
       <div className={s.label}>
         <span className={[s.date, "medium", "sm"].join(" ")}>
-          {useCalendar(props.date, ["d", "m"])}
+          {calendar.calendar(props.date, ["d", "m"])}
         </span>
       </div>
       <div className={s.content}>

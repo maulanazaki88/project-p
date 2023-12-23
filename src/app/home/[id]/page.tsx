@@ -1,12 +1,26 @@
+"use client";
 import React from "react";
-import { getUser } from "@/server/actions";
 import HomePage from "@/components/home-page/HomePage";
+import Context, { ContextType } from "@/context/Store";
 
-const Home: React.FC<{ params: { id: string } }> = async (props) => {
-  const { data, status } = await getUser(props.params.id);
+const Home: React.FC<{ params: { id: string } }> = (props) => {
 
-  if (data && status == 200) {
-    return <HomePage data={data} />;
+  const {user_data_handler_ctx, user_data_ctx} = React.useContext(Context) as ContextType;
+
+
+  React.useEffect(() => {
+    fetch(`/api/get-user/${props.params.id}`)
+      .then((res) => res)
+      .then((data) => data.json())
+      .then((data) => {
+        user_data_handler_ctx(data);
+        return;
+      })
+      .catch((e) => console.log(e));
+  }, []);
+
+  if (user_data_ctx) {
+    return <HomePage data={user_data_ctx} />;
   } else {
     return <div>Loading...</div>;
   }

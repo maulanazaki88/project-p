@@ -27,8 +27,7 @@ import { usePathname } from "next/navigation";
 import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
 
 interface TaskPageProps {
-  task_data: TaskType;
-  user_data: UserType;
+  task_data?: TaskType;
 }
 
 const TaskPage: React.FC<TaskPageProps> = (props) => {
@@ -36,6 +35,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
   const pathname = usePathname();
 
   const u_id = pathname.split("/")[2];
+  const t_id = pathname.split("/")[6];
 
   const {
     user_data_handler_ctx,
@@ -54,16 +54,9 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     task_change_description_ctx,
   } = React.useContext(Context) as ContextType;
 
-  const actual_task: TaskType = React.useMemo(() => {
-    const task = user_task_ctx?.find((task) => {
-      task.t_id === props.task_data.t_id;
-    });
-    return task ? task : props.task_data;
-  }, [user_task_ctx]);
-
   React.useEffect(() => {
     if (user_task_ctx) {
-      const task = user_task_ctx.find((t) => t.t_id === props.task_data.t_id);
+      const task = user_task_ctx.find((t) => t.t_id === props.task_data?.t_id);
       console.log(task);
     }
   }, [user_task_ctx]);
@@ -100,8 +93,8 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     title: string;
     description: string;
   }>({
-    title: actual_task.title,
-    description: actual_task.description,
+    title: props.task_data ? props.task_data.title : "",
+    description: props.task_data ? props.task_data.description : "",
   });
 
   const changeHandler = (
@@ -132,8 +125,6 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     React.useState<boolean>(false);
   const [isMemberListMenuActive, setIsMemberListMenuActive] =
     React.useState<boolean>(false);
-
-  const [startDate, setStartDate] = React.useState<string>(useDateNow);
 
   //   React.useEffect(() => {
   //     const data: TaskType = {
@@ -168,35 +159,33 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
 
   React.useEffect(() => {}, []);
 
-  React.useEffect(() => {
-    console.log(isCalendarActive);
-  }, [isCalendarActive]);
+  // React.useEffect(() => {
+  //   console.log(isCalendarActive);
+  // }, [isCalendarActive]);
 
-  React.useEffect(() => {
-    console.log(startDate);
-  }, [startDate]);
+  // React.useEffect(() => {
+  //   if (!user_data_ctx) {
+  //     user_data_handler_ctx(props.user_data);
+  //     initialize_workspaces_ctx({
+  //       workspace_list: props.user_data.workspace_list,
+  //     } as WorkspaceInit_Act);
 
-  React.useEffect(() => {
-    user_data_handler_ctx(props.user_data);
-    initialize_workspaces_ctx({
-      workspace_list: props.user_data.workspace_list,
-    } as WorkspaceInit_Act);
+  //     const tasks: TaskType[] = [];
 
-    const tasks: TaskType[] = [];
+  //     for (let workspace of props.user_data.workspace_list) {
+  //       for (let task of workspace.task_list) {
+  //         tasks.push({ ...task, workspace_name: workspace.name });
+  //       }
+  //     }
 
-    for (let workspace of props.user_data.workspace_list) {
-      for (let task of workspace.task_list) {
-        tasks.push({ ...task, workspace_name: workspace.name });
-      }
-    }
+  //     initialize_tasks_ctx({ task_list: tasks } as TaskInit_Act);
+  //   }
+  //   // router.refresh();
+  // }, []);
 
-    initialize_tasks_ctx({ task_list: tasks } as TaskInit_Act);
-    // router.refresh();
-  }, []);
-
-  if (user_task_ctx) {
+  if (props.task_data) {
     const actual_task = user_task_ctx.find(
-      (t) => t.t_id === props.task_data.t_id
+      (t) => t.t_id === props.task_data?.t_id
     );
     if (actual_task) {
       return (
@@ -225,7 +214,6 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
               });
             }}
           />
-          +
           <Comments
             chat_list={actual_task.comments}
             closeHandler={() => {
@@ -242,6 +230,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                   username: data.username,
                 },
                 u_id: u_id,
+                w_id: actual_task.w_id,
               });
             }}
           />
@@ -258,19 +247,20 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 action: set ? "ADD" : "DEL",
                 member: { u_id: payload.u_id, username: payload.username },
                 u_id: u_id,
+                w_id: actual_task.w_id,
               });
             }}
           />
-          <main className={s.main}>
-            <section
-              className={s.task}
-              style={{
-                overflowY:
-                  isMemberListMenuActive || isCalendarActive || isCommentsActive
-                    ? "hidden"
-                    : "scroll",
-              }}
-            >
+          <main
+            className={s.main}
+            style={{
+              overflowY:
+                isMemberListMenuActive || isCalendarActive || isCommentsActive
+                  ? "hidden"
+                  : "scroll",
+            }}
+          >
+            <section className={s.task}>
               <div className={[s.name, "medium", "big"].join(" ")}>
                 <p className={[s.label, "medium", "md"].join(" ")}>Nama Task</p>
                 <input
@@ -284,6 +274,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                     task_change_title_ctx(actual_task.t_id, {
                       title: taskForm.title,
                       u_id: u_id,
+                      w_id: actual_task.w_id,
                     });
                   }}
                 />
@@ -299,6 +290,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                     task_change_description_ctx(actual_task.t_id, {
                       description: taskForm.description,
                       u_id: u_id,
+                      w_id: actual_task.w_id,
                     });
                   }}
                 />
@@ -324,6 +316,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                       task_change_deadline_ctx(actual_task.t_id, {
                         deadline: e.target.value,
                         u_id: u_id,
+                        w_id: actual_task.w_id,
                       });
                     }}
                   />
@@ -349,6 +342,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           task_change_priority_ctx(actual_task.t_id, {
                             priority: "LOW",
                             u_id: u_id,
+                            w_id: actual_task.w_id,
                           });
                         }}
                         key={"low-priority-btn"}
@@ -371,6 +365,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           task_change_priority_ctx(actual_task.t_id, {
                             priority: "MED",
                             u_id: u_id,
+                            w_id: actual_task.w_id,
                           });
                         }}
                       />
@@ -391,6 +386,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           task_change_priority_ctx(actual_task.t_id, {
                             priority: "HIGH",
                             u_id: u_id,
+                            w_id: actual_task.w_id,
                           });
                         }}
                         key={"high-priority-btn"}
@@ -431,6 +427,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                                 action: "DEL",
                                 member: member,
                                 u_id: u_id,
+                                w_id: actual_task.w_id,
                               });
                             }}
                           />
@@ -460,6 +457,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           task_change_status_ctx(actual_task.t_id, {
                             status: "NEXT-UP",
                             u_id: u_id,
+                            w_id: actual_task.w_id,
                           });
                         }}
                         key={"next-up-status-btn"}
@@ -483,6 +481,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           task_change_status_ctx(actual_task.t_id, {
                             status: "IN-PROGRESS",
                             u_id: u_id,
+                            w_id: actual_task.w_id,
                           });
                         }}
                         key={"in-progress-status-btn"}
@@ -504,6 +503,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           task_change_status_ctx(actual_task.t_id, {
                             status: "REVISED",
                             u_id: u_id,
+                            w_id: actual_task.w_id,
                           });
                         }}
                         key={"revised-status-btn"}
@@ -527,6 +527,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           task_change_status_ctx(actual_task.t_id, {
                             status: "COMPLETED",
                             u_id: u_id,
+                            w_id: actual_task.w_id,
                           });
                         }}
                         key={"completed-status-btn"}
@@ -550,7 +551,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         </>
       );
     } else {
-      // router.replace(`/home/${pathname.split("/")[2]}`);
+      router.replace(`/home/${pathname.split("/")[2]}`);
     }
   }
 };

@@ -8,9 +8,13 @@ interface LogViewProps {
 }
 
 const LogView: React.FC<LogViewProps> = (props) => {
+  const calendar = useCalendar();
+
   return (
     <div className={s.ctn}>
-      <p className={[s.label, "medium", "md", "soft"].join(" ")}>Aktivitas Terakhir</p>
+      <p className={[s.label, "medium", "md", "soft"].join(" ")}>
+        Aktivitas Terakhir
+      </p>
       <div className={s.log}>
         <ul className={s.list}>
           {props.log.map((a, index) => {
@@ -20,7 +24,7 @@ const LogView: React.FC<LogViewProps> = (props) => {
                   {a.activity_desc}
                 </span>
                 <span className={[s.time, "medium", "sm"].join(" ")}>
-                  {useCalendar(a.created_at, ["m", "d"])}
+                  {calendar.calendar(a.created_at, ["m", "d"])}
                 </span>
               </li>
             );

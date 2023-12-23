@@ -44,12 +44,13 @@ const SignInPage: React.FC = () => {
   const submitHandler: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("/api/sign-in", {
+    const response = await fetch(`/api/sign-in`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify(data),
+      
     });
 
     const json = await response.json();

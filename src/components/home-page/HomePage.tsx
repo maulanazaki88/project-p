@@ -16,6 +16,7 @@ import Context, {
   WorkspaceInit_Act,
 } from "@/context/Store";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 interface HomePageProps {
   data: UserType;
@@ -34,6 +35,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
   const actual_user_data: UserType = user_data_ctx ? user_data_ctx : props.data;
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const [searchInput, setSearchInput] = React.useState<string>("");
   const [calendarMenuActive, setCalendarMenuActive] =
@@ -93,7 +95,10 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     }
 
     initialize_tasks_ctx({ task_list: tasks } as TaskInit_Act);
-    // router.refresh();
+  }, []);
+
+  React.useEffect(() => {
+    router.refresh();
   }, []);
 
   return (
@@ -155,7 +160,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                   opacity={1}
                   text="Add +"
                   onClick={() => {
-                    router.push("/workspace-setup");
+                    router.push(`${pathname}/workspace-setup`);
                   }}
                 />
               </div>

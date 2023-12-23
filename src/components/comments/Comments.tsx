@@ -21,6 +21,7 @@ interface CommentsProps {
 
 const Comments: React.FC<CommentsProps> = (props) => {
   const ctx = React.useContext(Context);
+  const date_now = useDateNow();
 
   const user_data = ctx?.user_data_ctx;
 
@@ -29,24 +30,27 @@ const Comments: React.FC<CommentsProps> = (props) => {
   return (
     <div className={s.comments} style={{ left: props.isActive ? "0" : "100%" }}>
       <MenuNavbar closeHandler={props.closeHandler} title={props.task_name} />
-      <ul className={s.list}>
-        {props.chat_list.map((chat, index) => {
-          return (
-            <li
-              className={s.item}
-              style={{
-                justifyContent:
-                  chat.username === user_data?.username
-                    ? "flex-end"
-                    : "flex-start",
-              }}
-              key={`chat-item-${index}`}
-            >
-              <ChatBubble {...chat} />
-            </li>
-          );
-        })}
-      </ul>
+      <div className={s.comment_screen}>
+        <ul className={s.list}>
+          {props.chat_list.map((chat, index) => {
+            return (
+              <li
+                className={s.item}
+                style={{
+                  justifyContent:
+                    chat.username === user_data?.username
+                      ? "flex-end"
+                      : "flex-start",
+                }}
+                key={`chat-item-${index}`}
+              >
+                <ChatBubble {...chat} />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
       <div className={s.fields}>
         <input
           type="text"
@@ -65,7 +69,7 @@ const Comments: React.FC<CommentsProps> = (props) => {
             props.sendComment({
               message: comment_val,
               username: user_data?.username ? user_data.username : "-",
-              time: useDateNow({ withTime: true }),
+              time: date_now.withTime(),
             })
           }
           scale={1}

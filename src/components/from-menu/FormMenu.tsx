@@ -23,12 +23,7 @@ const FormMenu: React.FC<FormMenuProps> = (props) => {
         closeHandler={props.closeHandler}
         title={props.title}
       />
-      <form
-        className={s.form}
-        onSubmit={() => {
-          props.submitHandler({ key: props.name, value: value });
-        }}
-      >
+      <form className={s.form}>
         <InputLarge
           label={props.label}
           name={props.label}
@@ -44,6 +39,10 @@ const FormMenu: React.FC<FormMenuProps> = (props) => {
             color="#fff"
             opacity={1}
             text="Submit"
+            onClick={() => {
+              props.submitHandler({ key: props.name, value: value });
+              props.closeHandler()
+            }}
           />
         </div>
       </form>

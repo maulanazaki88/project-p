@@ -12,6 +12,7 @@ export interface NotificationCardProps {
 
 const NotificationCard: React.FC<NotificationCardProps> = (props) => {
   const ctx = React.useContext(Context);
+  const calendar = useCalendar();
 
   const workspace_list = ctx?.user_workspaces_ctx;
 
@@ -42,7 +43,7 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
         </div>
         <div className={s.info}>
           <span className={[s.time, "sm", "medium", "soft"].join(" ")}>
-            {useCalendar(props.created_at, ["d", "m"])}
+            {calendar.calendar(props.created_at, ["d", "m"])}
           </span>
         </div>
       </div>

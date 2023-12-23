@@ -1,12 +1,10 @@
 "use client";
 import React from "react";
-import TaskPage from "@/components/task-page/TaskPage";
+import WorkspaceSetupPage from "@/components/workspace-setup-page/WorkspaceSetupPage";
 import Context, { ContextType } from "@/context/Store";
 
-const Task: React.FC<{
-  params: { id: string; t_id: string };
-}> = (props) => {
-  const { user_task_ctx, user_data_handler_ctx } = React.useContext(
+const Workspace: React.FC<{ params: {id: string, w_id: string } }> = (props) => {
+  const {  user_workspaces_ctx, user_data_handler_ctx } = React.useContext(
     Context
   ) as ContextType;
 
@@ -20,10 +18,11 @@ const Task: React.FC<{
       })
       .catch((e) => console.log(e));
   }, []);
-  if (user_task_ctx.find((t) => t.t_id === props.params.t_id)) {
+
+  if (user_workspaces_ctx?.find((w) => w.w_id === props.params.w_id)) {
     return (
-      <TaskPage
-        task_data={user_task_ctx.find((t) => t.t_id === props.params.t_id)}
+      <WorkspaceSetupPage
+        data={user_workspaces_ctx?.find((w) => w.w_id === props.params.w_id)}
       />
     );
   } else {
@@ -31,4 +30,4 @@ const Task: React.FC<{
   }
 };
 
-export default Task;
+export default Workspace;

@@ -23,6 +23,7 @@ const color_list = ["#F99370", "#F4D4BE", "#A523A2"];
 
 const TaskCard: React.FC<TaskCardProps> = (props) => {
   const ctx = React.useContext(Context);
+  const calendar = useCalendar();
 
   const user_workspaces = ctx?.user_workspaces_ctx;
 
@@ -35,11 +36,9 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
 
   const goToTask = (id: string) => {
     if (pathname.includes("workspace")) {
-      router.push(`${pathname}/task/${encodeURIComponent(id)}`);
+      router.push(`${pathname}/task/${id}`);
     } else {
-      router.push(
-        `${pathname}/workspace/${props.w_id}/task/${encodeURIComponent(id)}`
-      );
+      router.push(`${pathname}/workspace/${props.w_id}/task/${id}`);
     }
   };
 
@@ -119,7 +118,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
               className={s.icon}
             />
             <span className={[s.text, "medium", "sm", "blend"].join(" ")}>
-              {useCalendar(props.deadline, ["d", "m"])}
+              {calendar.calendar(props.deadline, ["d", "m"])}
             </span>
           </div>
         </div>

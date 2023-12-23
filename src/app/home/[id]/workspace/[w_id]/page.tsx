@@ -1,22 +1,33 @@
+"use client";
 import React from "react";
-import { getUser, getWorkspace } from "@/server/actions";
 import WorkspacePage from "@/components/workspace-page/WorkspacePage";
+import Context, { ContextType } from "@/context/Store";
 
-const Workspace: React.FC<{ params: { id: string; w_id: string } }> = async (
+const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
   props
 ) => {
-  const user_response = await getUser(props.params.id);
+  const { user_workspaces_ctx, user_data_handler_ctx } = React.useContext(
+    Context
+  ) as ContextType;
+  
 
-  if (user_response.data && user_response.status == 200) {
-    const workspace_response = await getWorkspace(props.params.w_id);
-    if (workspace_response.data && workspace_response.status == 200) {
-      return (
-        <WorkspacePage
-          user_data={user_response.data}
-          workspace_data={workspace_response.data}
-        />
-      );
-    }
+  React.useEffect(() => {
+    fetch(`/api/get-user/${props.params.id}`)
+      .then((res) => res)
+      .then((data) => data.json())
+      .then((data) => {
+        user_data_handler_ctx(data);
+        return;
+      })
+      .catch((e) => console.log(e));
+  }, []);
+
+  if (user_workspaces_ctx.find((w) => w.w_id === props.params.w_id)) {
+    return (
+      <WorkspacePage
+        data={user_workspaces_ctx.find((w) => w.w_id === props.params.w_id)}
+      />
+    );
   } else {
     return <div>Loading...</div>;
   }

@@ -1,7 +1,8 @@
 import React from "react";
+
 import WorkspaceSetupPage from "@/components/workspace-setup-page/WorkspaceSetupPage";
 
-const Workspace: React.FC = async (props) => {
+const Workspace: React.FC = () => {
   return <WorkspaceSetupPage />;
 };
 
