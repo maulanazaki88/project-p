@@ -221,7 +221,7 @@ export interface WorkspaceActions {
     | "CREATE"
     | "CHANGE_TASKS"
     | "REPLACE"
-    | "REPLACE_LOCAL"
+    | "REPLACE_LOCAL";
   payload:
     | WorkspaceChangeName_Act
     | WorkspaceChangeMember_Act
@@ -1229,19 +1229,17 @@ export function ContextProvider(props: any) {
     });
   };
 
-  const taskReplace =  async (t_id: string, payload: TaskReplace_Act) => {
-    if(task_verify_access(payload.u_id, t_id, payload.w_id)) {
+  const taskReplace = async (t_id: string, payload: TaskReplace_Act) => {
+    if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       dispatchTask({
         payload: payload,
         t_id: t_id,
-        type: "REPLACE"
-      })
+        type: "REPLACE",
+      });
     }
 
     const new_data = payload.task;
-
-    
-  } 
+  };
 
   const taskCreate = async (t_id: string, payload: TaskCreate_Act) => {
     if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
@@ -1601,6 +1599,23 @@ export function ContextProvider(props: any) {
 
     window.addEventListener("resize", getWidth);
   }, []);
+
+  React.useEffect(() => {
+    if (user_data) {
+      workspaceInit({ workspace_list: user_data.workspace_list });
+      const tasks: TaskType[] = [];
+
+      for (let workspace of user_data.workspace_list) {
+        for (let task of workspace.task_list) {
+          tasks.push({ ...task, workspace_name: workspace.name });
+        }
+      }
+
+      taskInit({ task_list: tasks });
+    } else {
+
+    }
+  }, [user_data]);
 
   const context: ContextType = {
     user_data_ctx: user_data,

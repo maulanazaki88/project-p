@@ -3,7 +3,7 @@ import React from "react";
 import { TaskPriorityType } from "@/type";
 import Image from "next/image";
 import Avatar from "../avatar/Avatar";
-import { useCalendar } from "@/hook/useCalendar";
+import { useRenderDate } from "@/hook/useRenderDate";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import Context from "@/context/Store";
@@ -23,7 +23,7 @@ const color_list = ["#F99370", "#F4D4BE", "#A523A2"];
 
 const TaskCard: React.FC<TaskCardProps> = (props) => {
   const ctx = React.useContext(Context);
-  const calendar = useCalendar();
+  const calendar = useRenderDate();
 
   const user_workspaces = ctx?.user_workspaces_ctx;
 
@@ -41,6 +41,15 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
       router.push(`${pathname}/workspace/${props.w_id}/task/${id}`);
     }
   };
+
+  // menjaga agar deskripsi tidak offset dari kartu
+  const description_render = (desc: string) => {
+    if(desc.length > 38){
+      return `${desc.slice(0, 38)}...`
+    } else {
+      return desc
+    }
+  }
 
   return (
     <div
@@ -72,7 +81,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
       <div className={s.content}>
         <h4 className={[s.title, "medium", "md"].join(" ")}>{props.name}</h4>
         <p className={[s.desc, "sm", "medium"].join(" ")}>
-          {props.description}
+          {description_render(props.description)}
         </p>
       </div>
       <div className={s.bottom}>

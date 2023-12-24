@@ -6,6 +6,7 @@ import NotificationCard, {
   NotificationCardProps,
 } from "../notification-card/NotificationCard";
 import ButtonLarge from "../button-large/ButtonLarge";
+import { useCalendar } from "@/hook/useCalendar";
 
 interface CardMenuProps {
   calendar_list?: CalendarCardProps[];
@@ -16,13 +17,50 @@ interface CardMenuProps {
   newNotificationHandler?: () => void;
 }
 
+const months = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
+
 const CardMenu: React.FC<CardMenuProps> = (props) => {
+  const calendar = useCalendar();
+
   const CalendarViews = props.calendar_list && (
-    <ul className={s.list}>
-      {props.calendar_list.map((c, index) => {
+    <ul className={s.calendar}>
+      {calendar.available_month_number.map((c) => {
         return (
-          <li className={s.item} key={`calendar-item-${index}`}>
-            <CalendarCard date={c.date} task_list={c.task_list} />
+          <li className={s.month}>
+            <h4 className={[s.month_header, "md", "medium"].join(" ")}>{`${
+              months[parseInt(c.split("-")[1]) - 1]
+            } ${c.split("-")[0]}`}</h4>
+            <ul className={s.list}>
+              {props.calendar_list &&
+                props.calendar_list.map((item, index) => {
+                  if (
+                    item.date.split("-")[0] === c.split("-")[0] &&
+                    item.date.split("-")[1] === c.split("-")[1]
+                  ) {
+                    return (
+                      <li className={s.item} key={`calendar-item-${index}`}>
+                        <CalendarCard
+                          date={item.date}
+                          task_list={item.task_list}
+                        />
+                      </li>
+                    );
+                  }
+                })}
+            </ul>
           </li>
         );
       })}

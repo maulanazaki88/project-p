@@ -47,9 +47,19 @@
     background-color: transparent;
     border: none;
     outline: none;
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.7);
     
 
+}
+
+.info {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 10px;
 }
 
 .warning{

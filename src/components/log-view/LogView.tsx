@@ -1,14 +1,14 @@
 import s from "./LogView.module.css";
 import React from "react";
 import { ActivityLogType } from "@/type";
-import { useCalendar } from "@/hook/useCalendar";
+import { useRenderDate } from "@/hook/useRenderDate";
 
 interface LogViewProps {
   log: ActivityLogType[];
 }
 
 const LogView: React.FC<LogViewProps> = (props) => {
-  const calendar = useCalendar();
+  const calendar = useRenderDate();
 
   return (
     <div className={s.ctn}>

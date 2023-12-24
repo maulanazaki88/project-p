@@ -1,4 +1,4 @@
-import { useCalendar } from "@/hook/useCalendar";
+import { useRenderDate } from "@/hook/useRenderDate";
 import s from "./CalendarCard.module.css";
 import React from "react";
 import { TaskType } from "@/type";
@@ -10,7 +10,7 @@ export interface CalendarCardProps {
 }
 
 const CalendarCard: React.FC<CalendarCardProps> = (props) => {
-  const calendar = useCalendar();
+  const calendar = useRenderDate();
 
   return (
     <div className={s.card}>

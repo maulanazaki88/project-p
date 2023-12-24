@@ -14,6 +14,7 @@ export interface ButtonLargeProps {
   rowReverse?: boolean;
   onClick?: (e: any | null) => void;
   disabled? :boolean
+  icon_scale?:number
 }
 
 const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
@@ -24,6 +25,7 @@ const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
       width={12}
       height={12}
       className={s.icon}
+      style={{scale: props.icon_scale ? props.icon_scale : 1}}
     />
   );
   const notifViews = props.notification && (

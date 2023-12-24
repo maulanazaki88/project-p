@@ -12,9 +12,11 @@ interface InputSmallProps {
   name: string;
   label: string;
   type: HTMLInputTypeAttribute;
-  warning: string
+  warning: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
+  maxChar?: number;
+  hideInfo?: boolean;
 }
 
 const InputSmall: React.FC<InputSmallProps> = (props) => {
@@ -43,9 +45,23 @@ const InputSmall: React.FC<InputSmallProps> = (props) => {
           name={props.name}
           id={props.name}
           onBlur={props.onBlur}
+          required
+          maxLength={props.maxChar}
         />
       </div>
-      <span className={[s.warning, "sm", "regular"].join(" ")} style={{color: props.warning === "-" ? "transparent" : "red"}} >{props.warning}</span>
+      {!props.hideInfo && (
+        <div className={s.info}>
+          <span
+            className={[s.warning, "sm", "regular"].join(" ")}
+            style={{ color: props.warning === "-" ? "transparent" : "red" }}
+          >
+            {props.warning}
+          </span>
+          <span className={[s.capacity, "medium", "sm", "soft"].join(" ")}>
+            {`${props.value.length}/${props.maxChar ? props.maxChar : "-"}`}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

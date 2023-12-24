@@ -1,6 +1,6 @@
 import s from "./NotificationCard.module.css";
 import React from "react";
-import { useCalendar } from "@/hook/useCalendar";
+import { useRenderDate } from "@/hook/useRenderDate";
 import Context from "@/context/Store";
 
 export interface NotificationCardProps {
@@ -12,7 +12,7 @@ export interface NotificationCardProps {
 
 const NotificationCard: React.FC<NotificationCardProps> = (props) => {
   const ctx = React.useContext(Context);
-  const calendar = useCalendar();
+  const calendar = useRenderDate();
 
   const workspace_list = ctx?.user_workspaces_ctx;
 

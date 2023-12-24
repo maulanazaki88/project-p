@@ -31,6 +31,8 @@ const BasicMenu: React.FC<BasicMenuProps> = (props) => {
                 notification={btn.notification}
                 rowReverse
                 onClick={btn.onClick}
+                icon_scale={btn.icon_scale}
+                disabled={btn.disabled}
               />
             </li>
           );

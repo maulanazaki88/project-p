@@ -25,7 +25,7 @@ import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
 import { useIdGenerator } from "@/hook/useIdGenerator";
 
 interface WorkspacePageProps {
-  data: WorkspaceType | undefined;
+  data: WorkspaceType;
 }
 
 const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
@@ -282,12 +282,14 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
       {
         bg_color: "",
         color: "",
-        text: "Notification",
-        icon: "/icons/notification.svg",
+        text: "Pengumuman",
+        icon: "/icons/announcement_black.svg",
         onClick: () => {
           setIsNotificationMenuActive(true);
           console.log("SUMMONED NOTIFICATION MENU");
         },
+        icon_scale: 1.5
+        
       },
     ];
 
@@ -295,7 +297,6 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
       <>
         <Navbar
           title={props.data.name}
-          subtitle="Task list"
           menuHandler={() => setIsMenuActive(true)}
         />
         <FormMenu

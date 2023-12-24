@@ -2,6 +2,8 @@
 import React from "react";
 import TaskPage from "@/components/task-page/TaskPage";
 import Context, { ContextType } from "@/context/Store";
+import { TaskType } from "@/type";
+import { useDateNow } from "@/hook/useDateNow";
 
 const Task: React.FC<{
   params: { id: string; t_id: string };
@@ -9,6 +11,8 @@ const Task: React.FC<{
   const { user_task_ctx, user_data_handler_ctx } = React.useContext(
     Context
   ) as ContextType;
+
+  const date_now = useDateNow();
 
   React.useEffect(() => {
     fetch(`/api/get-user/${props.params.id}`)
@@ -20,15 +24,36 @@ const Task: React.FC<{
       })
       .catch((e) => console.log(e));
   }, []);
-  if (user_task_ctx.find((t) => t.t_id === props.params.t_id)) {
-    return (
-      <TaskPage
-        task_data={user_task_ctx.find((t) => t.t_id === props.params.t_id)}
-      />
-    );
-  } else {
-    return <div>Loading...</div>;
-  }
+
+  const loading_task: TaskType = {
+    activity_list: [],
+    assigned_member: [],
+    author: "",
+    comments: [],
+    created_at: date_now.withTime(),
+    deadline: date_now.withTime(),
+    description: "",
+    priority: "MED",
+    seen_by: [],
+    status: "IN-PROGRESS",
+    t_id: props.params.t_id,
+    title: "",
+    updated_at: date_now.withTime(),
+    w_id: "",
+    workspace_name: "",
+  };
+
+  const task = React.useMemo(() => {
+    const data = user_task_ctx.find((t) => t.t_id === props.params.t_id);
+
+    if (data) {
+      return data;
+    } else {
+      return loading_task;
+    }
+  }, [user_task_ctx]);
+
+  return <TaskPage task_data={task} />;
 };
 
 export default Task;

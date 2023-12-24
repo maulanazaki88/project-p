@@ -80,26 +80,26 @@ const HomePage: React.FC<HomePageProps> = (props) => {
       } as CalendarCardProps;
     });
 
-  React.useEffect(() => {
-    user_data_handler_ctx(props.data);
-    initialize_workspaces_ctx({
-      workspace_list: props.data.workspace_list,
-    } as WorkspaceInit_Act);
+  // React.useEffect(() => {
+  //   user_data_handler_ctx(props.data);
+  //   initialize_workspaces_ctx({
+  //     workspace_list: props.data.workspace_list,
+  //   } as WorkspaceInit_Act);
 
-    const tasks: TaskType[] = [];
+  //   const tasks: TaskType[] = [];
 
-    for (let workspace of props.data.workspace_list) {
-      for (let task of workspace.task_list) {
-        tasks.push({ ...task, workspace_name: workspace.name });
-      }
-    }
+  //   for (let workspace of props.data.workspace_list) {
+  //     for (let task of workspace.task_list) {
+  //       tasks.push({ ...task, workspace_name: workspace.name });
+  //     }
+  //   }
 
-    initialize_tasks_ctx({ task_list: tasks } as TaskInit_Act);
-  }, []);
+  //   initialize_tasks_ctx({ task_list: tasks } as TaskInit_Act);
+  // }, []);
 
-  React.useEffect(() => {
-    router.refresh();
-  }, []);
+  // React.useEffect(() => {
+  //   router.refresh();
+  // }, []);
 
   return (
     <>
@@ -142,6 +142,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
             type="text"
             value={searchInput}
             warning=""
+            hideInfo
           />
           <div className={s.workspace}>
             <div className={s.heading}>

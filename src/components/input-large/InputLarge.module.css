@@ -26,9 +26,10 @@
     border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.08);
     font-family: inherit;
-    color: #000;
+    color: rgba(0, 0, 0, 0.7);
     padding: 10px;
-    resize: none
+    resize: none;
+    margin-bottom: 10px;
 }
 
 .textarea::placeholder{
@@ -36,3 +37,13 @@
     font-family: inherit;
 }
 
+.info{
+    font-family: inherit;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 0 10px;
+}

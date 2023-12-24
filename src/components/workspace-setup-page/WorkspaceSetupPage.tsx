@@ -165,6 +165,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
             value={workspace_data.name}
             warning={warning.username}
             key={"workspace-name-input"}
+            maxChar={15}
           />
           <InputLarge
             label="Deskripsi workspace"
@@ -173,6 +174,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
             placeholder="Masukan deskripsi"
             value={workspace_data.description}
             key={"workspace-description-input"}
+            maxChar={100}
           />
         </div>
 

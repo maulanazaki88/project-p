@@ -8,6 +8,7 @@ interface InputLargeProps {
   name: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: () => void
+  maxChar?:number
 }
 
 const InputLarge: React.FC<InputLargeProps> = (props) => {
@@ -24,10 +25,16 @@ const InputLarge: React.FC<InputLargeProps> = (props) => {
         name={props.name}
         value={props.value}
         onChange={props.onChange}
-        className={[s.textarea, "sm", "medium"].join(" ")}
+        className={[s.textarea, "sm", "medium", ].join(" ")}
         placeholder={props.placeholder}
         onBlur={props.onBlur}
+        maxLength={props.maxChar}
       />
+      <div className={s.info} >
+        <span className={[s.capacity, "medium", "sm", "soft"].join(" ")} >
+          {`${props.value.length}/${props.maxChar ? props.maxChar : "-"}`}
+        </span>
+      </div>
     </div>
   );
 };
