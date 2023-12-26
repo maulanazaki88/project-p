@@ -49,6 +49,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     workspace_create_announcement_ctx,
     user_task_ctx,
     workspace_create_ctx,
+    workspace_delete_ctx,
   } = React.useContext(Context) as ContextType;
 
   const screenRef = React.useRef<HTMLDivElement | null>(null);
@@ -79,7 +80,19 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const [showNotificationForm, setShowNotificationForm] =
     React.useState<boolean>(false);
   const [verifyId, setVerifyId] = React.useState<string | null>(null);
+  const [showOverlay, setShowOverlay] = React.useState<boolean>(false);
+  const [deletePromptActive, setDeletePromptActive] =
+    React.useState<boolean>(false);
+  const [deletePromptWarning, setDeletePromptWarning] =
+    React.useState<string>("-");
 
+  React.useEffect(() => {
+    if (deletePromptActive) {
+      setShowOverlay(true);
+    } else {
+      setShowOverlay(false);
+    }
+  }, [deletePromptActive]);
   // React.useEffect(() => {
   //   // user_data_handler_ctx(props.user_data);
 
@@ -288,16 +301,68 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           setIsNotificationMenuActive(true);
           console.log("SUMMONED NOTIFICATION MENU");
         },
-        icon_scale: 1.5
-        
+        icon_scale: 1.5,
       },
     ];
 
+    const deleteHandler = async (value: string) => {
+      if (value === props.data.name) {
+        const response = await workspace_delete_ctx(props.data.w_id, {
+          author_id: u_id,
+        });
+
+        const deleted_count = await response.deleted_count;
+
+        if (deleted_count > 0) {
+          router.back();
+        }
+      } else {
+        setDeletePromptWarning("Nama yang dimasukan tidak sama!");
+        setTimeout(() => {
+          setDeletePromptWarning("-");
+        }, 3000);
+      }
+    };
+
+    const overlayAction = () => {
+      setDeletePromptActive(false);
+    };
+
     return (
       <>
+        <div
+          className={s.overlay}
+          style={{
+            position: "fixed",
+            zIndex: 888,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "#000",
+            opacity: 0.5,
+            display: showOverlay ? "block" : "none",
+          }}
+          onClick={overlayAction}
+        />
         <Navbar
           title={props.data.name}
           menuHandler={() => setIsMenuActive(true)}
+        />
+        <FormMenu
+          closeHandler={() => setDeletePromptActive(false)}
+          label={`Ketik: "${props.data.name}"`}
+          name="name"
+          show={deletePromptActive}
+          submitHandler={({ key, value }) => {
+            deleteHandler(value);
+          }}
+          title="Hapus Workspace"
+          type="SMALL"
+          hideInputInfo
+          placeholder={`Ketik nama untuk menghapus`}
+          key={"workspace-delete-prompt"}
+          button_color="red"
+          button_text="Hapus"
+          warning={deletePromptWarning}
         />
         <FormMenu
           closeHandler={() => setShowNotificationForm(false)}
@@ -316,8 +381,13 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
               },
               u_id: user_data_ctx?.username ? user_data_ctx?.username : "",
             });
+            setShowNotificationForm(false);
           }}
           title="New notification"
+          type="LARGE"
+          key={"workspace-notification-form"}
+          button_color="#1c062d"
+          button_text="Submit"
         />
         <CardMenu
           closeHandler={() => {
@@ -338,6 +408,9 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           log_list={props.data.activity_list}
           closeHandler={() => {
             setIsMenuActive(false);
+          }}
+          deleteHandler={() => {
+            setDeletePromptActive(true);
           }}
         />
 

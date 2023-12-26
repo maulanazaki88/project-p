@@ -12,11 +12,17 @@ export interface CalendarCardProps {
 const CalendarCard: React.FC<CalendarCardProps> = (props) => {
   const calendar = useRenderDate();
 
+  const date = new Date(props.date);
+
+  const day = date.getDay();
+
+  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+
   return (
     <div className={s.card}>
       <div className={s.label}>
         <span className={[s.date, "medium", "sm"].join(" ")}>
-          {calendar.calendar(props.date, ["d", "m"])}
+          {`${days[day]}, ${calendar.calendar(props.date, ["d", "m"])}`}
         </span>
       </div>
       <div className={s.content}>

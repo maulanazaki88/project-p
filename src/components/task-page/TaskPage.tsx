@@ -26,6 +26,7 @@ import MemberListMenu, {
 import { usePathname } from "next/navigation";
 import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
 import InputSmall from "../input-small/InputSmall";
+import FormMenu from "../from-menu/FormMenu";
 
 interface TaskPageProps {
   task_data: TaskType;
@@ -127,6 +128,12 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
   const [isMemberListMenuActive, setIsMemberListMenuActive] =
     React.useState<boolean>(false);
 
+  const [deletePromptActive, setDeletePromptActive] =
+    React.useState<boolean>(false);
+
+  const [deletePromptWarning, setDeletePromptWarning] =
+    React.useState<string>("-");
+
   //   React.useEffect(() => {
   //     const data: TaskType = {
   //       ...task,
@@ -182,8 +189,77 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
   //   // router.refresh();
   // }, []);
 
+  const deleteHandler = async (value: string) => {
+    if (value === props.task_data.title) {
+      const response = await task_delete_ctx(props.task_data.t_id, {
+        delete_id: props.task_data.t_id,
+        task: props.task_data,
+        u_id: u_id,
+        w_id: props.task_data.w_id,
+      });
+
+      const deleted_count = await response.deleted_count;
+
+      if (deleted_count > 0) {
+        router.back();
+      }
+    } else {
+      setDeletePromptWarning("Nama yang dimasukan tidak sama!");
+      setTimeout(() => {
+        setDeletePromptWarning("-");
+      }, 3000);
+    }
+  };
+
+  const [showOverlay, setShowOverlay] = React.useState<boolean>(false);
+
+  const overlayAction = () => {
+    setDeletePromptActive(false);
+    setIsMemberListMenuActive(false)
+  }
+
+  React.useEffect(() => {
+    if(deletePromptActive || isMemberListMenuActive){
+      setShowOverlay(true)
+    } else {
+      setShowOverlay(false)
+    }
+  }, [deletePromptActive, isMemberListMenuActive])
+
   return (
     <>
+      <div
+        className={s.overlay}
+        style={{
+          position: "fixed",
+          zIndex: 888,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "#000",
+          opacity: 0.7,
+          display: showOverlay ? "block" : "none",
+        }}
+        onClick={overlayAction}
+      />
+      <FormMenu
+        closeHandler={() => {
+          setDeletePromptActive(false);
+        }}
+        label={`Ketik : "${props.task_data.title}"`}
+        name="title"
+        show={deletePromptActive}
+        submitHandler={({ key, value }) => {
+          deleteHandler(value);
+        }}
+        title="Hapus Tugas"
+        type="SMALL"
+        hideInputInfo
+        placeholder={`"${props.task_data.title}"`}
+        warning={deletePromptWarning}
+        button_color="red"
+        button_text="Hapus"
+        key={"task-delete-prompt"}
+      />
       <Navbar
         title={"Detail Tugas"}
         subtitle={getWorkspaceName(props.task_data.w_id)}
@@ -200,12 +276,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
           setIsMenuActive(false);
         }}
         deleteHandler={() => {
-          task_delete_ctx(props.task_data.t_id, {
-            delete_id: props.task_data.t_id,
-            task: props.task_data,
-            u_id: u_id,
-            w_id: props.task_data.w_id,
-          });
+          setDeletePromptActive(true);
         }}
       />
       <Comments

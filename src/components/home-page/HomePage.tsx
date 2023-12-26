@@ -142,7 +142,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
             type="text"
             value={searchInput}
             warning=""
-            hideInfo
+            hideCap
           />
           <div className={s.workspace}>
             <div className={s.heading}>

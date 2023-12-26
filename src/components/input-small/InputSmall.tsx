@@ -16,7 +16,7 @@ interface InputSmallProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
   maxChar?: number;
-  hideInfo?: boolean;
+  hideCap?: boolean;
 }
 
 const InputSmall: React.FC<InputSmallProps> = (props) => {
@@ -49,19 +49,19 @@ const InputSmall: React.FC<InputSmallProps> = (props) => {
           maxLength={props.maxChar}
         />
       </div>
-      {!props.hideInfo && (
-        <div className={s.info}>
-          <span
-            className={[s.warning, "sm", "regular"].join(" ")}
-            style={{ color: props.warning === "-" ? "transparent" : "red" }}
-          >
-            {props.warning}
-          </span>
+      <div className={s.info}>
+        <span
+          className={[s.warning, "sm", "regular"].join(" ")}
+          style={{ color: props.warning === "-" ? "transparent" : "red" }}
+        >
+          {props.warning}
+        </span>
+        {!props.hideCap && (
           <span className={[s.capacity, "medium", "sm", "soft"].join(" ")}>
             {`${props.value.length}/${props.maxChar ? props.maxChar : "-"}`}
           </span>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

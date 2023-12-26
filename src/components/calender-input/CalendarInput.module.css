@@ -1,7 +1,7 @@
 .calendar {
     position: relative;
     display: flex;
-    z-index: 99;
+    z-index: 9;
     font-family: inherit;
 }
 

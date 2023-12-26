@@ -35,14 +35,35 @@ const months = [
 const CardMenu: React.FC<CardMenuProps> = (props) => {
   const calendar = useCalendar();
 
+  props.calendar_list?.sort((a, b) => {
+    let dateA = new Date(a.date);
+    let dateB = new Date(b.date);
+
+    if (dateA < dateB) {
+      return -1;
+    } else if (dateA > dateB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
   const CalendarViews = props.calendar_list && (
     <ul className={s.calendar}>
-      {calendar.available_month_number.map((c) => {
+      {calendar.available_month_number.map((c, index) => {
+        const isEmpty = !props.calendar_list?.some(
+          (item) =>
+            item.date.split("-")[0] === c.split("-")[0] &&
+            item.date.split("-")[1] === c.split("-")[1]
+        );
         return (
-          <li className={s.month}>
+          <li key={`month-${index}`} className={s.month}>
             <h4 className={[s.month_header, "md", "medium"].join(" ")}>{`${
               months[parseInt(c.split("-")[1]) - 1]
             } ${c.split("-")[0]}`}</h4>
+            {isEmpty && (
+              <span className={"medium md soft"} style={{width: "100%"}} >Tidak ada tugas</span>
+            )}
             <ul className={s.list}>
               {props.calendar_list &&
                 props.calendar_list.map((item, index) => {
@@ -58,6 +79,7 @@ const CardMenu: React.FC<CardMenuProps> = (props) => {
                         />
                       </li>
                     );
+                  } else {
                   }
                 })}
             </ul>
@@ -68,10 +90,10 @@ const CardMenu: React.FC<CardMenuProps> = (props) => {
   );
 
   const NotificationViews = props.notification_list && (
-    <ul className={s.list}>
+    <ul className={s.notif_list}>
       {props.notification_list.map((n, index) => {
         return (
-          <li className={s.item} key={`notification-item-${index}`}>
+          <li className={s.notif_item} key={`notification-item-${index}`}>
             <NotificationCard
               created_at={n.created_at}
               message={n.message}

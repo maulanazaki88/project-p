@@ -12,14 +12,14 @@ export function useRenderDate() {
       "Feb",
       "Mar",
       "Apr",
-      "May",
+      "Mei",
       "Jun",
       "Jul",
-      "Aug",
+      "Agu",
       "Sep",
-      "Oct",
+      "Okt",
       "Nov",
-      "Dec",
+      "Des",
     ];
 
     if (type.some((c) => c === "y")) {

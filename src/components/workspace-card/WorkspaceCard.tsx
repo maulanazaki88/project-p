@@ -22,9 +22,15 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
   const pathname = usePathname();
 
   const goToWorkspace = (id: string) => {
-
     router.push(`${pathname}/workspace/${encodeURIComponent(id)}`);
+  };
 
+  const render_desc = (desc: string) => {
+    if (desc.length > 45) {
+      return `${desc.slice(0, 44)}...`;
+    } else {
+      return desc;
+    }
   };
 
   return (
@@ -42,7 +48,7 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
         <div className={s.headers}>
           <h5 className={s.name}>{props.name}</h5>
           <span className={[s.desc, "sm", "medium", "soft"].join(" ")}>
-            {props.description}
+            {render_desc(props.description)}
           </span>
         </div>
         <ul className={s.assigned_list}>
