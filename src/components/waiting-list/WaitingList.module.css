@@ -1,0 +1,54 @@
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100vh;
+    padding: 0 20px;
+}
+
+.ctn_screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    padding-top: 80px;
+    overflow-y: scroll;
+}
+
+.list {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 10px;
+}
+
+.item {
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.btn_group {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+}
+
+.btn_group:nth-child(2) {
+    margin-left: 10px;
+}

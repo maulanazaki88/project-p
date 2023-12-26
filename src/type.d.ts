@@ -25,6 +25,7 @@ export interface WorkspaceType {
   status: WorkspaceStatusType;
   admin_list: { u_id: string; username: string }[];
   member_list: { u_id: string; username: string }[];
+  waiting_list: {u_id: string; username: string}[];
   task_ids: string[];
   task_list: TaskType[];
   activity_list: ActivityLogType[];

@@ -15,6 +15,23 @@ export interface ContextType {
   user_data_ctx: UserType | null;
   user_data_handler_ctx: React.Dispatch<UserType>;
   user_workspaces_ctx: WorkspaceType[];
+  user_verify_add_worskpace_ctx: (u_id: string, w_id: string) => Promise<any>;
+  owner_acc_user_add_workspace_ctx: (
+    u_id: string,
+    w_id: string,
+    payload: WorkspaceAccWaitingList_Act
+  ) => Promise<any>;
+  owner_reject_user_add_workspace_ctx: (
+    u_id: string,
+    w_id: string,
+    payload: WorkspaceAccWaitingList_Act
+  ) => Promise<any>;
+  user_exit_workspace: (u_id: string, w_id: string) => Promise<any>;
+  owner_kick_user_workspace: (
+    u_id: string,
+    w_id: string,
+    kick_id: string
+  ) => Promise<any>;
   initialize_workspaces_ctx: (payload: WorkspaceInit_Act) => void;
   workspace_replace_ctx: (
     w_id: string,
@@ -96,6 +113,26 @@ export type WorkspaceReplace_Act = {
   workspace: WorkspaceType;
 };
 
+export type WorkspaceAddWaitingList_Act = {
+  u_id: string;
+  candidate: { u_id: string; username: string };
+};
+
+export type WorkspaceAccWaitingList_Act = {
+  u_id: string;
+  candidate: { u_id: string; username: string };
+};
+
+export type WorkspaceRejWaitingList_Act = {
+  u_id: string;
+  candidate: { u_id: string; username: string };
+};
+
+export type WorkspaceRemoveMember_Act = {
+  u_id: string;
+  removed_member: { u_id: string; username: string };
+};
+
 export function isWorkspaceInit(
   payload:
     | WorkspaceChangeName_Act
@@ -106,6 +143,10 @@ export function isWorkspaceInit(
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
     | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
 ): payload is WorkspaceInit_Act {
   return (payload as WorkspaceInit_Act).workspace_list !== undefined;
 }
@@ -120,6 +161,10 @@ export function isWorkspaceChangeName(
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
     | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
 ): payload is WorkspaceChangeName_Act {
   return (payload as WorkspaceChangeName_Act).name !== undefined;
 }
@@ -134,6 +179,10 @@ export function isWorkspaceChangeMember(
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
     | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
 ): payload is WorkspaceChangeMember_Act {
   return (payload as WorkspaceChangeMember_Act).action !== undefined;
 }
@@ -148,6 +197,10 @@ export function isWorkspaceCreateAnnouncement(
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
     | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
 ): payload is WorkspaceCreateAnnouncement_Act {
   return (
     (payload as WorkspaceCreateAnnouncement_Act).notification !== undefined
@@ -164,6 +217,10 @@ export function isWorkspaceDelete(
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
     | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
 ): payload is WorkspaceDelete_Act {
   return (payload as WorkspaceDelete_Act).author_id !== undefined;
 }
@@ -178,6 +235,10 @@ export function isWorkspaceCreate(
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
     | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
 ): payload is WorkspaceCreate_Act {
   return (payload as WorkspaceCreate_Act).workspace !== undefined;
 }
@@ -192,6 +253,10 @@ export function isWorkspaceChangeTasks(
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
     | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
 ): payload is WorkspaceChangeTasks_Act {
   return (payload as WorkspaceChangeTasks_Act).t_id !== undefined;
 }
@@ -206,8 +271,84 @@ export function isWorkspaceReplace(
     | WorkspaceInit_Act
     | WorkspaceChangeTasks_Act
     | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
 ): payload is WorkspaceReplace_Act {
   return (payload as WorkspaceReplace_Act).workspace !== undefined;
+}
+
+export function isWorkspaceAddWaitingList(
+  payload:
+    | WorkspaceChangeName_Act
+    | WorkspaceChangeMember_Act
+    | WorkspaceCreateAnnouncement_Act
+    | WorkspaceDelete_Act
+    | WorkspaceCreate_Act
+    | WorkspaceInit_Act
+    | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
+): payload is WorkspaceAddWaitingList_Act {
+  return (payload as WorkspaceAddWaitingList_Act).candidate !== undefined;
+}
+
+export function isWorkspaceAccWaitingList(
+  payload:
+    | WorkspaceChangeName_Act
+    | WorkspaceChangeMember_Act
+    | WorkspaceCreateAnnouncement_Act
+    | WorkspaceDelete_Act
+    | WorkspaceCreate_Act
+    | WorkspaceInit_Act
+    | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
+): payload is WorkspaceAccWaitingList_Act {
+  return (payload as WorkspaceAccWaitingList_Act).candidate !== undefined;
+}
+
+export function isWorkspaceRejWaitingList(
+  payload:
+    | WorkspaceChangeName_Act
+    | WorkspaceChangeMember_Act
+    | WorkspaceCreateAnnouncement_Act
+    | WorkspaceDelete_Act
+    | WorkspaceCreate_Act
+    | WorkspaceInit_Act
+    | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
+): payload is WorkspaceRejWaitingList_Act {
+  return (payload as WorkspaceRejWaitingList_Act).candidate !== undefined;
+}
+
+export function isWorkspaceRemoveMember(
+  payload:
+    | WorkspaceChangeName_Act
+    | WorkspaceChangeMember_Act
+    | WorkspaceCreateAnnouncement_Act
+    | WorkspaceDelete_Act
+    | WorkspaceCreate_Act
+    | WorkspaceInit_Act
+    | WorkspaceChangeTasks_Act
+    | WorkspaceReplace_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act
+): payload is WorkspaceRemoveMember_Act {
+  return (payload as WorkspaceRemoveMember_Act).removed_member !== undefined;
 }
 
 export interface WorkspaceActions {
@@ -221,7 +362,11 @@ export interface WorkspaceActions {
     | "CREATE"
     | "CHANGE_TASKS"
     | "REPLACE"
-    | "REPLACE_LOCAL";
+    | "REPLACE_LOCAL"
+    | "ADD_WAITING_LIST"
+    | "ACC_WAITING_LIST"
+    | "REJ_WAITING_LIST"
+    | "REMOVE_MEMBER";
   payload:
     | WorkspaceChangeName_Act
     | WorkspaceChangeMember_Act
@@ -229,7 +374,11 @@ export interface WorkspaceActions {
     | WorkspaceDelete_Act
     | WorkspaceCreate_Act
     | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act;
+    | WorkspaceChangeTasks_Act
+    | WorkspaceAddWaitingList_Act
+    | WorkspaceAccWaitingList_Act
+    | WorkspaceRejWaitingList_Act
+    | WorkspaceRemoveMember_Act;
 }
 
 // Workspace Interface ===========================================================
@@ -735,11 +884,189 @@ export function ContextProvider(props: any) {
             }
           });
         }
+      case "ACC_WAITING_LIST":
+        if (isWorkspaceAccWaitingList(action.payload)) {
+          updatedState = init.map((workspace) => {
+            if (
+              workspace.w_id === action.w_id &&
+              isWorkspaceAccWaitingList(action.payload)
+            ) {
+              return {
+                ...workspace,
+                waiting_list: workspace.waiting_list.filter(
+                  (i) =>
+                    isWorkspaceAccWaitingList(action.payload) &&
+                    i.u_id !== action.payload.u_id
+                ),
+              };
+            } else {
+              return workspace;
+            }
+          });
+        }
+        break;
+      case "REJ_WAITING_LIST":
+        if (isWorkspaceRejWaitingList(action.payload)) {
+          updatedState = init.map((workspace) => {
+            if (
+              workspace.w_id === action.w_id &&
+              isWorkspaceRejWaitingList(action.payload)
+            ) {
+              return {
+                ...workspace,
+                waiting_list: workspace.waiting_list.filter(
+                  (i) =>
+                    isWorkspaceRejWaitingList(action.payload) &&
+                    i.u_id !== action.payload.u_id
+                ),
+              };
+            } else {
+              return workspace;
+            }
+          });
+        }
+        break;
+      case "ADD_WAITING_LIST":
+        if (isWorkspaceAddWaitingList(action.payload)) {
+          updatedState = init.map((workspace) => {
+            if (
+              workspace.w_id === action.w_id &&
+              isWorkspaceAddWaitingList(action.payload)
+            ) {
+              return {
+                ...workspace,
+                waiting_list: workspace.waiting_list.concat(
+                  action.payload.candidate
+                ),
+              };
+            } else {
+              return workspace;
+            }
+          });
+        }
+        break;
+      case "REMOVE_MEMBER":
+        if (isWorkspaceRemoveMember(action.payload)) {
+          updatedState = init.map((workspace) => {
+            if (
+              workspace.w_id === action.w_id &&
+              isWorkspaceRemoveMember(action.payload)
+            ) {
+              return {
+                ...workspace,
+                member_list: workspace.member_list.filter(
+                  (member) =>
+                    isWorkspaceRemoveMember(action.payload) &&
+                    member.u_id !== action.payload.removed_member.u_id
+                ),
+              };
+            } else {
+              return workspace;
+            }
+          });
+        }
+        break;
       default:
         break;
     }
     return updatedState;
   };
+
+  // ================================ USER =======================================
+
+  const userVerifyAddWorkspace = async (u_id: string, w_id: string) => {
+    const data = {
+      username: user_data?.username,
+      u_id: u_id,
+    };
+
+    const response = await fetch(
+      `/api/workspace-add-member-waiting-list/${w_id}`,
+      {
+        body: JSON.stringify(data),
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+
+    const json = await response.json();
+
+    if (json && json.updated_count > 0) {
+      console.log("Success adding user to workspace waiting list");
+      return {
+        updated_count: json.updated_count,
+      };
+    } else {
+      console.log("Failed adding user to workspace waiting list");
+      return {
+        updated_count: 0,
+      };
+    }
+  };
+
+  const userExitWorkspace = async (u_id: string, w_id: string) => {
+    set_user_data((prev) => {
+      if (prev) {
+        return {
+          ...prev,
+          workspace_ids: prev.workspace_ids.filter((w) => w !== w_id),
+          workspace_list: prev.workspace_list.filter(
+            (workspace) => workspace.w_id !== w_id
+          ),
+        };
+      } else {
+        return prev;
+      }
+    });
+
+    const workspace_data = { w_id: w_id };
+
+    const user_response = await fetch(`/api/update-user-delete-workspace/${u_id}`, {
+      body: JSON.stringify(workspace_data),
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    const user_json = await user_response.json();
+
+    if (user_json && user_json.updated > 0) {
+      console.log("UPDATE --workspace_ids-- SUCCESS");
+
+      const user_data = { u_id: u_id };
+
+      const workspace_response = await fetch(
+        `/api/workspace-remove-member/${w_id}`,
+        {
+          body: JSON.stringify(user_data),
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "PUT",
+        }
+      );
+
+      const workspace_json = await workspace_response.json();
+
+      if (workspace_json && workspace_json.updated_count) {
+        console.log("UPDATE --member_list-- SUCCESS", "color: green");
+        return {
+          updated_count: workspace_json.updated_count,
+        };
+      } else {
+        console.log("UPDATE --member_list-- FAILED", "color: red");
+      }
+    } else {
+      console.log("UPDATE --workspace_ids-- FAILED");
+    }
+  };
+
+  //========================= USER ================================
+
+  //======================== WORKSPACE ============================
 
   const workspaces_init: WorkspaceType[] = [];
 
@@ -756,6 +1083,172 @@ export function ContextProvider(props: any) {
     } else {
       console.log(w_id);
       return false;
+    }
+  };
+
+  const ownerKickMember = async (
+    u_id: string,
+    w_id: string,
+    kick_id: string
+  ) => {
+    if (workspaces_verify_access(u_id, w_id)) {
+      dispatchWorkspace({
+        payload: {
+          removed_member: { u_id: kick_id, username: "member" },
+        } as WorkspaceRemoveMember_Act,
+        type: "REMOVE_MEMBER",
+        w_id: w_id,
+      });
+
+      const user_data = { u_id: u_id };
+
+      const workspace_response = await fetch(
+        `/api/workspace-remove-member/${w_id}`,
+        {
+          body: JSON.stringify(user_data),
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "PUT",
+        }
+      );
+
+      const workspace_json = await workspace_response.json();
+
+      if (workspace_json && workspace_json.updated_count > 0) {
+        console.log("UPDATED --member_list-- SUCCESS", "color: green");
+
+        const workspace_data = { w_id: w_id };
+
+        const user_response = await fetch(`/api/user-exit-workspace/${u_id}`, {
+          body: JSON.stringify(workspace_data),
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "PUT",
+        });
+
+        const user_json = await user_response.json();
+
+        if (user_json && user_json.updated_count > 0) {
+          console.log("UPDATED --workspace_ids-- SUCCESS");
+
+          return {
+            updated_count: user_json.updated_count,
+          };
+        } else {
+          console.log("UPDATED --workspace_ids-- FAILED");
+          return {
+            updated_count: 0,
+          };
+        }
+      } else {
+        console.log("UPDATED --member_list-- FAILED");
+        return {
+          updated_count: 0,
+        };
+      }
+    }
+  };
+
+  const ownerAccUserAddWorkspace = async (
+    u_id: string,
+    w_id: string,
+    payload: WorkspaceAccWaitingList_Act
+  ) => {
+    if (workspaces_verify_access(u_id, w_id)) {
+      dispatchWorkspace({
+        payload: payload,
+        type: "ACC_WAITING_LIST",
+        w_id: w_id,
+      });
+
+      const workspace_data = { w_id: w_id };
+
+      const user_response = await fetch(`/api/update-user-add-workspace/${u_id}`, {
+        body: JSON.stringify(workspace_data),
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+
+      const user_json = await user_response.json();
+      if (user_json && user_json.updated_count > 0) {
+        console.log("UPDATE --workspace_ids-- SUCCESS");
+
+        const user_data = payload.candidate;
+
+        const workspace_response = await fetch(
+          `/api/workspace-acc-waiting-list/${w_id}`,
+          {
+            body: JSON.stringify(user_data),
+            headers: {
+              "content-type": "application/json",
+            },
+            method: "PUT",
+          }
+        );
+
+        const workspace_json = await workspace_response.json();
+
+        if (workspace_json && workspace_json.updated_count > 0) {
+          console.log("UPDATE --waiting_list-- SUCCESS", "color: green");
+          return {
+            updated_count: workspace_json.updated_count,
+          };
+        } else {
+          console.log("UPDATE --waiting_list-- FAILED", "color: red");
+          return {
+            updated_count: 0,
+          };
+        }
+      } else {
+        console.log("UPDATE --workspace_ids-- FAILED", "color: red");
+        return {
+          updated_count: 0,
+        };
+      }
+    } else {
+      console.log("LIMITED ACCESS");
+    }
+  };
+
+  const ownerRejUserAddWorkspace = async (
+    u_id: string,
+    w_id: string,
+    payload: WorkspaceAccWaitingList_Act
+  ) => {
+    if (workspaces_verify_access(u_id, w_id)) {
+      dispatchWorkspace({
+        payload: payload,
+        type: "REJ_WAITING_LIST",
+        w_id: w_id,
+      });
+
+      const user_data = payload.candidate;
+
+      const workspace_response = await fetch(
+        `/api/workspace-rej-waiting-list/${w_id}`,
+        {
+          body: JSON.stringify(user_data),
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "PUT",
+        }
+      );
+
+      const workspace_json = await workspace_response.json();
+
+      if (workspace_json && workspace_json.updated_count > 0) {
+        console.log("UPDATE --waiting_list-- SUCCESS", "color: green");
+        return {
+          updated_count: workspace_json.updated_count,
+        };
+      } else {
+        console.log("UPDATE --waiting_list-- FAILED", "color: red");
+      }
     }
   };
 
@@ -1613,7 +2106,6 @@ export function ContextProvider(props: any) {
 
       taskInit({ task_list: tasks });
     } else {
-
     }
   }, [user_data]);
 
@@ -1642,6 +2134,11 @@ export function ContextProvider(props: any) {
     workspace_create_announcement_ctx: workspaceCreateAnnouncement,
     workspace_create_ctx: createWorkspace,
     workspace_delete_ctx: deleteWorkspace,
+    owner_acc_user_add_workspace_ctx: ownerAccUserAddWorkspace,
+    owner_reject_user_add_workspace_ctx: ownerRejUserAddWorkspace,
+    user_exit_workspace: userExitWorkspace,
+    owner_kick_user_workspace: ownerKickMember,
+    user_verify_add_worskpace_ctx: userVerifyAddWorkspace,
   };
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;

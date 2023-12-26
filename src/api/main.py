@@ -211,6 +211,8 @@ def update_user_delete_workspace_list(u_id: str, item: WorkspaceIds):
 
     return {"updated_count": updated_count, "u_id": u_id}
 
+
+
 ################################## USER #####################################################################
 
 
@@ -348,6 +350,62 @@ def replace_workspace(w_id: str, item: Workspace):
     replaced_count = replaced.raw_result["nModified"]
 
     return {"updated_count": replaced_count, "w_id": w_id}
+
+
+class UserSnippet(BaseModel):
+    username: str | None = None
+    u_id: str | None = None
+
+
+@app.put("/api/workspace-add-member-waiting-list/{w_id}")
+def add_waiting_list(w_id: str, item: UserSnippet):
+    record = jsonable_encoder(item)
+    updated = workspaces_collection.update_one(
+        {"w_id": w_id}, {'$push': {'waiting_list': record}})
+
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count, "w_id": w_id}
+
+
+@app.put("/api/workspace-acc-waiting-list/{w_id}")
+def acc_waiting_list(w_id: str, item: UserSnippet):
+    record = jsonable_encoder(item)
+    updated = workspaces_collection.update_one(
+        {"w_id": w_id}, {'$pull': {'waiting_list': {
+            'u_id': {'$eq': record["u_id"]}}}}
+    )
+
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count, "w_id": w_id}
+
+
+@app.put("/api/workspace-rej-waiting-list/{w_id}")
+def rej_waiting_list(w_id: str, item: UserSnippet):
+    record = jsonable_encoder(item)
+    updated = workspaces_collection.update_one(
+        {"w_id": w_id}, {'$pull': {'waiting_list': {
+            'u_id': {'$eq': record["u_id"]}}}}
+    )
+
+    updated_count = updated.raw_result["nModified"]
+
+    return {"updated_count": updated_count, "w_id": w_id}
+
+
+class RemoveMember(BaseModel):
+    u_id: str | None = None
+
+
+@app.put("/api/workspace-remove-member/{w_id}")
+def workspace_remove_member(w_id: str, item: RemoveMember):
+    record = jsonable_encoder(item)
+    updated = workspaces_collection.update_one(
+        {"w_id": w_id}, {'$pull': {'member_list': {'u_id': {'$eq': record["u_id"]}}}})
+
+    updated_count = updated.raw_result["nModified"]
+    return {"updated_count": updated_count, "w_id": w_id}
 
 
 ################################## WORKSPACE #####################################################################

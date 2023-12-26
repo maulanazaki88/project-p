@@ -23,6 +23,7 @@ import { usePathname } from "next/navigation";
 import FormMenu from "../from-menu/FormMenu";
 import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
 import { useIdGenerator } from "@/hook/useIdGenerator";
+import WaitingList from "../waiting-list/WaitingList";
 
 interface WorkspacePageProps {
   data: WorkspaceType;
@@ -50,6 +51,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     user_task_ctx,
     workspace_create_ctx,
     workspace_delete_ctx,
+    owner_acc_user_add_workspace_ctx,
+    owner_reject_user_add_workspace_ctx,
   } = React.useContext(Context) as ContextType;
 
   const screenRef = React.useRef<HTMLDivElement | null>(null);
@@ -85,6 +88,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     React.useState<boolean>(false);
   const [deletePromptWarning, setDeletePromptWarning] =
     React.useState<string>("-");
+
+  const [showWaitingList, setShowWaitingList] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (deletePromptActive) {
@@ -399,6 +404,27 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           newNotificationHandler={() => {
             setShowNotificationForm(true);
           }}
+        />
+        <WaitingList
+          accHandler={(data) => {
+            owner_acc_user_add_workspace_ctx(u_id, data.w_id, {
+              u_id: u_id,
+              candidate: { u_id: data.u_id, username: data.username },
+            });
+          }}
+          closeHandler={() => {
+            setShowWaitingList(false);
+          }}
+          list={props.data.waiting_list}
+          rejHandler={(data) => {
+            owner_reject_user_add_workspace_ctx(u_id, data.w_id, {
+              u_id: u_id,
+              candidate: { u_id: data.u_id, username: data.username },
+            });
+          }}
+          show={showWaitingList}
+          workspace_name={props.data.name}
+          w_id={props.data.w_id}
         />
         <BasicMenu
           button_list={menu_list}
