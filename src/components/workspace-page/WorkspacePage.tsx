@@ -24,6 +24,7 @@ import FormMenu from "../from-menu/FormMenu";
 import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
 import { useIdGenerator } from "@/hook/useIdGenerator";
 import WaitingList from "../waiting-list/WaitingList";
+import MemberList from "../member-list/MemberList";
 
 interface WorkspacePageProps {
   data: WorkspaceType;
@@ -53,6 +54,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     workspace_delete_ctx,
     owner_acc_user_add_workspace_ctx,
     owner_reject_user_add_workspace_ctx,
+    owner_kick_user_workspace,
+    user_exit_workspace,
   } = React.useContext(Context) as ContextType;
 
   const screenRef = React.useRef<HTMLDivElement | null>(null);
@@ -90,6 +93,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     React.useState<string>("-");
 
   const [showWaitingList, setShowWaitingList] = React.useState<boolean>(false);
+  const [showMemberList, setShowMemberList] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (deletePromptActive) {
@@ -98,6 +102,28 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
       setShowOverlay(false);
     }
   }, [deletePromptActive]);
+
+  const exitWorkspaceHandler = async (u_id: string, w_id: string) => {
+    const data = await user_exit_workspace(u_id, w_id);
+
+    const updated_one = await data.updated_one;
+
+    if (updated_one && updated_one > 0) {
+      console.log("Yeyyyy");
+      router.replace(`/home/${u_id}`);
+    }
+  };
+
+  const kickHandler = async (u_id: string, w_id: string, kick_id: string) => {
+    const data = await owner_kick_user_workspace(u_id, w_id, kick_id);
+
+    const updated_count = await data.updated_count;
+
+    if (updated_count && updated_count > 0) {
+      console.log("Yeyyyy");
+    }
+  };
+
   // React.useEffect(() => {
   //   // user_data_handler_ctx(props.user_data);
 
@@ -279,13 +305,26 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           router.push(`/home/${u_id}/workspace-setup/${props.data?.w_id}`);
         },
       },
-      // {
-      //   bg_color: "",
-      //   color: "",
-      //   text: "Antrian Masuk",
-      //   icon: "/icons/queue_black.svg",
-      //   notification: 2,
-      // },
+      {
+        bg_color: "",
+        color: "",
+        text: "Daftar Anggota",
+        icon: "/icons/team_black.svg",
+        onClick: () => {
+          setShowMemberList(true);
+        },
+        icon_scale: 1.5,
+      },
+      {
+        bg_color: "",
+        color: "",
+        text: "Antrian Bergabung",
+        icon: "/icons/queue_black.svg",
+        notification: 2,
+        onClick: () => {
+          setShowWaitingList(true);
+        },
+      },
       {
         bg_color: "",
         color: "",
@@ -307,6 +346,17 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           console.log("SUMMONED NOTIFICATION MENU");
         },
         icon_scale: 1.5,
+      },
+      {
+        bg_color: "",
+        color: "",
+        text: "Keluar Workspace",
+        icon: "/icons/exit_black.svg",
+
+        onClick: () => {
+          exitWorkspaceHandler(u_id, w_id);
+        },
+        icon_scale: 1,
       },
     ];
 
@@ -404,6 +454,18 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           newNotificationHandler={() => {
             setShowNotificationForm(true);
           }}
+        />
+        <MemberList
+          closeHandler={() => {
+            setShowMemberList(false);
+          }}
+          kickHandler={(data) => {
+            kickHandler(u_id, w_id, data.u_id);
+          }}
+          list={props.data.member_list}
+          show={showMemberList}
+          w_id={w_id}
+          workspace_name={props.data.name}
         />
         <WaitingList
           accHandler={(data) => {

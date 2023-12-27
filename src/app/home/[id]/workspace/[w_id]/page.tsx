@@ -38,6 +38,7 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
     task_list: [],
     updated_at: date_now.withTime(),
     w_id: props.params.w_id,
+    waiting_list: []
   };
 
   const workspace = React.useMemo(() => {

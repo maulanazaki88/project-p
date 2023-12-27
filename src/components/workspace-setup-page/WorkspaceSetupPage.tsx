@@ -48,6 +48,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
     task_list: props.data ? props.data.task_list : [],
     updated_at: props.data ? props.data.updated_at : "",
     w_id: props.data ? props.data.w_id : "",
+    waiting_list: []
   });
 
   const [buttonDisabled, setButtonDisabled] = React.useState<boolean>(false);

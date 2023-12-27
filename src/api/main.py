@@ -69,7 +69,6 @@ class Workspace(BaseModel):
         'assigned_member', {"u_id": str, "username": str})]] = None
     created_at: str | None = None
     updated_at: str | None = None
-    task_list: Optional[list[Task]] = None
     task_ids: Optional[list[str]] = None
     status: str | None = None
 
@@ -80,7 +79,6 @@ class User(BaseModel):
     email: str | None = None
     password: str | None = None
     workspace_ids: list[str] = None
-    workspace_list: Optional[list[Workspace]] = None
     created_at: str | None = None
     is_online: int | None = None
     updated_at: str | None = None

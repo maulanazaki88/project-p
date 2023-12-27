@@ -30,6 +30,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     initialize_tasks_ctx,
     user_workspaces_ctx,
     user_task_ctx,
+    logout_ctx,
   } = React.useContext(Context) as ContextType;
 
   const actual_user_data: UserType = user_data_ctx ? user_data_ctx : props.data;
@@ -42,6 +43,8 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     React.useState<boolean>(false);
   const [notificationMenuActive, setNotificationMenuActive] =
     React.useState<boolean>(false);
+
+  const [showLogoutPopup, setShowLogoutPopup] = React.useState<boolean>(false);
 
   const workspace_list = props.data.workspace_list as WorkspaceType[];
 
@@ -80,6 +83,11 @@ const HomePage: React.FC<HomePageProps> = (props) => {
       } as CalendarCardProps;
     });
 
+  const logoutHandler = () => {
+    logout_ctx();
+    router.replace("/");
+  };
+
   // React.useEffect(() => {
   //   user_data_handler_ctx(props.data);
   //   initialize_workspaces_ctx({
@@ -110,6 +118,11 @@ const HomePage: React.FC<HomePageProps> = (props) => {
         }}
         notificationHandler={() => {
           setNotificationMenuActive(true);
+        }}
+        showLogoutPopup={showLogoutPopup}
+        logoutHandler={logoutHandler}
+        showLogoutPopupHandler={() => {
+          setShowLogoutPopup(!showLogoutPopup);
         }}
       />
       <CardMenu

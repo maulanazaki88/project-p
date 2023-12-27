@@ -7,6 +7,9 @@ interface HomeNavbarProps {
   username: string;
   calendarHandler: () => void;
   notificationHandler: () => void;
+  showLogoutPopup: boolean;
+  logoutHandler: () => void;
+  showLogoutPopupHandler: () => void;
 }
 
 const HomeNavbar: React.FC<HomeNavbarProps> = (props) => {
@@ -28,7 +31,12 @@ const HomeNavbar: React.FC<HomeNavbarProps> = (props) => {
           opacity={1}
           onClick={props.calendarHandler}
         />
-        <UsernameButton username={props.username} />
+        <UsernameButton
+          username={props.username}
+          logoutHandler={props.logoutHandler}
+          showPopup={props.showLogoutPopup}
+          onClick={props.showLogoutPopupHandler}
+        />
       </div>
     </header>
   );

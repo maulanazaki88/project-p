@@ -16,7 +16,7 @@ interface WaitingListProps {
 
 const WaitingList: React.FC<WaitingListProps> = (props) => {
   return (
-    <div className={s.menu}>
+    <div className={s.menu} style={{translate: props.show ?  "0 0" : "100vw 0"}} >
       <MenuNavbar
         title={props.workspace_name}
         closeHandler={props.closeHandler}

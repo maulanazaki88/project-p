@@ -84,6 +84,7 @@ export interface ContextType {
   display_width_ctx: number;
   task_comments_ctx: CommentType[] | null;
   task_comments_handler_ctx: React.Dispatch<CommentType[]>;
+  logout_ctx: () => void;
 }
 
 // Workspace Interface ===========================================================
@@ -1007,60 +1008,73 @@ export function ContextProvider(props: any) {
   };
 
   const userExitWorkspace = async (u_id: string, w_id: string) => {
-    set_user_data((prev) => {
-      if (prev) {
-        return {
-          ...prev,
-          workspace_ids: prev.workspace_ids.filter((w) => w !== w_id),
-          workspace_list: prev.workspace_list.filter(
-            (workspace) => workspace.w_id !== w_id
-          ),
-        };
-      } else {
-        return prev;
-      }
-    });
+    if (!workspaces_verify_access(u_id, w_id)) {
+      set_user_data((prev) => {
+        if (prev) {
+          return {
+            ...prev,
+            workspace_ids: prev.workspace_ids.filter((w) => w !== w_id),
+            workspace_list: prev.workspace_list.filter(
+              (workspace) => workspace.w_id !== w_id
+            ),
+          };
+        } else {
+          return prev;
+        }
+      });
 
-    const workspace_data = { w_id: w_id };
+      const workspace_data = { w_id: w_id };
 
-    const user_response = await fetch(`/api/update-user-delete-workspace/${u_id}`, {
-      body: JSON.stringify(workspace_data),
-      method: "PUT",
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-
-    const user_json = await user_response.json();
-
-    if (user_json && user_json.updated > 0) {
-      console.log("UPDATE --workspace_ids-- SUCCESS");
-
-      const user_data = { u_id: u_id };
-
-      const workspace_response = await fetch(
-        `/api/workspace-remove-member/${w_id}`,
+      const user_response = await fetch(
+        `/api/update-user-delete-workspace/${u_id}`,
         {
-          body: JSON.stringify(user_data),
+          body: JSON.stringify(workspace_data),
+          method: "PUT",
           headers: {
             "content-type": "application/json",
           },
-          method: "PUT",
         }
       );
 
-      const workspace_json = await workspace_response.json();
+      const user_json = await user_response.json();
 
-      if (workspace_json && workspace_json.updated_count) {
-        console.log("UPDATE --member_list-- SUCCESS", "color: green");
-        return {
-          updated_count: workspace_json.updated_count,
-        };
+      if (user_json && user_json.updated > 0) {
+        console.log("UPDATE --workspace_ids-- SUCCESS");
+
+        const user_data = { u_id: u_id };
+
+        const workspace_response = await fetch(
+          `/api/workspace-remove-member/${w_id}`,
+          {
+            body: JSON.stringify(user_data),
+            headers: {
+              "content-type": "application/json",
+            },
+            method: "PUT",
+          }
+        );
+
+        const workspace_json = await workspace_response.json();
+
+        if (workspace_json && workspace_json.updated_count) {
+          console.log("UPDATE --member_list-- SUCCESS", "color: green");
+          return {
+            updated_count: workspace_json.updated_count,
+          };
+        } else {
+          console.log("UPDATE --member_list-- FAILED", "color: red");
+          return {
+            updated_count: 0,
+          };
+        }
       } else {
-        console.log("UPDATE --member_list-- FAILED", "color: red");
+        console.log("UPDATE --workspace_ids-- FAILED");
+        return {
+          updated_count: 0,
+        };
       }
     } else {
-      console.log("UPDATE --workspace_ids-- FAILED");
+      console.log("ADMIN CAN'T LEAVE!")
     }
   };
 
@@ -1165,13 +1179,16 @@ export function ContextProvider(props: any) {
 
       const workspace_data = { w_id: w_id };
 
-      const user_response = await fetch(`/api/update-user-add-workspace/${u_id}`, {
-        body: JSON.stringify(workspace_data),
-        method: "PUT",
-        headers: {
-          "content-type": "application/json",
-        },
-      });
+      const user_response = await fetch(
+        `/api/update-user-add-workspace/${u_id}`,
+        {
+          body: JSON.stringify(workspace_data),
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      );
 
       const user_json = await user_response.json();
       if (user_json && user_json.updated_count > 0) {
@@ -2109,6 +2126,13 @@ export function ContextProvider(props: any) {
     }
   }, [user_data]);
 
+  const logout = () => {
+    set_user_data(null)
+    workspaceInit({workspace_list: []})
+    taskInit({task_list: []})
+
+  }
+
   const context: ContextType = {
     user_data_ctx: user_data,
     user_data_handler_ctx: set_user_data,
@@ -2139,6 +2163,7 @@ export function ContextProvider(props: any) {
     user_exit_workspace: userExitWorkspace,
     owner_kick_user_workspace: ownerKickMember,
     user_verify_add_worskpace_ctx: userVerifyAddWorkspace,
+    logout_ctx: logout
   };
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;
