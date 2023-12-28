@@ -16,12 +16,24 @@ interface WaitingListProps {
 
 const WaitingList: React.FC<WaitingListProps> = (props) => {
   return (
-    <div className={s.menu} style={{translate: props.show ?  "0 0" : "100vw 0"}} >
+    <div
+      className={s.menu}
+      style={{ translate: props.show ? "0 0" : "100vw 0" }}
+    >
       <MenuNavbar
         title={props.workspace_name}
         closeHandler={props.closeHandler}
       />
       <div className={s.ctn_screen}>
+        <p className={[s.title, "medium", "md"].join(" ")}>
+          Daftar antrian masuk
+        </p>
+        {props.list.length === 0 && (
+          <p className={[s.empty_txt, "reguler", "md", "soft"].join(" ")}>
+            Antrian Kosong
+          </p>
+        )}
+
         <ul className={s.list}>
           {props.list.map((candidate, index) => {
             return (
@@ -31,6 +43,7 @@ const WaitingList: React.FC<WaitingListProps> = (props) => {
                   <RoundButton
                     color="#79C89F"
                     icon="/icons/check_white.svg"
+                    scale={0.87}
                     opacity={1}
                     onClick={() => {
                       props.accHandler({
@@ -41,7 +54,7 @@ const WaitingList: React.FC<WaitingListProps> = (props) => {
                     }}
                   />
                   <RoundButton
-                    color="#79C89F"
+                    color="red"
                     icon="/icons/plus_white.svg"
                     opacity={1}
                     onClick={() => {

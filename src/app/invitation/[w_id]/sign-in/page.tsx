@@ -5,10 +5,13 @@ import { UserType } from "@/type";
 import InputSmall from "@/components/input-small/InputSmall";
 import ButtonLarge from "@/components/button-large/ButtonLarge";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const InvitationSignInPage: React.FC = () => {
-
   const router = useRouter();
+  const pathname = usePathname();
+
+  const w_id = pathname.split("/")[2]
 
   const [data, setData] = React.useState<UserType>({
     created_at: "",
@@ -50,12 +53,11 @@ const InvitationSignInPage: React.FC = () => {
         "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify(data),
-      
     });
 
     const json = await response.json();
 
-    console.log(await json)
+    console.log(await json);
 
     if (await json) {
       if (json.message === "success") {
@@ -65,10 +67,10 @@ const InvitationSignInPage: React.FC = () => {
   };
 
   React.useEffect(() => {
-    if(verifyId){
-      router.push(`/home/${verifyId}`)
+    if (verifyId) {
+      router.push(`/invitation/${w_id}/user/${verifyId}`);
     }
-  }, [verifyId])
+  }, [verifyId]);
 
   return (
     <main className={s.main}>

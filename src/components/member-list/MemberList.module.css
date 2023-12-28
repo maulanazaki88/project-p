@@ -6,7 +6,7 @@
     justify-content: flex-start;
     width: 100vw;
     height: 100vh;
-    padding: 0 20px;
+    padding: 0 20px 30px 20px;
     top: 0;
     left: 0;
     z-index: 999;
@@ -34,7 +34,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 0 10px;
+    overflow-x: hidden;
 }
 
 .item {
@@ -43,7 +43,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     width: 100%;
 }
 
@@ -57,4 +57,23 @@
 
 .btn_group:nth-child(2) {
     margin-left: 10px;
+}
+
+.action{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.action > button {
+    margin-bottom: 20px;
+}
+
+.title{
+    position: relative;
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: center;
 }

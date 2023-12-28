@@ -45,13 +45,15 @@ const InvitationSignUpPage: React.FC = () => {
     setButtonDisabled(true);
     const date_time = date_now.withTime();
 
+    const user = {
+      ...user_data,
+      created_at: date_time,
+      updated_at: date_time,
+      u_id: id_generator.user(),
+    };
+
     const response = await fetch(`/api/create-user`, {
-      body: JSON.stringify({
-        ...user_data,
-        created_at: date_time,
-        updated_at: date_time,
-        u_id: id_generator.user(),
-      } as UserType),
+      body: JSON.stringify(user),
       headers: { "content-type": "application/json" },
       method: "POST",
     });
@@ -97,7 +99,7 @@ const InvitationSignUpPage: React.FC = () => {
 
   React.useEffect(() => {
     if (verifyId) {
-      router.replace(`/home/${verifyId}`);
+      router.push(`/invitation/user/${verifyId}`);
     }
   }, [verifyId]);
 

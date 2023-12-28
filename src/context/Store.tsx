@@ -15,7 +15,11 @@ export interface ContextType {
   user_data_ctx: UserType | null;
   user_data_handler_ctx: React.Dispatch<UserType>;
   user_workspaces_ctx: WorkspaceType[];
-  user_verify_add_worskpace_ctx: (u_id: string, w_id: string) => Promise<any>;
+  user_verify_add_worskpace_ctx: (
+    u_id: string,
+    username: string,
+    w_id: string
+  ) => Promise<any>;
   owner_acc_user_add_workspace_ctx: (
     u_id: string,
     w_id: string,
@@ -888,16 +892,21 @@ export function ContextProvider(props: any) {
       case "ACC_WAITING_LIST":
         if (isWorkspaceAccWaitingList(action.payload)) {
           updatedState = init.map((workspace) => {
+            console.log(action.payload);
             if (
               workspace.w_id === action.w_id &&
               isWorkspaceAccWaitingList(action.payload)
             ) {
+              console.log(action.payload);
               return {
                 ...workspace,
                 waiting_list: workspace.waiting_list.filter(
                   (i) =>
                     isWorkspaceAccWaitingList(action.payload) &&
-                    i.u_id !== action.payload.u_id
+                    i.u_id !== action.payload.candidate.u_id
+                ),
+                member_list: workspace.member_list.concat(
+                  action.payload.candidate
                 ),
               };
             } else {
@@ -913,12 +922,13 @@ export function ContextProvider(props: any) {
               workspace.w_id === action.w_id &&
               isWorkspaceRejWaitingList(action.payload)
             ) {
+              console.log(action.payload);
               return {
                 ...workspace,
                 waiting_list: workspace.waiting_list.filter(
                   (i) =>
                     isWorkspaceRejWaitingList(action.payload) &&
-                    i.u_id !== action.payload.u_id
+                    i.u_id !== action.payload.candidate.u_id
                 ),
               };
             } else {
@@ -975,9 +985,13 @@ export function ContextProvider(props: any) {
 
   // ================================ USER =======================================
 
-  const userVerifyAddWorkspace = async (u_id: string, w_id: string) => {
+  const userVerifyAddWorkspace = async (
+    u_id: string,
+    username: string,
+    w_id: string
+  ) => {
     const data = {
-      username: user_data?.username,
+      username: username,
       u_id: u_id,
     };
 
@@ -1074,7 +1088,7 @@ export function ContextProvider(props: any) {
         };
       }
     } else {
-      console.log("ADMIN CAN'T LEAVE!")
+      console.log("ADMIN CAN'T LEAVE!");
     }
   };
 
@@ -1114,7 +1128,7 @@ export function ContextProvider(props: any) {
         w_id: w_id,
       });
 
-      const user_data = { u_id: u_id };
+      const user_data = { u_id: kick_id };
 
       const workspace_response = await fetch(
         `/api/workspace-remove-member/${w_id}`,
@@ -1134,13 +1148,16 @@ export function ContextProvider(props: any) {
 
         const workspace_data = { w_id: w_id };
 
-        const user_response = await fetch(`/api/user-exit-workspace/${u_id}`, {
-          body: JSON.stringify(workspace_data),
-          headers: {
-            "content-type": "application/json",
-          },
-          method: "PUT",
-        });
+        const user_response = await fetch(
+          `/api/update-user-delete-workspace/${kick_id}`,
+          {
+            body: JSON.stringify(workspace_data),
+            headers: {
+              "content-type": "application/json",
+            },
+            method: "PUT",
+          }
+        );
 
         const user_json = await user_response.json();
 
@@ -1180,7 +1197,7 @@ export function ContextProvider(props: any) {
       const workspace_data = { w_id: w_id };
 
       const user_response = await fetch(
-        `/api/update-user-add-workspace/${u_id}`,
+        `/api/update-user-add-workspace/${payload.candidate.u_id}`,
         {
           body: JSON.stringify(workspace_data),
           method: "PUT",
@@ -2127,11 +2144,10 @@ export function ContextProvider(props: any) {
   }, [user_data]);
 
   const logout = () => {
-    set_user_data(null)
-    workspaceInit({workspace_list: []})
-    taskInit({task_list: []})
-
-  }
+    set_user_data(null);
+    workspaceInit({ workspace_list: [] });
+    taskInit({ task_list: [] });
+  };
 
   const context: ContextType = {
     user_data_ctx: user_data,
@@ -2163,7 +2179,7 @@ export function ContextProvider(props: any) {
     user_exit_workspace: userExitWorkspace,
     owner_kick_user_workspace: ownerKickMember,
     user_verify_add_worskpace_ctx: userVerifyAddWorkspace,
-    logout_ctx: logout
+    logout_ctx: logout,
   };
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;

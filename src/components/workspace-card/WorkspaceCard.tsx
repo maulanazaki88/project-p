@@ -52,7 +52,7 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
           </span>
         </div>
         <ul className={s.assigned_list}>
-          {props.members.map((member, index) => {
+          {props.members.slice(0, 3).map((member, index) => {
             return (
               <li
                 className={s.assigned_item}

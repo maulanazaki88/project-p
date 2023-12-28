@@ -4,8 +4,6 @@ from pymongo import MongoClient
 from datetime import datetime
 from pydantic import BaseModel
 from typing_extensions import TypedDict, Optional
-from starlette.requests import Request
-import json
 
 app = FastAPI()
 
@@ -71,6 +69,8 @@ class Workspace(BaseModel):
     updated_at: str | None = None
     task_ids: Optional[list[str]] = None
     status: str | None = None
+    waiting_list: Optional[list[TypedDict(
+        'candidate', {'u_id': str, "username": str})]]
 
 
 class User(BaseModel):
@@ -101,10 +101,6 @@ client = MongoClient(
 database = client["projectp"]  # sama utk setiap crud operation
 
 # disesuaikan dengan nama data
-activity_collection = database["activities"]
-chat_collection = database["chat"]
-comments_collection = database["comments"]
-notifications_collection = database["notifications"]
 tasks_collection = database["tasks"]
 users_collection = database["users"]
 workspaces_collection = database["workspaces"]
@@ -127,27 +123,22 @@ async def signIn(data: User):
 @app.post("/api/create-user")
 async def create_user(data: User):
     # konversi json ke dictionary
-    user_dict = jsonable_encoder(data)
-    user_dict["created_at"] = get_date_now()
-    user_dict["updated_at"] = get_date_now()
+    record = jsonable_encoder(data)
+    record["created_at"] = get_date_now()
+    record["updated_at"] = get_date_now()
     # request.data => data yg dikirimkan oleh klien
 
     # jumlah data ditemukan
     length = users_collection.count_documents(
-        {"username": user_dict["username"]})
+        {"username": record["username"]})
 
     # memeriksa apakah sudah ada akun yang memiliki username yang sama
     if length == 0:
-        # pre-designed uid
-        # u_id = f"{user_dict['username'][:3]}-{str(datetime.now()).replace(':', '').replace(' ', '').replace('-', '').replace('.', '')}-usr"
 
-        # user_dict["u_id"] = u_id
-
-        record = user_dict
-
+        # memasukan data ke database
         users_collection.insert_one(record)
 
-        return ({"message": "success", "u_id": user_dict["u_id"]})
+        return ({"message": "success", "u_id": record["u_id"]})
 
     elif length != 0:
         return ({"message": "user-exist"})
@@ -158,8 +149,19 @@ async def create_user(data: User):
 
 @app.get("/api/get-user/{u_id}")
 def get_user(u_id: str):
-    user = users_collection.aggregate([{'$match': {'u_id': u_id}}, {'$lookup': {'from': 'workspaces', 'localField': 'workspace_ids', 'foreignField': 'w_id', 'pipeline': [
-                                      {'$lookup': {'from': 'tasks', 'localField': 'task_ids', 'foreignField': 't_id', 'pipeline': [{'$project': {'_id': 0}}], 'as': 'task_list'}}, {'$project': {"_id": 0}}], 'as': 'workspace_list'}}, {'$project': {'_id': 0}}])
+    user = users_collection.aggregate([{'$match': {'u_id': u_id}},
+                                       {'$lookup': {'from': 'workspaces', 
+                                                    'localField': 'workspace_ids', 
+                                                    'foreignField': 'w_id', 
+                                                    'pipeline': [
+                                           {'$lookup': {'from': 'tasks', 
+                                                        'localField': 'task_ids', 
+                                                        'foreignField': 't_id', 
+                                                        'pipeline': [
+                                               {'$project': {'_id': 0}}], 'as': 'task_list'}}, 
+                                           {'$project': {"_id": 0}}], 'as': 'workspace_list'}},
+                                       {'$project': {'_id': 0}}])
+    # mengembalikan data pada list indeks 0 
     return list(user)[0]
 
 
@@ -191,12 +193,18 @@ class WorkspaceIds(BaseModel):
 
 @app.put("/api/update-user-add-workspace/{u_id}")
 def update_user_add_workspace_list(u_id: str, item: WorkspaceIds):
+    # mengkonversi json ke dictionary
     record = jsonable_encoder(item)
+    # melakukan update ke database
     updated = users_collection.update_one(
-        {"u_id": u_id}, {'$push': {'workspace_ids': record["w_id"]}, '$set': {'updated_at': get_date_now()}}, upsert=False)
+        {"u_id": u_id}, 
+        {'$push': {'workspace_ids': record["w_id"]}, 
+         '$set': {'updated_at': get_date_now()}}, 
+        upsert=False)
     updated_count = updated.raw_result["nModified"]
     print(record)
 
+    #mengembalikan jumlah data yang terupdate
     return {"updated_count": updated_count, "u_id": u_id}
 
 
@@ -204,11 +212,10 @@ def update_user_add_workspace_list(u_id: str, item: WorkspaceIds):
 def update_user_delete_workspace_list(u_id: str, item: WorkspaceIds):
     record = jsonable_encoder(item)
     updated = users_collection.update_one(
-        {"u_id": u_id}, {'$pull': {'workspace_ids': record['w_id']}}, {'$set': {"updated_at": get_date_now()}}, upsert=False)
+        {"u_id": u_id}, {'$pull': {'workspace_ids': record['w_id']}, '$set': {"updated_at": get_date_now()}}, upsert=False)
     updated_count = updated.raw_result["nModified"]
 
     return {"updated_count": updated_count, "u_id": u_id}
-
 
 
 ################################## USER #####################################################################
@@ -220,16 +227,12 @@ def update_user_delete_workspace_list(u_id: str, item: WorkspaceIds):
 async def create_workspace(data: Workspace):
     # konversi json ke dictionary
     record = jsonable_encoder(data)
+
+    # memanggil fungsi untuk mendapatkan format waktu terkini
     record["updated_at"] = get_date_now()
     record["created_at"] = get_date_now()
-    # request.data => data yg dikirimkan oleh klien
 
-    # jumlah data ditemukan
-    # memeriksa apakah sudah ada akun yang memiliki username yang sama
-    # w_id = f"{workspace_dict['name'][:3]}-{str(datetime.now()).replace(':', '').replace(' ', '').replace('-', '').replace('.', '')}-wks"
-
-    # workspace_dict["w_id"] = w_id
-
+    # menambahkan data baru ke databas
     workspaces_collection.insert_one(record)
 
     return {"message": "success", "w_id": record["w_id"]}
@@ -371,7 +374,7 @@ def acc_waiting_list(w_id: str, item: UserSnippet):
     record = jsonable_encoder(item)
     updated = workspaces_collection.update_one(
         {"w_id": w_id}, {'$pull': {'waiting_list': {
-            'u_id': {'$eq': record["u_id"]}}}}
+            'u_id': {'$eq': record["u_id"]}}}, '$push': {'member_list': record}}
     )
 
     updated_count = updated.raw_result["nModified"]
@@ -419,12 +422,6 @@ async def create_task(data: Task):
     record["updated_at"] = get_date_now()
     # request.data => data yg dikirimkan oleh klien
 
-    # jumlah data ditemukan
-    # memeriksa apakah sudah ada akun yang memiliki username yang sama
-    # t_id = f"{str(datetime.now()).replace(':', '').replace(' ', '').replace('-', '').replace('.', '')}-tsk"
-
-    # task_dict["t_id"] = t_id
-
     tasks_collection.insert_one(record)
 
     return ({"message": "success", "t_id": record["t_id"]})
@@ -445,8 +442,16 @@ async def update_task(t_id: str, item: Task):
 
 @app.get("/api/get-task/{t_id}")
 def get_task(t_id: str):
-    task = tasks_collection.aggregate([{'$match': {'t_id': t_id}}, {'$lookup': {'from': 'workspaces', 'localField': 'w_id', 'foreignField': 'w_id', 'pipeline': [
-                                      {'$project': {'_id': 0, 'name': 1}}], 'as': 'workspace'}}, {'$project': {'_id': 0}}, {'$unwind': "$workspace"}])
+    task = tasks_collection.aggregate([{'$match': {'t_id': t_id}}, 
+                                       {'$lookup': {'from': 'workspaces', 
+                                                    'localField': 'w_id', 
+                                                    'foreignField': 'w_id', 
+                                                    'pipeline': [
+                                      {'$project': 
+                                          {'_id': 0, 'name': 1}}], 
+                                                    'as': 'workspace'}}, 
+                                       {'$project': {'_id': 0}}, 
+                                       {'$unwind': "$workspace"}])
 
     return list(task)[0]
 

@@ -86,7 +86,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
       </div>
       <div className={s.bottom}>
         <ul className={s.assigned_member}>
-          {props.assigned_member.map((member, index) => {
+          {props.assigned_member.slice(0, 6).map((member, index) => {
             return (
               <li
                 key={`member-${index}`}

@@ -3,7 +3,9 @@ import React from "react";
 import MenuNavbar from "../menu-navbar/MenuNavbar";
 import UsernameButton from "../username-button/UsernameButton";
 import RoundButton from "../round-button/RoundButton";
+import ButtonLarge from "../button-large/ButtonLarge";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface MemberListProps {
   list: { username: string; u_id: string }[];
@@ -12,10 +14,13 @@ interface MemberListProps {
   closeHandler: () => void;
   show: boolean;
   w_id: string;
+  showWaitingListHandler: () => void;
+  showInvitationMenuHandler: () => void;
 }
 
 const MemberList: React.FC<MemberListProps> = (props) => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const u_id = pathname.split("/")[2];
 
@@ -29,6 +34,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
         closeHandler={props.closeHandler}
       />
       <div className={s.ctn_screen}>
+        <h3 className={[s.title, "medium", "md"].join(" ")}>Daftar Anggota</h3>
         <ul className={s.list}>
           {props.list.map((member, index) => {
             if (member.u_id === u_id) {
@@ -64,6 +70,24 @@ const MemberList: React.FC<MemberListProps> = (props) => {
             );
           })}
         </ul>
+      </div>
+      <div className={s.action}>
+        <ButtonLarge
+          bg_color="#080726"
+          color="#fff"
+          text="Lihat Antrian Bergabung"
+          icon="/icons/queue_white.svg"
+          onClick={props.showWaitingListHandler}
+          rowReverse
+        />
+        <ButtonLarge
+          bg_color="#080726"
+          color="#fff"
+          text="Undang orang lain!"
+          icon="/icons/plus_white.svg"
+          onClick={props.showInvitationMenuHandler}
+          rowReverse
+        />
       </div>
     </div>
   );

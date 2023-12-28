@@ -142,11 +142,11 @@ const HomePage: React.FC<HomePageProps> = (props) => {
         }}
       />
       <main className={s.main}>
-        <h2 className={[s.header, "big", "medium"].join(" ")}>
+        <h2 className={[s.main_title, "big", "medium"].join(" ")}>
           Selamat datang, {props.data.username}!
         </h2>
         <div className={s.dashboard}>
-          <InputSmall
+          {/* <InputSmall
             icon="/icons/search.svg"
             label=""
             name="search"
@@ -156,7 +156,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
             value={searchInput}
             warning=""
             hideCap
-          />
+          /> */}
           <div className={s.workspace}>
             <div className={s.heading}>
               <div className={s.header}>

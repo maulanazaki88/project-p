@@ -1,15 +1,20 @@
-import s from "./ConfirmedInvitation.module.css";
 import React from "react";
+import ConfirmedInvitationPage from "@/components/confirmed-invitation-page/ConfirmedInvitationPage";
 
-const ConfirmedInvitation: React.FC = () => {
-    return(
-        <main className={s.main} >
-            <div className={s.header} >
-                <h2 className={s.title} >
-                    Hai! {} Undangan untuk bergabung ke workspace sudah terverifikasi! 
-                </h2>
-                <p className={s.a} ></p>
-            </div>
-        </main>
-    )
-}
+const ConfirmedInvitation: React.FC<{ params: { u_id: string } }> = async (
+  props
+) => {
+  const response = await fetch(
+    `http://localhost:8000/api/get-user/${props.params.u_id}`
+  );
+
+  const data = await response.json();
+
+  if (data) {
+    return <ConfirmedInvitationPage data={data} />;
+  } else {
+    return <div>Loading...</div>;
+  }
+};
+
+export default ConfirmedInvitation;

@@ -10,6 +10,11 @@
 
 }
 
+.main_title{
+    position: relative;
+    margin-bottom: 30px;
+}
+
 .dashboard {
     position: relative;
     display: flex;

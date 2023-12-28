@@ -119,6 +119,7 @@ const SignUpPage: React.FC = () => {
           label="Nama Pengguna"
           type="text"
           warning={warning.username}
+          maxChar={18}
         />
         <InputSmall
           icon={"/icons/email_black.svg"}
@@ -130,6 +131,7 @@ const SignUpPage: React.FC = () => {
           label="Email"
           type="text"
           warning={warning.email}
+          hideCap
         />
         <InputSmall
           icon={"/icons/lock_black.svg"}
@@ -141,6 +143,7 @@ const SignUpPage: React.FC = () => {
           label="Password"
           type="password"
           warning={warning.password}
+          hideCap
         />
         <ButtonLarge
           bg_color="#080726"

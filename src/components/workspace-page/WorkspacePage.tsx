@@ -25,6 +25,7 @@ import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
 import { useIdGenerator } from "@/hook/useIdGenerator";
 import WaitingList from "../waiting-list/WaitingList";
 import MemberList from "../member-list/MemberList";
+import InvitationMenu from "../invitation-menu/InvitationMenu";
 
 interface WorkspacePageProps {
   data: WorkspaceType;
@@ -94,6 +95,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
 
   const [showWaitingList, setShowWaitingList] = React.useState<boolean>(false);
   const [showMemberList, setShowMemberList] = React.useState<boolean>(false);
+  const [showInvitationMenu, setShowInvitationMenu] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (deletePromptActive) {
@@ -325,17 +328,17 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           setShowWaitingList(true);
         },
       },
-      {
-        bg_color: "",
-        color: "",
-        text: "Salin Link",
-        icon: "/icons/copy_black.svg",
-        onClick: () => {
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(pathname);
-          }
-        },
-      },
+      // {
+      //   bg_color: "",
+      //   color: "",
+      //   text: "Salin Link",
+      //   icon: "/icons/copy_black.svg",
+      //   onClick: () => {
+      //     if (navigator.clipboard) {
+      //       navigator.clipboard.writeText(pathname);
+      //     }
+      //   },
+      // },
       {
         bg_color: "",
         color: "",
@@ -466,6 +469,12 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           show={showMemberList}
           w_id={w_id}
           workspace_name={props.data.name}
+          showWaitingListHandler={() => {
+            setShowWaitingList(true);
+          }}
+          showInvitationMenuHandler={() => {
+            setShowInvitationMenu(true);
+          }}
         />
         <WaitingList
           accHandler={(data) => {
@@ -473,6 +482,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
               u_id: u_id,
               candidate: { u_id: data.u_id, username: data.username },
             });
+            
           }}
           closeHandler={() => {
             setShowWaitingList(false);
@@ -487,6 +497,15 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           show={showWaitingList}
           workspace_name={props.data.name}
           w_id={props.data.w_id}
+        />
+        <InvitationMenu
+          closeHandler={() => {
+            setShowInvitationMenu(false);
+          }}
+          show={showInvitationMenu}
+          showHandler={() => {
+            setShowInvitationMenu(true);
+          }}
         />
         <BasicMenu
           button_list={menu_list}
