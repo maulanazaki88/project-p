@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
-    padding: 80px 20px 0 20px;
+    padding: 80px 50px 0 50px;
     color: #000;
     font-family: inherit;
 
@@ -18,11 +18,14 @@
 .dashboard {
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
     font-family: inherit;
     width: 100%;
+    height: auto;
+    margin-top: 30px;
+    /* background-color: purple; */
 }
 
 .workspace, .todo {
@@ -30,9 +33,24 @@
     display: flex;
     flex-direction: column;
     font-family: inherit;
-    width: 100%;
+    width: 50%;
     margin-bottom: 30px
 
+
+}
+
+.workspace {
+    align-items: flex-start;
+    width: 70%;
+    /* background-color: beige; */
+    margin-right: 50px;
+}
+
+.todo{
+    align-items: flex-start;
+    width: 30%;
+    min-width: 390px;
+    /* background-color: cadetblue; */
 }
 
 .heading {
@@ -44,15 +62,17 @@
     margin-bottom: 30px;
 }
 
-.workspace>.header {
+.workspace >* .header {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    margin-right: 20px;
+    
 }
 
-.workspace > .action {
+.workspace >* .action {
     position: relative;
 }
 
@@ -60,11 +80,36 @@
     position: relative;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
     overflow-x: scroll;
+    height: 380px;
+    /* background-color: aqua; */
+    
 }
+
+.list_screen::-webkit-scrollbar {
+    position: absolute;
+    width: 0.5em;
+    
+}
+
+.list_screen::-webkit-scrollbar-track {
+    width: 8px;
+    background-color: transparent;
+    border-radius: 100vw;
+    margin-block: 10px;
+
+
+}
+
+.list_screen::-webkit-scrollbar-thumb {
+    width: auto;
+    border-radius: 100vw;
+    background-color: #1c062d;
+}
+
 
 
 
@@ -74,6 +119,41 @@
     flex-direction: row;
     list-style: none;
 }
+
+.task_list_screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 45vh;
+    /* background-color: yellow; */
+    overflow-y: scroll;
+    padding-top: 10px;
+}
+
+.task_list_screen::-webkit-scrollbar {
+    position: absolute;
+    width: 0.5em;
+    
+}
+
+.task_list_screen::-webkit-scrollbar-track {
+    width: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 100vw;
+    margin-block: 10px;
+
+
+}
+
+.task_list_screen::-webkit-scrollbar-thumb {
+    width: auto;
+    border-radius: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 
 .task_list{
     position: relative;
@@ -88,4 +168,103 @@
 .task_list > .item {
     position: relative;
     margin-bottom: 23px;
+}
+
+
+@media screen and (max-width: 425px) {
+    .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100vw;
+        padding: 80px 20px 0 20px;
+        color: #000;
+        font-family: inherit;
+
+    }
+
+    .main_title {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+    .dashboard {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        font-family: inherit;
+        width: 100%;
+    }
+
+    .workspace, .todo {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        font-family: inherit;
+        width: 100%;
+        margin-bottom: 30px
+    }
+
+    .heading {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 30px;
+    }
+
+    .workspace>.header {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .workspace>.action {
+        position: relative;
+    }
+
+    .list_screen {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: 250px;
+        overflow-x: scroll;
+    }
+
+
+
+    .list {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        list-style: none;
+    }
+
+    .task_list {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        list-style: none;
+        width: 100%;
+        
+
+    }
+
+    .task_list>.item {
+        position: relative;
+        margin-bottom: 23px;
+        width: 100%;
+    }
+
 }

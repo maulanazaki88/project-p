@@ -1,10 +1,5 @@
-const deadlines = ["2023-12-1",  "2023-12-5", "2023-12-12", "2023-12-8", "2023-12-2",]
+const email_re = /^[a-zA-Z0-9]+@[a-z]+\.[a-zA-Z]+/g;
 
-deadlines.sort((a, b) => {
-  let dateA = new Date(a);
-  let dateB = new Date(b);
+const email = "maulanazaki88@gmail.com"
 
-  return dateA - dateB;
-})
-
-console.log(deadlines)
+console.log(email_re.test(email))

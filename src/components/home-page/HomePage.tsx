@@ -88,27 +88,6 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     router.replace("/");
   };
 
-  // React.useEffect(() => {
-  //   user_data_handler_ctx(props.data);
-  //   initialize_workspaces_ctx({
-  //     workspace_list: props.data.workspace_list,
-  //   } as WorkspaceInit_Act);
-
-  //   const tasks: TaskType[] = [];
-
-  //   for (let workspace of props.data.workspace_list) {
-  //     for (let task of workspace.task_list) {
-  //       tasks.push({ ...task, workspace_name: workspace.name });
-  //     }
-  //   }
-
-  //   initialize_tasks_ctx({ task_list: tasks } as TaskInit_Act);
-  // }, []);
-
-  // React.useEffect(() => {
-  //   router.refresh();
-  // }, []);
-
   return (
     <>
       <HomeNavbar
@@ -145,18 +124,18 @@ const HomePage: React.FC<HomePageProps> = (props) => {
         <h2 className={[s.main_title, "big", "medium"].join(" ")}>
           Selamat datang, {props.data.username}!
         </h2>
+        <InputSmall
+          icon="/icons/search.svg"
+          label=""
+          name="search"
+          onChange={searchInputChange}
+          placeholder="Cari workspace, tugas"
+          type="text"
+          value={searchInput}
+          warning=""
+          hideCap
+        />
         <div className={s.dashboard}>
-          {/* <InputSmall
-            icon="/icons/search.svg"
-            label=""
-            name="search"
-            onChange={searchInputChange}
-            placeholder="Cari workspace, tugas"
-            type="text"
-            value={searchInput}
-            warning=""
-            hideCap
-          /> */}
           <div className={s.workspace}>
             <div className={s.heading}>
               <div className={s.header}>
@@ -182,29 +161,37 @@ const HomePage: React.FC<HomePageProps> = (props) => {
             {workspace_list.length > 0 && (
               <div className={s.list_screen}>
                 <ul className={s.list}>
-                  {workspace_list.map((workspace, index) => {
-                    return (
-                      <li
-                        className={s.item}
-                        key={`workspace-item-${index}`}
-                        style={{ marginLeft: index > 0 ? "16px" : "0px" }}
-                      >
-                        <WorkspaceCard
-                          description={workspace.description}
-                          img={"/ilust/team_1.svg"}
-                          members={workspace.member_list}
-                          name={workspace.name}
-                          key={`workspace-${index}`}
-                          bg_color={
-                            color_list[
-                              (index + color_list.length) % color_list.length
-                            ]
-                          }
-                          id={workspace.w_id}
-                        />
-                      </li>
-                    );
-                  })}
+                  {workspace_list
+                    .filter(
+                      (workspace) =>
+                        workspace.name.toLowerCase().includes(searchInput) ||
+                        workspace.description
+                          .toLowerCase()
+                          .includes(searchInput)
+                    )
+                    .map((workspace, index) => {
+                      return (
+                        <li
+                          className={s.item}
+                          key={`workspace-item-${index}`}
+                          style={{ marginLeft: index > 0 ? "16px" : "0px" }}
+                        >
+                          <WorkspaceCard
+                            description={workspace.description}
+                            img={"/ilust/team_1.svg"}
+                            members={workspace.member_list}
+                            name={workspace.name}
+                            key={`workspace-${index}`}
+                            bg_color={
+                              color_list[
+                                (index + color_list.length) % color_list.length
+                              ]
+                            }
+                            id={workspace.w_id}
+                          />
+                        </li>
+                      );
+                    })}
                 </ul>
               </div>
             )}
@@ -220,24 +207,32 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                 </p>
               </div>
             </div>
-            <ul className={s.task_list}>
-              {task_list?.map((task, index) => {
-                return (
-                  <li className={s.item} key={`user-task-${index}`}>
-                    <TaskCard
-                      assigned_member={task.assigned_member}
-                      comments_count={task.comments.length}
-                      deadline={task.deadline}
-                      description={task.description}
-                      name={task.title}
-                      priority={task.priority}
-                      w_id={task.w_id}
-                      id={task.t_id}
-                    />
-                  </li>
-                );
-              })}
-            </ul>
+            <div className={s.task_list_screen}>
+              <ul className={s.task_list}>
+                {task_list
+                  ?.filter(
+                    (task) =>
+                      task.title.toLowerCase().includes(searchInput) ||
+                      task.description.toLowerCase().includes(searchInput)
+                  )
+                  .map((task, index) => {
+                    return (
+                      <li className={s.item} key={`user-task-${index}`}>
+                        <TaskCard
+                          assigned_member={task.assigned_member}
+                          comments_count={task.comments.length}
+                          deadline={task.deadline}
+                          description={task.description}
+                          name={task.title}
+                          priority={task.priority}
+                          w_id={task.w_id}
+                          id={task.t_id}
+                        />
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
           </div>
         </div>
       </main>

@@ -9,30 +9,24 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 
-  --primary-glow: conic-gradient(
-    from 180deg at 50% 50%,
-    #16abff33 0deg,
-    #0885ff33 55deg,
-    #54d6ff33 120deg,
-    #0071ff33 160deg,
-    transparent 360deg
-  );
-  --secondary-glow: radial-gradient(
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0)
-  );
+  --primary-glow: conic-gradient(from 180deg at 50% 50%,
+      #16abff33 0deg,
+      #0885ff33 55deg,
+      #54d6ff33 120deg,
+      #0071ff33 160deg,
+      transparent 360deg);
+  --secondary-glow: radial-gradient(rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0));
 
   --tile-start-rgb: 239, 245, 249;
   --tile-end-rgb: 228, 232, 233;
-  --tile-border: conic-gradient(
-    #00000080,
-    #00000040,
-    #00000030,
-    #00000020,
-    #00000010,
-    #00000010,
-    #00000080
-  );
+  --tile-border: conic-gradient(#00000080,
+      #00000040,
+      #00000030,
+      #00000020,
+      #00000010,
+      #00000010,
+      #00000080);
 
   --callout-rgb: 238, 240, 241;
   --callout-border-rgb: 172, 175, 176;
@@ -40,7 +34,9 @@
   --card-border-rgb: 131, 134, 135;
 }
 
-
+button {
+  cursor: pointer
+}
 
 * {
   box-sizing: border-box;
@@ -57,7 +53,7 @@ body {
 body {
   color: rgb(var(--foreground-rgb));
   background-color: #fff;
- 
+
 }
 
 a {
@@ -71,43 +67,69 @@ a {
   }
 }
 
+
+
+
 /* global font */
-.x-big{
-  font-size: 30px;
-}
 
-.big{
-  font-size: 24px;
-}
 
-.md{
-  font-size: 18px;
-}
-
-.sm{
-  font-size: 12px;
-}
-
-.soft{
+.soft {
   opacity: 0.5;
 }
 
-.blend{
+.blend {
   opacity: 0.8
 }
 
-.light{
+.light {
   font-weight: 400;
 }
 
-.regular{
+.regular {
   font-weight: 500;
 }
 
-.medium{
+.medium {
   font-weight: 600;
 }
 
-.bold{
+.bold {
   font-weight: 800
+}
+
+/* FONT */
+
+.x-big {
+  font-size: 50px;
+}
+
+.big {
+  font-size: 30px;
+}
+
+.md {
+  font-size: 30px;
+}
+
+.sm {
+  font-size: 20px;
+}
+
+
+@media screen and (max-width: 425px) {
+  .x-big {
+    font-size: 30px;
+  }
+
+  .big {
+    font-size: 24px;
+  }
+
+  .md {
+    font-size: 18px;
+  }
+
+  .sm {
+    font-size: 12px;
+  }
 }

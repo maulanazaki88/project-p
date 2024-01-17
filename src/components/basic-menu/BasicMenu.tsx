@@ -17,7 +17,7 @@ interface BasicMenuProps {
 
 const BasicMenu: React.FC<BasicMenuProps> = (props) => {
   return (
-    <div className={s.menu} style={{ left: props.isActive ? `0` : `100%` }}>
+    <div className={s.menu} style={{ translate : props.isActive ? `0 0` : `100% 0` }}>
       <MenuNavbar title={props.title} closeHandler={props.closeHandler} />
       <ul className={s.button_list}>
         {props.button_list.map((btn, index) => {
@@ -38,11 +38,11 @@ const BasicMenu: React.FC<BasicMenuProps> = (props) => {
           );
         })}
       </ul>
-      {props.log_list && (
+      {/* {props.log_list && (
         <div className={s.log}>
           <LogView log={props.log_list} />
         </div>
-      )}
+      )} */}
 
       {props.delete_text && (
         <ButtonLarge

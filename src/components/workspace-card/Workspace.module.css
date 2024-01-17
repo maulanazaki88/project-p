@@ -1,28 +1,30 @@
-.card{
+.card {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    padding: 10px 10px;
-    width: 182px;
-    height: 226px;
+    padding: 20px 20px;
+    width: 280px;
+    height: 356px;
     border-radius: 15px;
 
 }
 
-.figure{
+.figure {
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 98px;
-    height: 60px;
+    height: auto;
     bottom: 87px;
     right: 20px;
+    scale: 2;
+    translate: -60px -40px;
 }
 
-.ilust{
+.ilust {
     position: relative;
     display: block;
     width: 100%;
@@ -30,7 +32,7 @@
     object-fit: cover;
 }
 
-.top{
+.top {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -58,12 +60,12 @@
 
 }
 
-.desc{
+.desc {
     position: relative;
     color: #000;
 }
 
-.assigned_list{
+.assigned_list {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -71,7 +73,7 @@
     justify-content: center;
     width: min-content;
     list-style: none;
-    transform: scale(0.8);
+    transform: scale(1);
     /* top: 50%; */
     /* left: 0; */
     /* translate: 0 25%; */
@@ -82,10 +84,106 @@
 
 }
 
-.bottom{
+.bottom {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
+}
+
+@media screen and (max-width: 425px) {
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 10px 10px;
+        width: 182px;
+        height: 226px;
+        border-radius: 15px;
+
+    }
+
+    .figure {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 98px;
+        height: 60px;
+        bottom: 87px;
+        right: 20px;
+        scale: 1;
+        translate: 0 0;
+    }
+
+    .ilust {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .top {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-end;
+
+    }
+
+    .headers {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .name {
+        position: relative;
+        font-size: 14px;
+        font-weight: 600;
+        color: #000;
+        text-decoration: underline;
+        text-align: left;
+
+    }
+
+    .desc {
+        position: relative;
+        color: #000;
+    }
+
+    .assigned_list {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: min-content;
+        list-style: none;
+        transform: scale(0.8);
+        /* top: 50%; */
+        /* left: 0; */
+        /* translate: 0 25%; */
+    }
+
+    .assigned_item {
+        position: relative;
+
+    }
+
+    .bottom {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
 }

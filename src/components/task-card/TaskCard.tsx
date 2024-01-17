@@ -79,7 +79,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
         </div>
       </div>
       <div className={s.content}>
-        <h4 className={[s.title, "medium", "md"].join(" ")}>{props.name}</h4>
+        <h4 className={[s.title, "bold", "sm"].join(" ")}>{props.name}</h4>
         <p className={[s.desc, "sm", "medium"].join(" ")}>
           {description_render(props.description)}
         </p>

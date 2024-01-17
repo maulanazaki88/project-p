@@ -26,6 +26,7 @@ import { useIdGenerator } from "@/hook/useIdGenerator";
 import WaitingList from "../waiting-list/WaitingList";
 import MemberList from "../member-list/MemberList";
 import InvitationMenu from "../invitation-menu/InvitationMenu";
+import TaskStageSection from "../task-stage-section/TaskStageSection";
 
 interface WorkspacePageProps {
   data: WorkspaceType;
@@ -482,7 +483,6 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
               u_id: u_id,
               candidate: { u_id: data.u_id, username: data.username },
             });
-            
           }}
           closeHandler={() => {
             setShowWaitingList(false);
@@ -530,62 +530,38 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
               onTouchEnd={pointerUpHandler}
             >
               <div className={s.selection_display}>
-                <section className={s.stage}>
-                  <ProgressTitle
-                    bg_color="#080726"
-                    bg_color_accent="#BBE0EF"
-                    color="#fff"
-                    count={next_up ? next_up.length : 0}
-                    title="Next Up"
-                    type="NEXT-UP"
-                    newTaskHandler={newTaskHandler}
-                  />
-                  <div className={s.list_screen}>
-                    <ul className={s.task_list}>{NextUpViews}</ul>
-                  </div>
-                </section>
-                <section className={s.stage}>
-                  <ProgressTitle
-                    bg_color="#080726"
-                    bg_color_accent="#BBE0EF"
-                    color="#fff"
-                    count={in_progress ? in_progress.length : 0}
-                    title="In Progress"
-                    type="IN-PROGRESS"
-                    newTaskHandler={newTaskHandler}
-                  />
-                  <div className={s.list_screen}>
-                    <ul className={s.task_list}>{InProgressViews}</ul>
-                  </div>
-                </section>
-                <section className={s.stage}>
-                  <ProgressTitle
-                    bg_color="#080726"
-                    bg_color_accent="#BBE0EF"
-                    color="#fff"
-                    count={revised ? revised.length : 0}
-                    title="Revised"
-                    type="REVISED"
-                    newTaskHandler={newTaskHandler}
-                  />
-                  <div className={s.list_screen}>
-                    <ul className={s.task_list}>{RevisedViews}</ul>
-                  </div>
-                </section>
-                <section className={s.stage}>
-                  <ProgressTitle
-                    bg_color="#080726"
-                    bg_color_accent="#BBE0EF"
-                    color="#fff"
-                    count={completed ? completed.length : 0}
-                    title="Completed"
-                    type="COMPLETED"
-                    newTaskHandler={newTaskHandler}
-                  />
-                  <div className={s.list_screen}>
-                    <ul className={s.task_list}>{CompletedViews}</ul>
-                  </div>
-                </section>
+                <TaskStageSection
+                  newTask={newTaskHandler}
+                  status="NEXT-UP"
+                  task_list={next_up}
+                  title="Next Up"
+                  key={"next-up-stage-section"}
+                  members={props.data.member_list}
+                />
+                <TaskStageSection
+                  newTask={newTaskHandler}
+                  status="IN-PROGRESS"
+                  task_list={in_progress}
+                  title="In Progress"
+                  key={"in-progress-stage-section"}
+                  members={props.data.member_list}
+                />
+                <TaskStageSection
+                  newTask={newTaskHandler}
+                  status="REVISED"
+                  task_list={revised}
+                  title="Revised"
+                  key={"revised-stage-section"}
+                  members={props.data.member_list}
+                />
+                <TaskStageSection
+                  newTask={newTaskHandler}
+                  status="COMPLETED"
+                  task_list={completed}
+                  title="Completed"
+                  key={"completed-stage-section"}
+                  members={props.data.member_list}
+                />
               </div>
             </div>
           </div>

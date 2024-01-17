@@ -215,16 +215,16 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
 
   const overlayAction = () => {
     setDeletePromptActive(false);
-    setIsMemberListMenuActive(false)
-  }
+    setIsMemberListMenuActive(false);
+  };
 
   React.useEffect(() => {
-    if(deletePromptActive || isMemberListMenuActive){
-      setShowOverlay(true)
+    if (deletePromptActive || isMemberListMenuActive) {
+      setShowOverlay(true);
     } else {
-      setShowOverlay(false)
+      setShowOverlay(false);
     }
-  }, [deletePromptActive, isMemberListMenuActive])
+  }, [deletePromptActive, isMemberListMenuActive]);
 
   return (
     <>
@@ -326,9 +326,10 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         }}
       >
         <section className={s.task}>
-          <div className={[s.name, "medium", "big"].join(" ")}>
-            {/* <p className={[s.label, "medium", "md"].join(" ")}>Nama Task</p> */}
-            {/* <input
+          <div className={s.form}>
+            <div className={[s.name, "medium", "big"].join(" ")}>
+              {/* <p className={[s.label, "medium", "md"].join(" ")}>Nama Task</p> */}
+              {/* <input
               className={[s.name_inp, "medium", "big"].join(" ")}
               value={taskForm.title}
               id="title"
@@ -343,292 +344,301 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 });
               }}
             /> */}
-            <InputSmall
-              icon="/icons/clipboard.svg"
-              label="Nama Task"
-              name="title"
-              onChange={changeHandler}
-              placeholder="Nama task"
-              type="text"
-              value={taskForm.title}
-              warning={""}
-              key={"Nama task input"}
-              maxChar={25}
-              onBlur={() => {
-                task_change_title_ctx(props.task_data.t_id, {
-                  title: taskForm.title,
-                  u_id: u_id,
-                  w_id: props.task_data.w_id,
-                });
-              }}
-            />
-          </div>
-          <div className={s.desc}>
-            <InputLarge
-              onChange={changeHandler}
-              label="Deskripsi Task"
-              name="description"
-              placeholder="📋 Deskripsi"
-              value={taskForm.description}
-              onBlur={() => {
-                task_change_description_ctx(props.task_data.t_id, {
-                  description: taskForm.description,
-                  u_id: u_id,
-                  w_id: props.task_data.w_id,
-                });
-              }}
-              maxChar={200}
-            />
-          </div>
-          <div className={s.deadline}>
-            <p className={[s.label, "medium", "md"].join(" ")}>Deadline</p>
-            <div className={s.content}>
-              <RoundButton
-                color="rgba(0, 0, 0, 0.08)"
-                icon="/icons/calendar.svg"
-                opacity={1}
-                onClick={() => {
-                  setIsCalendarActive(!isCalendarActive);
-                }}
-              />
-              <CalendarInput
-                show={true}
-                value={`${props.task_data.deadline.split("-")[0]}-${
-                  props.task_data.deadline.split("-")[1]
-                }-${props.task_data.deadline.split("-")[2]}`}
-                name={"deadline"}
-                onChange={(e) => {
-                  task_change_deadline_ctx(props.task_data.t_id, {
-                    deadline: e.target.value,
+              <InputSmall
+                icon="/icons/clipboard.svg"
+                label="Nama Task"
+                name="title"
+                onChange={changeHandler}
+                placeholder="Nama task"
+                type="text"
+                value={taskForm.title}
+                warning={""}
+                key={"Nama task input"}
+                maxChar={25}
+                onBlur={() => {
+                  task_change_title_ctx(props.task_data.t_id, {
+                    title: taskForm.title,
                     u_id: u_id,
                     w_id: props.task_data.w_id,
                   });
                 }}
               />
             </div>
-          </div>
-          <div className={s.priority}>
-            <p className={[s.label, "medium", "md"].join(" ")}>Priority</p>
-            <div className={s.content}>
-              <ul className={s.list}>
-                <li className={s.item}>
-                  <SquareButton
-                    bg_color={
-                      props.task_data.priority === "LOW"
-                        ? "#1C062D"
-                        : "rgba(0, 0, 0, 0.08)"
-                    }
-                    color={
-                      props.task_data.priority === "LOW" ? "#fff" : "#1C062D"
-                    }
-                    opacity={1}
-                    text="Low"
-                    onClick={() => {
-                      task_change_priority_ctx(props.task_data.t_id, {
-                        priority: "LOW",
-                        u_id: u_id,
-                        w_id: props.task_data.w_id,
-                      });
-                    }}
-                    key={"low-priority-btn"}
-                  />
-                </li>
-                <li className={s.item}>
-                  <SquareButton
-                    bg_color={
-                      props.task_data.priority === "MED"
-                        ? "#1C062D"
-                        : "rgba(0, 0, 0, 0.08)"
-                    }
-                    color={
-                      props.task_data.priority === "MED" ? "#fff" : "#1C062D"
-                    }
-                    opacity={1}
-                    text="Med"
-                    key={"med-priority-btn"}
-                    onClick={() => {
-                      task_change_priority_ctx(props.task_data.t_id, {
-                        priority: "MED",
-                        u_id: u_id,
-                        w_id: props.task_data.w_id,
-                      });
-                    }}
-                  />
-                </li>
-                <li className={s.item}>
-                  <SquareButton
-                    bg_color={
-                      props.task_data.priority === "HIGH"
-                        ? "#1C062D"
-                        : "rgba(0, 0, 0, 0.08)"
-                    }
-                    color={
-                      props.task_data.priority === "HIGH" ? "#fff" : "#1C062D"
-                    }
-                    opacity={1}
-                    text="High"
-                    onClick={() => {
-                      task_change_priority_ctx(props.task_data.t_id, {
-                        priority: "HIGH",
-                        u_id: u_id,
-                        w_id: props.task_data.w_id,
-                      });
-                    }}
-                    key={"high-priority-btn"}
-                  />
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className={s.participants}>
-            <p className={[s.label, "medium", "md"].join(" ")}>Participants</p>
-            <div className={s.content}>
-              <SquareButton
-                bg_color="rgba(0, 0, 0, 0.08)"
-                color="#1C062D"
-                opacity={0.5}
-                text=""
-                icon="/icons/plus.svg"
-                key={"plus-btn"}
-                onClick={() => {
-                  setIsMemberListMenuActive(true);
+            <div className={s.desc}>
+              <InputLarge
+                onChange={changeHandler}
+                label="Deskripsi Task"
+                name="description"
+                placeholder="📋 Deskripsi"
+                value={taskForm.description}
+                onBlur={() => {
+                  task_change_description_ctx(props.task_data.t_id, {
+                    description: taskForm.description,
+                    u_id: u_id,
+                    w_id: props.task_data.w_id,
+                  });
                 }}
+                maxChar={200}
               />
-              <ul className={s.list}>
-                {props.task_data.assigned_member.map((member, index) => {
-                  return (
-                    <li
-                      className={s.item}
-                      key={`assigned-member-${index}`}
-                      style={{ marginLeft: index > 0 ? "12px" : "0px" }}
-                    >
-                      <UsernameButton
-                        username={member.username}
-                        withDelete
-                        deleteHandler={(username) => {
-                          task_change_participants_ctx(props.task_data.t_id, {
-                            action: "DEL",
-                            member: member,
-                            u_id: u_id,
-                            w_id: props.task_data.w_id,
-                          });
-                        }}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
             </div>
           </div>
-          <div className={s.status}>
-            <p className={[s.label, "medium", "md"].join(" ")}>Status</p>
-            <div className={s.content}>
-              <ul className={s.list}>
-                <li className={s.item}>
-                  <SquareButton
-                    bg_color={
-                      props.task_data.status === "NEXT-UP"
-                        ? "#1C062D"
-                        : "rgba(0, 0, 0, 0.08)"
-                    }
-                    color={
-                      props.task_data.status === "NEXT-UP" ? "#fff" : "#1C062D"
-                    }
-                    opacity={1}
-                    text="Next up"
-                    onClick={() => {
-                      task_change_status_ctx(props.task_data.t_id, {
-                        status: "NEXT-UP",
-                        u_id: u_id,
-                        w_id: props.task_data.w_id,
-                      });
-                    }}
-                    key={"next-up-status-btn"}
-                  />
-                </li>
-                <li className={s.item}>
-                  <SquareButton
-                    bg_color={
-                      props.task_data.status === "IN-PROGRESS"
-                        ? "#1C062D"
-                        : "rgba(0, 0, 0, 0.08)"
-                    }
-                    color={
-                      props.task_data.status === "IN-PROGRESS"
-                        ? "#fff"
-                        : "#1C062D"
-                    }
-                    opacity={1}
-                    text="In progress"
-                    onClick={() => {
-                      task_change_status_ctx(props.task_data.t_id, {
-                        status: "IN-PROGRESS",
-                        u_id: u_id,
-                        w_id: props.task_data.w_id,
-                      });
-                    }}
-                    key={"in-progress-status-btn"}
-                  />
-                </li>
-                <li className={s.item}>
-                  <SquareButton
-                    bg_color={
-                      props.task_data.status === "REVISED"
-                        ? "#1C062D"
-                        : "rgba(0, 0, 0, 0.08)"
-                    }
-                    color={
-                      props.task_data.status === "REVISED" ? "#fff" : "#1C062D"
-                    }
-                    opacity={1}
-                    text="Revised"
-                    onClick={() => {
-                      task_change_status_ctx(props.task_data.t_id, {
-                        status: "REVISED",
-                        u_id: u_id,
-                        w_id: props.task_data.w_id,
-                      });
-                    }}
-                    key={"revised-status-btn"}
-                  />
-                </li>
-                <li className={s.item}>
-                  <SquareButton
-                    bg_color={
-                      props.task_data.status === "COMPLETED"
-                        ? "#1C062D"
-                        : "rgba(0, 0, 0, 0.08)"
-                    }
-                    color={
-                      props.task_data.status === "COMPLETED"
-                        ? "#fff"
-                        : "#1C062D"
-                    }
-                    opacity={1}
-                    text="Completed"
-                    onClick={() => {
-                      task_change_status_ctx(props.task_data.t_id, {
-                        status: "COMPLETED",
-                        u_id: u_id,
-                        w_id: props.task_data.w_id,
-                      });
-                    }}
-                    key={"completed-status-btn"}
-                  />
-                </li>
-              </ul>
+          <div className={s.radio}>
+            <div className={s.deadline}>
+              <p className={[s.label, "medium", "md"].join(" ")}>Deadline</p>
+              <div className={s.content}>
+                <RoundButton
+                  color="rgba(0, 0, 0, 0.08)"
+                  icon="/icons/calendar.svg"
+                  opacity={1}
+                  onClick={() => {
+                    setIsCalendarActive(!isCalendarActive);
+                  }}
+                />
+                <CalendarInput
+                  show={true}
+                  value={`${props.task_data.deadline.split("-")[0]}-${
+                    props.task_data.deadline.split("-")[1]
+                  }-${props.task_data.deadline.split("-")[2]}`}
+                  name={"deadline"}
+                  onChange={(e) => {
+                    task_change_deadline_ctx(props.task_data.t_id, {
+                      deadline: e.target.value,
+                      u_id: u_id,
+                      w_id: props.task_data.w_id,
+                    });
+                  }}
+                />
+              </div>
             </div>
+            <div className={s.priority}>
+              <p className={[s.label, "medium", "md"].join(" ")}>Priority</p>
+              <div className={s.content}>
+                <ul className={s.list}>
+                  <li className={s.item}>
+                    <SquareButton
+                      bg_color={
+                        props.task_data.priority === "LOW"
+                          ? "#1C062D"
+                          : "rgba(0, 0, 0, 0.08)"
+                      }
+                      color={
+                        props.task_data.priority === "LOW" ? "#fff" : "#1C062D"
+                      }
+                      opacity={1}
+                      text="Low"
+                      onClick={() => {
+                        task_change_priority_ctx(props.task_data.t_id, {
+                          priority: "LOW",
+                          u_id: u_id,
+                          w_id: props.task_data.w_id,
+                        });
+                      }}
+                      key={"low-priority-btn"}
+                    />
+                  </li>
+                  <li className={s.item}>
+                    <SquareButton
+                      bg_color={
+                        props.task_data.priority === "MED"
+                          ? "#1C062D"
+                          : "rgba(0, 0, 0, 0.08)"
+                      }
+                      color={
+                        props.task_data.priority === "MED" ? "#fff" : "#1C062D"
+                      }
+                      opacity={1}
+                      text="Med"
+                      key={"med-priority-btn"}
+                      onClick={() => {
+                        task_change_priority_ctx(props.task_data.t_id, {
+                          priority: "MED",
+                          u_id: u_id,
+                          w_id: props.task_data.w_id,
+                        });
+                      }}
+                    />
+                  </li>
+                  <li className={s.item}>
+                    <SquareButton
+                      bg_color={
+                        props.task_data.priority === "HIGH"
+                          ? "#1C062D"
+                          : "rgba(0, 0, 0, 0.08)"
+                      }
+                      color={
+                        props.task_data.priority === "HIGH" ? "#fff" : "#1C062D"
+                      }
+                      opacity={1}
+                      text="High"
+                      onClick={() => {
+                        task_change_priority_ctx(props.task_data.t_id, {
+                          priority: "HIGH",
+                          u_id: u_id,
+                          w_id: props.task_data.w_id,
+                        });
+                      }}
+                      key={"high-priority-btn"}
+                    />
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className={s.participants}>
+              <p className={[s.label, "medium", "md"].join(" ")}>
+                Participants
+              </p>
+              <div className={s.content}>
+                <SquareButton
+                  bg_color="rgba(0, 0, 0, 0.08)"
+                  color="#1C062D"
+                  opacity={0.5}
+                  text=""
+                  icon="/icons/plus.svg"
+                  key={"plus-btn"}
+                  onClick={() => {
+                    setIsMemberListMenuActive(true);
+                  }}
+                />
+                <ul className={s.list}>
+                  {props.task_data.assigned_member.map((member, index) => {
+                    return (
+                      <li
+                        className={s.item}
+                        key={`assigned-member-${index}`}
+                        style={{ marginLeft: index > 0 ? "12px" : "0px" }}
+                      >
+                        <UsernameButton
+                          username={member.username}
+                          withDelete
+                          deleteHandler={(username) => {
+                            task_change_participants_ctx(props.task_data.t_id, {
+                              action: "DEL",
+                              member: member,
+                              u_id: u_id,
+                              w_id: props.task_data.w_id,
+                            });
+                          }}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+            <div className={s.status}>
+              <p className={[s.label, "medium", "md"].join(" ")}>Status</p>
+              <div className={s.content}>
+                <ul className={s.list}>
+                  <li className={s.item}>
+                    <SquareButton
+                      bg_color={
+                        props.task_data.status === "NEXT-UP"
+                          ? "#1C062D"
+                          : "rgba(0, 0, 0, 0.08)"
+                      }
+                      color={
+                        props.task_data.status === "NEXT-UP"
+                          ? "#fff"
+                          : "#1C062D"
+                      }
+                      opacity={1}
+                      text="Next up"
+                      onClick={() => {
+                        task_change_status_ctx(props.task_data.t_id, {
+                          status: "NEXT-UP",
+                          u_id: u_id,
+                          w_id: props.task_data.w_id,
+                        });
+                      }}
+                      key={"next-up-status-btn"}
+                    />
+                  </li>
+                  <li className={s.item}>
+                    <SquareButton
+                      bg_color={
+                        props.task_data.status === "IN-PROGRESS"
+                          ? "#1C062D"
+                          : "rgba(0, 0, 0, 0.08)"
+                      }
+                      color={
+                        props.task_data.status === "IN-PROGRESS"
+                          ? "#fff"
+                          : "#1C062D"
+                      }
+                      opacity={1}
+                      text="In progress"
+                      onClick={() => {
+                        task_change_status_ctx(props.task_data.t_id, {
+                          status: "IN-PROGRESS",
+                          u_id: u_id,
+                          w_id: props.task_data.w_id,
+                        });
+                      }}
+                      key={"in-progress-status-btn"}
+                    />
+                  </li>
+                  <li className={s.item}>
+                    <SquareButton
+                      bg_color={
+                        props.task_data.status === "REVISED"
+                          ? "#1C062D"
+                          : "rgba(0, 0, 0, 0.08)"
+                      }
+                      color={
+                        props.task_data.status === "REVISED"
+                          ? "#fff"
+                          : "#1C062D"
+                      }
+                      opacity={1}
+                      text="Revised"
+                      onClick={() => {
+                        task_change_status_ctx(props.task_data.t_id, {
+                          status: "REVISED",
+                          u_id: u_id,
+                          w_id: props.task_data.w_id,
+                        });
+                      }}
+                      key={"revised-status-btn"}
+                    />
+                  </li>
+                  <li className={s.item}>
+                    <SquareButton
+                      bg_color={
+                        props.task_data.status === "COMPLETED"
+                          ? "#1C062D"
+                          : "rgba(0, 0, 0, 0.08)"
+                      }
+                      color={
+                        props.task_data.status === "COMPLETED"
+                          ? "#fff"
+                          : "#1C062D"
+                      }
+                      opacity={1}
+                      text="Completed"
+                      onClick={() => {
+                        task_change_status_ctx(props.task_data.t_id, {
+                          status: "COMPLETED",
+                          u_id: u_id,
+                          w_id: props.task_data.w_id,
+                        });
+                      }}
+                      key={"completed-status-btn"}
+                    />
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <ButtonLarge
+              bg_color="#080726"
+              color="#fff"
+              text="Comments"
+              icon="/icons/comment_white.svg"
+              key={"comment-btn"}
+              onClick={() => {
+                setIsCommentsActive(true);
+              }}
+            />
           </div>
-          <ButtonLarge
-            bg_color="#080726"
-            color="#fff"
-            text="Comments"
-            icon="/icons/comment_white.svg"
-            key={"comment-btn"}
-            onClick={() => {
-              setIsCommentsActive(true);
-            }}
-          />
         </section>
       </main>
     </>

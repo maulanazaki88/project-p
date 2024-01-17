@@ -17,6 +17,7 @@ interface InputSmallProps {
   onBlur?: () => void;
   maxChar?: number;
   hideCap?: boolean;
+  required?: boolean; 
 }
 
 const InputSmall: React.FC<InputSmallProps> = (props) => {
@@ -45,7 +46,7 @@ const InputSmall: React.FC<InputSmallProps> = (props) => {
           name={props.name}
           id={props.name}
           onBlur={props.onBlur}
-          required
+          required = {props.required}
           maxLength={props.maxChar}
         />
       </div>

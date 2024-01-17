@@ -5,7 +5,9 @@
     align-items: center;
     justify-content: flex-start;
     width: 90vw;
+    max-width: 425px;
     height: 45vh;
+    min-height: 500px;
     padding: 0 10px 10px 10px;
     left: 50vw;
     translate: -50% -50%;

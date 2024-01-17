@@ -6,18 +6,39 @@
     width: 100vw;
     height: auto;
     padding: 0 20px;
-    padding-top: 80px;
+    padding-top: 100px;
     padding-bottom: 30px;
     overflow-x: hidden;
 
 }
 
-.task {
+.form {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    width: 50%;
+    height: auto;
+    margin-right: 30px;
+}
+
+.radio {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 50%;
+    height: auto;
+}
+
+.task {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
     width: 100%;
     height: 100%;
 
@@ -60,7 +81,36 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    width: 100%;
+    width: auto;
+    height: 100px;
+    overflow-x: scroll;
+}
+
+
+.content::-webkit-scrollbar {
+    position: absolute;
+    height: 0.5em;
+    
+}
+
+.content::-webkit-scrollbar-track {
+    width: 8px;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 100vw;
+    margin-block: 10px;
+
+
+}
+
+.content::-webkit-scrollbar-thumb {
+    width: 2em;
+    border-radius: 100vw;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.content:hover::-webkit-scrollbar-thumb {
+    
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .deadline > .content {
@@ -83,7 +133,6 @@
     justify-content: flex-start;
     list-style: none;
     width: 100%;
-    overflow-x: scroll;
     height: 55px;
 }
 
@@ -102,3 +151,131 @@
     margin-left: 20px;
 }
 
+
+@media screen and (max-width: 425px) {
+    .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: auto;
+        padding: 0 20px;
+        padding-top: 80px;
+        padding-bottom: 30px;
+        overflow-x: hidden;
+
+    }
+
+    .form {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: auto;
+    }
+
+    .radio {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: auto;
+    }
+
+    .task {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: 100%;
+
+    }
+
+    .name {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        /* margin-bottom: 30px; */
+
+    }
+
+    .name_inp {
+        position: relative;
+        width: 100%;
+        background-color: transparent;
+        outline: none;
+        border: none;
+        color: #000;
+        font-family: inherit;
+    }
+
+    .desc, .deadline, .priority, .participants, .status {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .content {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .deadline>.content {
+        flex-direction: row;
+        align-items: center;
+        font-family: inherit;
+    }
+
+    .label {
+        position: relative;
+        color: #000;
+        margin-bottom: 10px;
+    }
+
+    .list {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        list-style: none;
+        width: 100%;
+        overflow-x: scroll;
+        height: 55px;
+    }
+
+    .item {
+        position: relative;
+        margin-left: 20px;
+
+    }
+
+    .item:nth-child(1) {
+        margin-left: 0;
+    }
+
+    .date {
+        color: #1C062D;
+        margin-left: 20px;
+    }
+
+
+}

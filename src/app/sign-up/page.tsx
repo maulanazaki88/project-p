@@ -41,48 +41,66 @@ const SignUpPage: React.FC = () => {
 
   const submitData: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    console.log("Submit!!!");
-    setButtonDisabled(true);
-    const date_time = date_now.withTime();
+    const email_re = /^[a-zA-Z0-9]+@[a-z]+\.[a-zA-Z]+/g;
 
-    const response = await fetch(`/api/create-user`, {
-      body: JSON.stringify({
-        ...user_data,
-        created_at: date_time,
-        updated_at: date_time,
-        u_id: id_generator.user(),
-      } as UserType),
-      headers: { "content-type": "application/json" },
-      method: "POST",
-    });
-
-    const res = await response.json();
-
-    const message = await res.message;
-
-    if ((await message) == "success" && response.status == 200) {
-      console.log(await res);
-      setVerifyId(await res.u_id);
-    } else if ((await message) == "user-exist") {
-      console.log("nooo");
-      console.log(await res);
-      setButtonDisabled(false);
+    if (!email_re.test(user_data.email)) {
       setWarning((prev) => {
         return {
           ...prev,
-          username: "Sudah ada username dengan nama ini",
+          email: "Tolong masukkan email yang valid",
+        };
+      });
+    } else if (user_data.password.length < 8) {
+      setWarning((prev) => {
+        return {
+          ...prev,
+          password: "Password minimal terdiri dari 8 karakter.",
         };
       });
     } else {
-      console.log("nooo");
-      console.log(await res);
-      // setButtonDisabled(false);
-      setWarning((prev) => {
-        return {
-          ...prev,
-          username: "Gagal. Terjadi kesalahan pada jaringan",
-        };
+      console.log("Submit!!!");
+      setButtonDisabled(true);
+      const date_time = date_now.withTime();
+
+      const response = await fetch(`/api/create-user`, {
+        body: JSON.stringify({
+          ...user_data,
+          created_at: date_time,
+          updated_at: date_time,
+          u_id: id_generator.user(),
+        } as UserType),
+        headers: { "content-type": "application/json" },
+        method: "POST",
       });
+
+      const res = await response.json();
+
+      const message = await res.message;
+
+      if ((await message) == "success" && response.status == 200) {
+        console.log(await res);
+        setVerifyId(await res.u_id);
+      } else if ((await message) == "user-exist") {
+        console.log("nooo");
+        console.log(await res);
+        setButtonDisabled(false);
+        setWarning((prev) => {
+          return {
+            ...prev,
+            username: "Sudah ada username dengan nama ini",
+          };
+        });
+      } else {
+        console.log("nooo");
+        console.log(await res);
+        // setButtonDisabled(false);
+        setWarning((prev) => {
+          return {
+            ...prev,
+            username: "Gagal. Terjadi kesalahan pada jaringan",
+          };
+        });
+      }
     }
   };
 
@@ -120,6 +138,7 @@ const SignUpPage: React.FC = () => {
           type="text"
           warning={warning.username}
           maxChar={18}
+          required
         />
         <InputSmall
           icon={"/icons/email_black.svg"}
@@ -132,6 +151,7 @@ const SignUpPage: React.FC = () => {
           type="text"
           warning={warning.email}
           hideCap
+          required
         />
         <InputSmall
           icon={"/icons/lock_black.svg"}
@@ -144,6 +164,7 @@ const SignUpPage: React.FC = () => {
           type="password"
           warning={warning.password}
           hideCap
+          required
         />
         <ButtonLarge
           bg_color="#080726"

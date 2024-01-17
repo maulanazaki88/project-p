@@ -4,11 +4,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 100vw;
+    width: 425px;
     height: 100vh;
     padding: 0 20px 30px 20px;
     top: 0;
-    left: 0;
+    right: 0;
     z-index: 999;
     background-color: #fff;
     transition: all 0.2s ease-out;
@@ -24,6 +24,27 @@
     height: 100%;
     padding-top: 80px;
     overflow-y: scroll;
+}
+
+.ctn_screen::-webkit-scrollbar {
+    position: absolute;
+    width: 0.5em;
+    
+}
+
+.ctn_screen::-webkit-scrollbar-track {
+    width: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 100vw;
+    margin-block: 10px;
+
+
+}
+
+.ctn_screen::-webkit-scrollbar-thumb {
+    width: auto;
+    border-radius: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .list {
@@ -59,21 +80,104 @@
     margin-left: 10px;
 }
 
-.action{
+.action {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    width: 100%;
 }
 
-.action > button {
+.action>button {
     margin-bottom: 20px;
 }
 
-.title{
+.title {
     position: relative;
     width: 100%;
     margin-bottom: 30px;
     text-align: center;
+}
+
+@media screen and (max-width: 425px) {
+    .menu {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100vw;
+        height: 100vh;
+        padding: 0 20px 30px 20px;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        background-color: #fff;
+        transition: all 0.2s ease-out;
+    }
+
+    .ctn_screen {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: 100%;
+        padding-top: 80px;
+        overflow-y: scroll;
+    }
+
+    .list {
+        position: relative;
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        overflow-x: hidden;
+    }
+
+    .item {
+        position: relative;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+    .btn_group {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
+    }
+
+    .btn_group:nth-child(2) {
+        margin-left: 10px;
+    }
+
+    .action {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .action>button {
+        margin-bottom: 20px;
+    }
+
+    .title {
+        position: relative;
+        width: 100%;
+        margin-bottom: 30px;
+        text-align: center;
+    }
 }

@@ -4,14 +4,15 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    height: 43px;
+    /* height: 43px; */
     width: min-content;
-    padding: 0 4px 0px 20px;
+    padding: 10px 4px 10px 20px;
     border-radius: 100vw;
     background: #D3DEF0;
     border: none;
     font-family: inherit;
     margin-left: 8px;
+    cursor: pointer;
 
 }
 
@@ -29,7 +30,7 @@
     translate: -60% 15%;
 }
 
-.pop_up{
+.pop_up {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -46,9 +47,66 @@
     translate: 0 50%;
 }
 
-.pop_up_text{
+.pop_up_text {
     position: relative;
     text-align: left;
     width: 100%;
     margin-bottom: 6px;
+}
+
+@media screen and (max-width: 425px) {
+    .btn {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        height: 43px;
+        width: min-content;
+        padding: 0 4px 0px 20px;
+        border-radius: 100vw;
+        background: #D3DEF0;
+        border: none;
+        font-family: inherit;
+        margin-left: 8px;
+
+    }
+
+    .username {
+        color: #000;
+        margin-right: 10px;
+        font-family: inherit;
+    }
+
+    .deleteBtn {
+        position: absolute;
+        scale: 0.7;
+        top: calc(0.7 * (-50%));
+        right: calc(0.7 * (-50%));
+        translate: -60% 15%;
+    }
+
+    .pop_up {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 198px;
+        height: 101px;
+        background-color: #fff;
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+        border-radius: 12px;
+        padding: 15px;
+        top: 0;
+        right: 0;
+        translate: 0 50%;
+    }
+
+    .pop_up_text {
+        position: relative;
+        text-align: left;
+        width: 100%;
+        margin-bottom: 6px;
+    }
 }

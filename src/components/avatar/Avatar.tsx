@@ -10,6 +10,11 @@ interface AvatarProps {
 }
 
 const Avatar: React.FC<AvatarProps> = (props) => {
+
+  console.log(props.username)
+
+  const render_name = props.username.toUpperCase()
+
   return (
     <div
       style={{
@@ -19,9 +24,7 @@ const Avatar: React.FC<AvatarProps> = (props) => {
       }}
       className={s.avatar}
     >
-      <span className={s.text}>
-        {props.username.toLocaleUpperCase().slice(0, 2)}
-      </span>
+      <span className={s.text}>{render_name.slice(0, 2)}</span>
       {props.isOnline && <div className={s.green_light} />}
     </div>
   );

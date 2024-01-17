@@ -45,7 +45,7 @@ const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
       }}
       onClick={props.onClick}
     >
-      <p className={[s.txt, "medium", "blend", inter.className].join(" ")}>
+      <p className={[s.txt, "medium", "blend", inter.className, "sm"].join(" ")}>
         {props.text}
       </p>
       {iconViews}

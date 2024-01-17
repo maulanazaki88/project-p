@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 45px;
+    height: 55px;
     border: none;
     outline: none;
     border-radius: 12px;
@@ -34,4 +34,44 @@
     width: 12px;
     height: auto;
     object-fit: cover;
+}
+
+@media screen and (max-width: 425px) {
+    .btn {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 45px;
+        border: none;
+        outline: none;
+        border-radius: 12px;
+        padding: 0 12px;
+        font-family: inherit;
+    }
+
+    .btn:active {
+        opacity: 0.7;
+    }
+
+    .round {
+        position: relative;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: inherit;
+    }
+
+    .icon {
+        position: relative;
+        display: block;
+        width: 12px;
+        height: auto;
+        object-fit: cover;
+    }
 }

@@ -1,10 +1,10 @@
-.controler{
+.controler {
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    width: 88vw;
+    width: 88%;
 }
 
 .bar {
@@ -14,8 +14,8 @@
     align-items: center;
     justify-content: space-between;
     height: 50px;
-    width: 184px;
-    padding: 0 14px;
+    width: 250px;
+    padding: 30px 14px;
     border-radius: 8px;
     font-family: inherit;
 
@@ -38,7 +38,7 @@
     font-family: inherit;
 }
 
-.tools{
+.tools {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -46,7 +46,7 @@
     justify-content: flex-end;
 }
 
-.btn{
+.btn {
     position: relative;
     display: block;
     background-color: transparent;
@@ -55,3 +55,64 @@
     margin-left: 20px;
 }
 
+
+@media screen and (max-width: 425px) {
+    .controler {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 88%;
+    }
+
+    .bar {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 50px;
+        width: 184px;
+        padding: 0 14px;
+        border-radius: 8px;
+        font-family: inherit;
+
+    }
+
+    .title {
+        position: relative;
+        color: #fff;
+        font-family: inherit;
+    }
+
+    .count {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 26px;
+        border-radius: 8px;
+        font-family: inherit;
+    }
+
+    .tools {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .btn {
+        position: relative;
+        display: block;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        margin-left: 20px;
+    }
+
+
+}

@@ -148,12 +148,12 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
 
   return (
     <main className={s.main}>
-      <MenuNavbar
+      {/* <MenuNavbar
         closeHandler={() => {
           router.back();
         }}
         title="Workspace Setup"
-      />
+      /> */}
       <form className={s.form} onSubmit={submitData}>
         <div className={s.input}>
           <InputSmall

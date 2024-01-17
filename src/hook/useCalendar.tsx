@@ -46,9 +46,6 @@ export const useCalendar = () => {
     available_month_number.push(`${2023 + Math.floor(n / 12)}-${((n + months.length) % months.length) + 1}`)
   }
 
-  
-
-
   return {
     available_month: available_month,
     available_month_number: available_month_number

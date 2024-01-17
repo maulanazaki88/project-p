@@ -116,7 +116,7 @@ const CardMenu: React.FC<CardMenuProps> = (props) => {
   );
 
   return (
-    <div className={s.menu} style={{ left: props.isActive ? "0" : "100%" }}>
+    <div className={s.menu} style={{ translate: props.isActive ? "0 0" : "100% 0" }}>
       <MenuNavbar title={props.title} closeHandler={props.closeHandler} />
       {CalendarViews}
       {NotificationViews}

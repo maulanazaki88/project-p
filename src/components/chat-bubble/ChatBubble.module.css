@@ -1,10 +1,10 @@
-.bubble{
+.bubble {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    width: 215px;
+    width: 280px;
     height: auto;
     min-height: 80px;
     background-color: #d9d9d9;
@@ -13,7 +13,7 @@
 
 }
 
-.username_box{
+.username_box {
     position: relative;
     display: flex;
     align-items: center;
@@ -30,7 +30,7 @@
     position: relative;
 }
 
-.message{
+.message {
     position: relative;
     color: #000;
     text-align: left;
@@ -43,11 +43,69 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
-    
+
 }
 
-.time{
+.time {
     position: relative;
     color: #000;
 }
 
+
+
+@media screen and (max-width: 425px) {
+    .bubble {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 215px;
+        height: auto;
+        min-height: 80px;
+        background-color: #d9d9d9;
+        border-radius: 12px;
+        padding: 10px;
+
+    }
+
+    .username_box {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        color: #fff;
+        background-color: steelblue;
+        text-wrap: none;
+        padding: 3px 5px;
+        margin-bottom: 10px;
+    }
+
+    .username {
+        position: relative;
+    }
+
+    .message {
+        position: relative;
+        color: #000;
+        text-align: left;
+        margin-bottom: 10px;
+    }
+
+    .stamp {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+
+    }
+
+    .time {
+        position: relative;
+        color: #000;
+    }
+
+
+}

@@ -28,7 +28,7 @@ const Comments: React.FC<CommentsProps> = (props) => {
   const [comment_val, set_comment_val] = React.useState<string>("");
 
   return (
-    <div className={s.comments} style={{ left: props.isActive ? "0" : "100%" }}>
+    <div className={s.comments} style={{ translate: props.isActive ? "0 0" : "100% 0" }}>
       <MenuNavbar closeHandler={props.closeHandler} title={props.task_name} />
       <div className={s.comment_screen}>
         <ul className={s.list}>

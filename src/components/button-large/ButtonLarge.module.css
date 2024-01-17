@@ -6,37 +6,36 @@
     justify-content: center;
     border-radius: 12px;
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25);
-    width: 88vw;
+    width: 88%;
     min-width: 200px;
-    min-height: 54px;
+    min-height: 70px;
     outline: none;
     border: none;
     font-family: inherit;
 }
 
-.btn:active{
+.btn:active {
     opacity: 0.7;
 }
 
-.txt{
+.txt {
     position: relative;
     display: block;
-    
     opacity: 0.8;
-    font-size: 15px;
+    
 }
 
-.icon{
+.icon {
     position: relative;
     height: 14px;
     width: auto;
     object-fit: fill;
     margin: 0 7px;
     opacity: 0.7;
-    
+
 }
 
-.notif{
+.notif {
     position: absolute;
     display: flex;
     align-items: center;
@@ -50,4 +49,60 @@
     top: -0;
     right: 0;
     translate: 50% -50%;
+}
+
+
+@media screen and (max-width: 425px) {
+    .btn {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25);
+        width: 88%;
+        min-width: 200px;
+        min-height: 54px;
+        outline: none;
+        border: none;
+        font-family: inherit;
+    }
+
+    .btn:active {
+        opacity: 0.7;
+    }
+
+    .txt {
+        position: relative;
+        display: block;
+        opacity: 0.8;
+        
+    }
+
+    .icon {
+        position: relative;
+        height: 14px;
+        width: auto;
+        object-fit: fill;
+        margin: 0 7px;
+        opacity: 0.7;
+
+    }
+
+    .notif {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: yellow;
+        color: #000;
+        font-family: inherit;
+        width: 25px;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        top: -0;
+        right: 0;
+        translate: 50% -50%;
+    }
 }
