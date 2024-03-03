@@ -3,18 +3,19 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "next-dev": "next dev",
+        "dev": "next dev",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
         "uvicorn-dev": ".venv\\Scripts\\pip install -r requirements.txt &&  .venv\\Scripts\\uvicorn main:app --app-dir src/api --port 8000 --reload",
-        "dev": "concurrently \"npm run next-dev\" \"npm run uvicorn-dev\"",
+        "python-dev": "concurrently \"npm run next-dev\" \"npm run uvicorn-dev\"",
         "deploy": "npm run build && concurrently \"npm run uvicorn-dev\" \"npm start\""
     },
     "dependencies": {
         "@tanstack/react-query": "^5.13.4",
         "concurrently": "^8.2.2",
         "dotenv": "^16.3.1",
+        "mongoose": "^8.2.0",
         "next": "13.5.4",
         "react": "^18",
         "react-datepicker": "^4.24.0",

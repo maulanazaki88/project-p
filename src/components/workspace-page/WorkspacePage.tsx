@@ -159,6 +159,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     const date_ = date_now.withoutTime();
 
     const newTaskHandler = async (t: ProgressStatusType) => {
+      console.log("CLICKED")
       const new_task: TaskType = {
         activity_list: [],
         assigned_member: [],

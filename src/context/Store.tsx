@@ -1895,7 +1895,7 @@ export function ContextProvider(props: any) {
     dispatchTask({ payload: payload, t_id: t_id, type: "CHANGE_TITLE" });
     if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       const data = { title: payload.title };
-      const response = await fetch(`/api/update-task-title/${t_id}`, {
+      const response = await fetch(`/api/update-task/${t_id}`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -1922,7 +1922,7 @@ export function ContextProvider(props: any) {
     });
     if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       const data = { description: payload.description };
-      const response = await fetch(`/api/update-task-description/${t_id}`, {
+      const response = await fetch(`/api/update-task/${t_id}`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -1949,7 +1949,7 @@ export function ContextProvider(props: any) {
         type: "CHANGE_DEADLINE",
       });
       const data = { deadline: payload.deadline };
-      const response = await fetch(`/api/update-task-deadline/${t_id}`, {
+      const response = await fetch(`/api/update-task/${t_id}`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -1977,7 +1977,7 @@ export function ContextProvider(props: any) {
       });
       const data = { priority: payload.priority };
 
-      const response = await fetch(`/api/update-task-priority/${t_id}`, {
+      const response = await fetch(`/api/update-task/${t_id}`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -2064,7 +2064,7 @@ export function ContextProvider(props: any) {
         type: "CHANGE_STATUS",
       });
       const data = { status: payload.status };
-      const response = await fetch(`/api/update-task-status/${t_id}`, {
+      const response = await fetch(`/api/update-task/${t_id}`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
