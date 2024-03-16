@@ -301,7 +301,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
             ) : (
               <span className={[s.empty_task, "light", "md"].join(" ")}>
                 {" "}
-                Currently you didn't have any task{" "}
+                Currently you didn&apos;t have any task{" "}
               </span>
             )}
           </div>

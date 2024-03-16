@@ -24,7 +24,7 @@ const LogView: React.FC<LogViewProps> = (props) => {
                   {a.activity_desc}
                 </span>
                 <span className={[s.time, "medium", "sm"].join(" ")}>
-                  {calendar.calendar(a.created_at, ["m", "d"])}
+                  {calendar.calendar(new Date(a.created_at), ["m", "d"])}
                 </span>
               </li>
             );

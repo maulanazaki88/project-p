@@ -43,7 +43,7 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
         </div>
         <div className={s.info}>
           <span className={[s.time, "sm", "medium", "soft"].join(" ")}>
-            {calendar.calendar(props.created_at, ["d", "m"])}
+            {calendar.calendar(new Date(props.created_at), ["d", "m"])}
           </span>
         </div>
       </div>
