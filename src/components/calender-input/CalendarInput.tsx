@@ -22,7 +22,6 @@ const CalendarInput: React.FC<CalendarInputProps> = (props) => {
         className={s.input}
         onChange={props.onChange}
         id="calendar-input"
-        
       />
     </div>
   );

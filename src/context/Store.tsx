@@ -427,7 +427,7 @@ export type TaskChangeDescription_Act = {
 export type TaskChangeDeadline_Act = {
   u_id: string;
   w_id: string;
-  deadline: string;
+  deadline: Date;
 };
 
 export type TaskChangePriority_Act = {
@@ -1542,7 +1542,7 @@ export function ContextProvider(props: any) {
     });
     const json = await response.json();
     // console.log(json);
-    if (json && response.status === 200) {
+    if (json && response.ok) {
       const user_response = await fetch(
         `/api/update-user-add-workspace/${payload.u_id}`,
         {
@@ -1557,7 +1557,7 @@ export function ContextProvider(props: any) {
 
       const user_json = await user_response.json();
       // console.log(user_json);
-      if (user_json && user_response.status === 200) {
+      if (user_json && user_response.ok) {
         return {
           ...json,
           ...user_json,
@@ -1948,13 +1948,14 @@ export function ContextProvider(props: any) {
         t_id: t_id,
         type: "CHANGE_DEADLINE",
       });
-      const data = { deadline: payload.deadline };
+      const data = { deadline: payload.deadline.toString() };
       const response = await fetch(`/api/update-task/${t_id}`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify(data),
+        cache: "no-cache",
       });
 
       const json = await response.json();

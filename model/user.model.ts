@@ -30,10 +30,10 @@ const UserSchema: Schema = new Schema({
     type: ["String"],
   },
   created_at: {
-    type: "String",
+    type: "Date",
   },
   updated_at: {
-    type: "String",
+    type: "Date",
   },
   is_online: {
     type: "Number",

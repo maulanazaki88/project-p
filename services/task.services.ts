@@ -17,8 +17,8 @@ export const createTask = async (data: TaskType) => {
 
       const response = await TaskModel.create({
         ...data,
-        updated_at: DateFormater(currentDate),
-        created_at: DateFormater(currentDate),
+        updated_at: currentDate,
+        created_at: currentDate,
       } as TaskType);
 
       if (response) {
@@ -45,7 +45,7 @@ export const updateTask = async (t_id: string, data: any) => {
     const currentDate = new Date();
     const updated_data = {
       ...data,
-      updated_at: DateFormater(currentDate),
+      updated_at: currentDate,
     } as TaskType;
 
     const response = await TaskModel.updateOne(
@@ -55,7 +55,7 @@ export const updateTask = async (t_id: string, data: any) => {
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         t_id: t_id,
       };
     }
@@ -98,14 +98,14 @@ export const taskAddParticipant = async (
     const response = await TaskModel.updateOne(
       { t_id: t_id },
       {
-        $set: { updated_at: DateFormater(currentDate) } as TaskType,
+        $set: { updated_at: currentDate } as TaskType,
         $push: { assigned_member: user },
       }
     );
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         t_id: t_id,
       };
     }
@@ -123,14 +123,14 @@ export const taskDeleteParticipant = async (
     const response = await TaskModel.updateOne(
       { t_id: t_id },
       {
-        $set: { updated_at: DateFormater(currentDate) } as TaskType,
+        $set: { updated_at: currentDate } as TaskType,
         $pull: { assigned_member: { u_id: { $eq: user.u_id } } },
       }
     );
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         t_id: t_id,
       };
     }
@@ -149,14 +149,14 @@ export const taskAddComment = async (
     const response = await TaskModel.updateOne(
       { t_id: t_id },
       {
-        $set: { updated_at: DateFormater(currentDate) } as TaskType,
+        $set: { updated_at: currentDate } as TaskType,
         $push: { comments: comment },
       }
     );
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         t_id: t_id,
       };
     }

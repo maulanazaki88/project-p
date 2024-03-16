@@ -41,10 +41,10 @@ const WorkspaceSchema: Schema = new Schema({
     type: ["Mixed"],
   },
   updated_at: {
-    type: "String",
+    type: "Date",
   },
   created_at: {
-    type: "String",
+    type: "Date",
   },
   waiting_list: {
     type: ["Mixed"],

@@ -6,9 +6,9 @@
     justify-content: center;
     border-radius: 12px;
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25);
-    width: 88%;
+    padding: 10px 20px;
     min-width: 200px;
-    min-height: 70px;
+    min-height: 50px;
     outline: none;
     border: none;
     font-family: inherit;
@@ -22,7 +22,7 @@
     position: relative;
     display: block;
     opacity: 0.8;
-    
+
 }
 
 .icon {
@@ -52,7 +52,7 @@
 }
 
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 500px) {
     .btn {
         position: relative;
         display: flex;
@@ -61,7 +61,7 @@
         justify-content: center;
         border-radius: 12px;
         box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25);
-        width: 88%;
+        width: 100%;
         min-width: 200px;
         min-height: 54px;
         outline: none;
@@ -77,7 +77,7 @@
         position: relative;
         display: block;
         opacity: 0.8;
-        
+
     }
 
     .icon {

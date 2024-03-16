@@ -62,25 +62,82 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
 
   const screenRef = React.useRef<HTMLDivElement | null>(null);
 
-  const pointerUpHandler = React.useCallback(
-    (e: React.TouchEvent<HTMLDivElement>) => {
-      const screen = screenRef.current;
-      if (display_width_ctx && screen) {
-        const mid_point = display_width_ctx / 2;
-        const scrollLeft = screen.scrollLeft;
-        if (scrollLeft < mid_point) {
-          screen.scrollTo({ left: 0, behavior: "smooth" });
-        } else if (scrollLeft > mid_point && scrollLeft < mid_point * 3) {
-          screen.scrollTo({ left: display_width_ctx, behavior: "smooth" });
-        } else if (scrollLeft > mid_point * 3 && scrollLeft < mid_point * 5) {
-          screen.scrollTo({ left: display_width_ctx * 2, behavior: "smooth" });
-        } else if (scrollLeft > mid_point * 5) {
-          screen.scrollTo({ left: display_width_ctx * 3, behavior: "smooth" });
-        }
-      }
-    },
-    [display_width_ctx]
+  // const pointerUpHandler = React.useCallback(
+  //   (e: React.TouchEvent<HTMLDivElement>) => {
+  //     const screen = screenRef.current;
+  //     if (display_width_ctx && screen) {
+  //       const mid_point = display_width_ctx / 2;
+  //       const scrollLeft = screen.scrollLeft;
+  //       if (scrollLeft < mid_point) {
+  //         screen.scrollTo({ left: 0, behavior: "smooth" });
+  //       } else if (scrollLeft > mid_point && scrollLeft < mid_point * 3) {
+  //         screen.scrollTo({ left: display_width_ctx, behavior: "smooth" });
+  //       } else if (scrollLeft > mid_point * 3 && scrollLeft < mid_point * 5) {
+  //         screen.scrollTo({ left: display_width_ctx * 2, behavior: "smooth" });
+  //       } else if (scrollLeft > mid_point * 5) {
+  //         screen.scrollTo({ left: display_width_ctx * 3, behavior: "smooth" });
+  //       }
+  //     }
+  //   },
+  //   [display_width_ctx]
+  // );
+
+  const [scroll_position, setScrollPosition] = React.useState<number>(
+    screenRef.current ? screenRef.current.scrollLeft : 0
   );
+
+  const [on_touch_down, setOnTouchDown] = React.useState<boolean>(false);
+
+  const [on_adjustment, setOnAdjustment] = React.useState<boolean>(false);
+
+  // React.useEffect(() => {
+  //   const mid_point = display_width_ctx / 2;
+  //   if (
+  //     scroll_position < mid_point &&
+  //     screenRef.current &&
+  //     !on_touch_down &&
+  //     !on_adjustment
+  //   ) {
+  //     screenRef.current.scrollTo({ left: 0, behavior: "smooth" });
+  //   } else if (
+  //     scroll_position > mid_point &&
+  //     scroll_position < mid_point * 3 &&
+  //     screenRef.current &&
+  //     !on_touch_down &&
+  //     !on_adjustment
+  //   ) {
+  //     screenRef.current.scrollTo({
+  //       left: display_width_ctx,
+  //       behavior: "smooth",
+  //     });
+  //     setOnAdjustment(true);
+  //   } else if (
+  //     scroll_position > mid_point * 3 &&
+  //     scroll_position < mid_point * 5 &&
+  //     screenRef.current &&
+  //     !on_touch_down &&
+  //     !on_adjustment
+  //   ) {
+  //     screenRef.current.scrollTo({
+  //       left: display_width_ctx * 2,
+  //       behavior: "smooth",
+  //     });
+  //     setOnAdjustment(true);
+  //   } else if (
+  //     scroll_position > mid_point * 5 &&
+  //     screenRef.current &&
+  //     !on_touch_down &&
+  //     !on_adjustment
+  //   ) {
+  //     screenRef.current.scrollTo({
+  //       left: display_width_ctx * 3,
+  //       behavior: "smooth",
+  //     });
+  //     setOnAdjustment(true);
+  //   } else {
+  //     setOnAdjustment(false);
+  //   }
+  // }, [scroll_position, on_touch_down, on_adjustment]);
 
   const [isMenuActive, setIsMenuActive] = React.useState<boolean>(false);
   const [isNotificationMenuActive, setIsNotificationMenuActive] =
@@ -98,6 +155,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const [showMemberList, setShowMemberList] = React.useState<boolean>(false);
   const [showInvitationMenu, setShowInvitationMenu] =
     React.useState<boolean>(false);
+
+  React.useEffect(() => {}, []);
 
   React.useEffect(() => {
     if (deletePromptActive) {
@@ -155,11 +214,11 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
 
   if (props.data !== undefined) {
     const t_id = id_generator.task();
-    const date_time = date_now.withTime();
-    const date_ = date_now.withoutTime();
+    const date_time = new Date();
+    const date_ = new Date()
 
     const newTaskHandler = async (t: ProgressStatusType) => {
-      console.log("CLICKED")
+      console.log("CLICKED");
       const new_task: TaskType = {
         activity_list: [],
         assigned_member: [],
@@ -526,46 +585,47 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           <div className={s.task_board}>
             <OnlineBar users={props.data.member_list} />
             <div
+            dir="ltr"
               className={s.selection_screen}
-              ref={screenRef}
-              onTouchEnd={pointerUpHandler}
+              // ref={screenRef}
+              // onTouchEnd={pointerUpHandler}
             >
-              <div className={s.selection_display}>
-                <TaskStageSection
-                  newTask={newTaskHandler}
-                  status="NEXT-UP"
-                  task_list={next_up}
-                  title="Next Up"
-                  key={"next-up-stage-section"}
-                  members={props.data.member_list}
-                />
-                <TaskStageSection
-                  newTask={newTaskHandler}
-                  status="IN-PROGRESS"
-                  task_list={in_progress}
-                  title="In Progress"
-                  key={"in-progress-stage-section"}
-                  members={props.data.member_list}
-                />
-                <TaskStageSection
-                  newTask={newTaskHandler}
-                  status="REVISED"
-                  task_list={revised}
-                  title="Revised"
-                  key={"revised-stage-section"}
-                  members={props.data.member_list}
-                />
-                <TaskStageSection
-                  newTask={newTaskHandler}
-                  status="COMPLETED"
-                  task_list={completed}
-                  title="Completed"
-                  key={"completed-stage-section"}
-                  members={props.data.member_list}
-                />
-              </div>
+              {/* <div className={s.selection_display}> */}
+              <TaskStageSection
+                newTask={newTaskHandler}
+                status="NEXT-UP"
+                task_list={next_up}
+                title="Next Up"
+                key={"next-up-stage-section"}
+                members={props.data.member_list}
+              />
+              <TaskStageSection
+                newTask={newTaskHandler}
+                status="IN-PROGRESS"
+                task_list={in_progress}
+                title="In Progress"
+                key={"in-progress-stage-section"}
+                members={props.data.member_list}
+              />
+              <TaskStageSection
+                newTask={newTaskHandler}
+                status="REVISED"
+                task_list={revised}
+                title="Revised"
+                key={"revised-stage-section"}
+                members={props.data.member_list}
+              />
+              <TaskStageSection
+                newTask={newTaskHandler}
+                status="COMPLETED"
+                task_list={completed}
+                title="Completed"
+                key={"completed-stage-section"}
+                members={props.data.member_list}
+              />
             </div>
           </div>
+          {/* </div> */}
         </main>
       </>
     );

@@ -1,16 +1,18 @@
 import { UserModel } from "../model/user.model";
 import { UserType } from "@/type";
 import { DateFormater } from "@/app/utils/DateFormater";
+import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
 
-export const login = async (data: any) => {
+export const login = async (data: { email: string; password: string }) => {
   try {
     const user_data = data as UserType;
 
     const record = (await UserModel.findOne({
-      email: user_data.email,
+      email: user_data.email.toLocaleLowerCase(),
     })) as UserType;
 
-    if (record && record.password === user_data.password) {
+    if (record && (await bcrypt.compare(data.password, record.password))) {
       return { message: "success", u_id: record.u_id };
     } else {
       return { message: "failed", u_id: "" };
@@ -31,7 +33,15 @@ export const createUser = async (data: UserType) => {
         message: "failed",
       };
     } else {
-      const response = (await UserModel.create({ ...data })) as UserType;
+      const u_id = `${data.username}-${uuidv4()}`;
+      const salt = await bcrypt.genSalt(10);
+      const hashed_password = await bcrypt.hash(data.password, salt);
+      const response = (await UserModel.create({
+        ...data,
+        u_id: u_id,
+        password: hashed_password,
+        email: data.email.toLocaleLowerCase(),
+      } as UserType)) as UserType;
 
       if (response) {
         return {
@@ -98,7 +108,7 @@ export const updateUser = async (u_id: string, data: any) => {
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         u_id: u_id,
       };
     }
@@ -128,13 +138,13 @@ export const userAddWorkspace = async (u_id: string, w_id: string) => {
     const response = await UserModel.updateOne(
       { u_id: u_id },
       {
-        $set: { updated_at: DateFormater(currentDate) },
+        $set: { updated_at: currentDate },
         $push: { workspace_ids: w_id },
       }
     );
 
     if (response) {
-      return { updated_count: response.upsertedCount, u_id: u_id };
+      return { updated_count: response.modifiedCount, u_id: u_id };
     }
   } catch (error: any) {
     console.error("Error Adding new workspace_id to user: ", error.message);
@@ -148,13 +158,13 @@ export const userDeleteWorkspace = async (u_id: string, w_id: string) => {
     const response = await UserModel.updateOne(
       { u_id: u_id },
       {
-        $set: { updated_at: DateFormater(currentDate) },
+        $set: { updated_at: currentDate},
         $pull: { workspace_ids: w_id },
       }
     );
 
     if (response) {
-      return { updated_count: response.upsertedCount, u_id: u_id };
+      return { updated_count: response.modifiedCount, u_id: u_id };
     }
   } catch (error: any) {
     console.error("Error remove workspace_id to user: ", error.message);

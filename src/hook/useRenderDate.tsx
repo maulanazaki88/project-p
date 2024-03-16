@@ -1,8 +1,10 @@
+import { DateFormater } from "@/app/utils/DateFormater";
+
 type CalendarType = ("y" | "m" | "d")[];
 
 export function useRenderDate() {
-  const calendar = (date: string, type: CalendarType) => {
-    const array = date.split("-");
+  const calendar = (date: Date, type: CalendarType) => {
+    const array = DateFormater(date).split("-");
     const year = parseInt(array[0]);
     const month = parseInt(array[1]);
     const day = parseInt(array[2]);
@@ -30,6 +32,6 @@ export function useRenderDate() {
   };
 
   return {
-    calendar: (date: string, type: CalendarType) => calendar(date, type),
+    calendar: (date: Date, type: CalendarType) => calendar(date, type),
   };
 }

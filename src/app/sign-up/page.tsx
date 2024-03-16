@@ -8,6 +8,7 @@ import { createUser } from "@/server/actions";
 import { useRouter } from "next/navigation";
 import { useDateNow } from "@/hook/useDateNow";
 import { useIdGenerator } from "@/hook/useIdGenerator";
+import Link from "next/link";
 
 const SignUpPage: React.FC = () => {
   const router = useRouter();
@@ -15,12 +16,12 @@ const SignUpPage: React.FC = () => {
   const date_now = useDateNow();
 
   const [user_data, set_user_data] = React.useState<UserType>({
-    created_at: "",
+    created_at: new Date(),
     email: "",
     is_online: 0,
     password: "",
     u_id: "",
-    updated_at: "",
+    updated_at: new Date(),
     username: "",
     workspace_ids: [],
     workspace_list: [],
@@ -60,7 +61,7 @@ const SignUpPage: React.FC = () => {
     } else {
       console.log("Submit!!!");
       setButtonDisabled(true);
-      const date_time = date_now.withTime();
+      const date_time = new Date();
 
       const response = await fetch(`/api/create-user`, {
         body: JSON.stringify({
@@ -69,30 +70,15 @@ const SignUpPage: React.FC = () => {
           updated_at: date_time,
           u_id: id_generator.user(),
         } as UserType),
-        headers: { "content-type": "application/json" },
         method: "POST",
       });
 
-      const res = await response.json();
-
-      const message = await res.message;
-
-      if ((await message) == "success" && response.status == 200) {
-        console.log(await res);
-        setVerifyId(await res.u_id);
-      } else if ((await message) == "user-exist") {
+      if (response.ok && !response.redirected) {
+        console.log( await response.json());
+        // setVerifyId(await res.u_id);
+      } else if(!response.ok) {
         console.log("nooo");
-        console.log(await res);
-        setButtonDisabled(false);
-        setWarning((prev) => {
-          return {
-            ...prev,
-            username: "Sudah ada username dengan nama ini",
-          };
-        });
-      } else {
-        console.log("nooo");
-        console.log(await res);
+        console.log(await response.json());
         // setButtonDisabled(false);
         setWarning((prev) => {
           return {
@@ -100,6 +86,8 @@ const SignUpPage: React.FC = () => {
             username: "Gagal. Terjadi kesalahan pada jaringan",
           };
         });
+      } else {
+        router.replace(response.url)
       }
     }
   };
@@ -122,7 +110,7 @@ const SignUpPage: React.FC = () => {
   return (
     <main className={s.main}>
       <div className={s.heading}>
-        <h1 className={[s.title, "medium", "big"].join(" ")}>
+        <h1 className={[s.title, "medium", "md"].join(" ")}>
           Daftarkan Akun Anda
         </h1>
       </div>
@@ -175,6 +163,14 @@ const SignUpPage: React.FC = () => {
           disabled={buttonDisabled}
         />
       </form>
+      <div className={s.suggestion}>
+        <p className={[s.suggestion_txt, "sm", "soft"].join(" ")}>
+          Sudah memiliki akun?
+        </p>
+        <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
+          <Link href="/login">Masuk</Link>
+        </span>
+      </div>
     </main>
   );
 };

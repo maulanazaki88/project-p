@@ -17,18 +17,21 @@ interface InputSmallProps {
   onBlur?: () => void;
   maxChar?: number;
   hideCap?: boolean;
-  required?: boolean; 
+  required?: boolean;
+  showLabel?: boolean;
 }
 
 const InputSmall: React.FC<InputSmallProps> = (props) => {
   return (
     <div className={[s.comp, inter.className].join(" ")}>
-      <label
-        className={[s.label, "medium", "md"].join(" ")}
-        htmlFor={props.name}
-      >
-        {props.label}
-      </label>
+      {props.showLabel && (
+        <label
+          className={[s.label, "medium", "md"].join(" ")}
+          htmlFor={props.name}
+        >
+          {props.label}
+        </label>
+      )}
       <div className={s.field}>
         <Image
           className={s.icon}
@@ -46,7 +49,7 @@ const InputSmall: React.FC<InputSmallProps> = (props) => {
           name={props.name}
           id={props.name}
           onBlur={props.onBlur}
-          required = {props.required}
+          required={props.required}
           maxLength={props.maxChar}
         />
       </div>

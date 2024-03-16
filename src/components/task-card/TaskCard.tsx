@@ -14,7 +14,7 @@ interface TaskCardProps {
   assigned_member: { u_id: string; username: string }[];
   priority: TaskPriorityType;
   description: string;
-  deadline: string;
+  deadline: Date;
   comments_count: number;
   id: string;
 }
@@ -127,7 +127,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
               className={s.icon}
             />
             <span className={[s.text, "medium", "sm", "blend"].join(" ")}>
-              {calendar.calendar(props.deadline, ["d", "m"])}
+              {calendar.calendar(new Date(props.deadline), ["d", "m"])}
             </span>
           </div>
         </div>

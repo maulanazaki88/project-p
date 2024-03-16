@@ -20,7 +20,7 @@ const TaskSchema: Schema = new Schema({
     type: "String",
   },
   description: {
-    type: "Date",
+    type: "String",
   },
   assigned_member: {
     type: ["Mixed"],
@@ -32,7 +32,7 @@ const TaskSchema: Schema = new Schema({
     type: "String",
   },
   created_at: {
-    type: "String",
+    type: "Date",
   },
   activity_list: {
     type: ["Mixed"],
@@ -50,7 +50,7 @@ const TaskSchema: Schema = new Schema({
     type: "String",
   },
   updated_at: {
-    type: "String",
+    type: "Date",
   },
   author: {
     type: "String",

@@ -4,6 +4,7 @@ export declare global {
       NODE_ENV: string;
       PYTHON_HOST: string;
       DB_CONN_STRING: string;
+      NEXT_PUBLIC_BASE_URL: string;
     }
   }
 }

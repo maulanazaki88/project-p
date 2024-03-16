@@ -27,6 +27,7 @@ import { usePathname } from "next/navigation";
 import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
 import InputSmall from "../input-small/InputSmall";
 import FormMenu from "../from-menu/FormMenu";
+import { DateFormater } from "@/app/utils/DateFormater";
 
 interface TaskPageProps {
   task_data: TaskType;
@@ -35,6 +36,7 @@ interface TaskPageProps {
 const TaskPage: React.FC<TaskPageProps> = (props) => {
   const router = useRouter();
   const pathname = usePathname();
+  const dateNow = useDateNow();
 
   const u_id = pathname.split("/")[2];
   const t_id = pathname.split("/")[6];
@@ -97,6 +99,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
       description: props.task_data.description,
       title: props.task_data.title,
     });
+    console.log(props.task_data);
   }, [props]);
 
   const changeHandler = (
@@ -355,6 +358,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 warning={""}
                 key={"Nama task input"}
                 maxChar={25}
+                showLabel
                 onBlur={() => {
                   task_change_title_ctx(props.task_data.t_id, {
                     title: taskForm.title,
@@ -371,6 +375,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 name="description"
                 placeholder="📋 Deskripsi"
                 value={taskForm.description}
+                showLabel
                 onBlur={() => {
                   task_change_description_ctx(props.task_data.t_id, {
                     description: taskForm.description,
@@ -396,13 +401,11 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 />
                 <CalendarInput
                   show={true}
-                  value={`${props.task_data.deadline.split("-")[0]}-${
-                    props.task_data.deadline.split("-")[1]
-                  }-${props.task_data.deadline.split("-")[2]}`}
+                  value={`${DateFormater(new Date(props.task_data.deadline))}`}
                   name={"deadline"}
                   onChange={(e) => {
                     task_change_deadline_ctx(props.task_data.t_id, {
-                      deadline: e.target.value,
+                      deadline: e.target.valueAsDate as Date,
                       u_id: u_id,
                       w_id: props.task_data.w_id,
                     });

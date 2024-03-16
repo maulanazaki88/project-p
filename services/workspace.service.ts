@@ -17,8 +17,8 @@ export const createWorkspace = async (data: WorkspaceType) => {
       const currentDate = new Date();
       const response = await WorkspaceModel.create({
         ...data,
-        updated_at: DateFormater(currentDate),
-        created_at: DateFormater(currentDate),
+        updated_at: currentDate,
+        created_at: currentDate,
       } as WorkspaceType);
 
       if (response) {
@@ -50,15 +50,15 @@ export const updateWorkspace = async (w_id: string, data: any) => {
     {
       $set: {
         ...updated_data,
-        updated_at: DateFormater(currentDate),
-        created_at: DateFormater(currentDate),
+        updated_at: currentDate,
+        created_at: currentDate,
       } as WorkspaceType,
     }
   );
 
   if (response) {
     return {
-      updated_count: response.upsertedCount,
+      updated_count: response.modifiedCount,
       w_id: w_id,
     };
   }
@@ -74,14 +74,14 @@ export const workspaceAddMember = async (
     const response = await WorkspaceModel.updateOne(
       { w_id: w_id },
       {
-        $set: { updated_at: DateFormater(currentDate) } as WorkspaceType,
+        $set: { updated_at: currentDate } as WorkspaceType,
         $push: { member_list: { ...user } },
       }
     );
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         w_id: w_id,
       };
     }
@@ -100,14 +100,14 @@ export const workspaceDeleteMember = async (
     const response = await WorkspaceModel.updateOne(
       { w_id: w_id },
       {
-        $set: { updated_at: DateFormater(currentDate) } as WorkspaceType,
+        $set: { updated_at: currentDate } as WorkspaceType,
         $pull: { member_list: { u_id: { $eq: user.u_id } } },
       }
     );
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         w_id: w_id,
       };
     }
@@ -151,12 +151,12 @@ export const workspaceCreateAnnouncement = async (
       { w_id: w_id },
       {
         $push: { notification_list: data },
-        $set: { updated_at: DateFormater(currentDate) },
+        $set: { updated_at: currentDate },
       }
     );
 
     if (response) {
-      return { updated_count: response.upsertedCount, w_id: w_id };
+      return { updated_count: response.modifiedCount, w_id: w_id };
     }
   } catch (error: any) {
     console.error("Cant create announcement :", error.message);
@@ -169,13 +169,13 @@ export const workspaceAddTask = async (w_id: string, t_id: string) => {
     const response = await WorkspaceModel.updateOne(
       { w_id: w_id },
       {
-        $set: { updated_at: DateFormater(currentDate) },
+        $set: { updated_at: currentDate },
         $push: { task_ids: t_id },
       }
     );
 
     if (response) {
-      return { updated_count: response.upsertedCount, w_id: w_id };
+      return { updated_count: response.modifiedCount, w_id: w_id };
     }
   } catch (error: any) {
     console.error("Error adding task to workspace: ", error.message);
@@ -189,13 +189,13 @@ export const workspaceDeleteTask = async (w_id: string, t_id: string) => {
     const response = await WorkspaceModel.updateOne(
       { w_id: w_id },
       {
-        $set: { updated_at: DateFormater(currentDate) },
+        $set: { updated_at: currentDate },
         $pull: { task_ids: t_id },
       }
     );
 
     if (response) {
-      return { updated_count: response.upsertedCount, w_id: w_id };
+      return { updated_count: response.modifiedCount, w_id: w_id };
     }
   } catch (error: any) {
     console.error("Error deleting task from workspace: ", error.message);
@@ -208,11 +208,11 @@ export const replaceWorkspace = async (w_id: string, data: WorkspaceType) => {
 
     const response = await WorkspaceModel.replaceOne({ w_id: w_id }, {
       ...data,
-      updated_at: DateFormater(currentDate),
+      updated_at: currentDate,
     } as WorkspaceType);
 
     if (response) {
-      return { updated_count: response.upsertedCount, w_id: w_id };
+      return { updated_count: response.modifiedCount, w_id: w_id };
     }
   } catch (error: any) {
     console.error("Error replace workspace: ", error.message);
@@ -229,14 +229,14 @@ export const addMemberWaitingList = async (
     const response = await WorkspaceModel.updateOne(
       { w_id: w_id },
       {
-        $set: { updated_at: DateFormater(currentDate) },
+        $set: { updated_at: currentDate },
         $push: { waiting_list: user },
       }
     );
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         w_id: w_id,
       };
     }
@@ -255,7 +255,7 @@ export const accWaitingList = async (
     const response = await WorkspaceModel.updateOne(
       { w_id: w_id },
       {
-        $set: { updated_at: DateFormater(currentDate) },
+        $set: { updated_at: currentDate },
         $push: { member_list: user.u_id },
         $pull: { waiting_list: user.u_id },
       }
@@ -263,7 +263,7 @@ export const accWaitingList = async (
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         w_id: w_id,
       };
     }
@@ -282,14 +282,14 @@ export const rejWaitingList = async (
     const response = await WorkspaceModel.updateOne(
       { w_id: w_id },
       {
-        $set: { updated_at: DateFormater(currentDate) },
+        $set: { updated_at: currentDate },
         $pull: { waiting_list: { u_id: { $eq: user.u_id } } },
       }
     );
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         w_id: w_id,
       };
     }
@@ -308,7 +308,7 @@ export const workspaceRemoveMember = async (
     const response = await WorkspaceModel.updateOne(
       { w_id: w_id },
       {
-        $set: { updated_at: DateFormater(currentDate) } as WorkspaceType,
+        $set: { updated_at: currentDate } as WorkspaceType,
         $pull: {
           member_list: { u_id: { $eq: user.u_id } },
         },
@@ -317,7 +317,7 @@ export const workspaceRemoveMember = async (
 
     if (response) {
       return {
-        updated_count: response.upsertedCount,
+        updated_count: response.modifiedCount,
         w_id: w_id,
       };
     }

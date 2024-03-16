@@ -4,7 +4,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    padding: 20px 20px;
+    padding: 25px;
     width: 280px;
     height: 356px;
     border-radius: 15px;
@@ -57,6 +57,7 @@
     color: #000;
     text-decoration: underline;
     text-align: left;
+    margin-bottom: 5px;
 
 }
 
@@ -92,7 +93,7 @@
     width: 100%;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 500px) {
     .card {
         position: relative;
         display: flex;
@@ -100,8 +101,8 @@
         align-items: flex-start;
         justify-content: space-between;
         padding: 10px 10px;
-        width: 182px;
-        height: 226px;
+        width: 250px;
+        height: calc(5/4 * 250px);
         border-radius: 15px;
 
     }
@@ -111,8 +112,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 98px;
-        height: 60px;
+        width: 150px;
+        height: calc(60/98 * 150px);
         bottom: 87px;
         right: 20px;
         scale: 1;
@@ -147,7 +148,7 @@
 
     .name {
         position: relative;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 600;
         color: #000;
         text-decoration: underline;
@@ -168,7 +169,7 @@
         justify-content: center;
         width: min-content;
         list-style: none;
-        transform: scale(0.8);
+        transform: scale(1);
         /* top: 50%; */
         /* left: 0; */
         /* translate: 0 25%; */

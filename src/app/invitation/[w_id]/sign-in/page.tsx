@@ -11,15 +11,17 @@ const InvitationSignInPage: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const w_id = pathname.split("/")[2]
+  const currentDate = new Date();
+
+  const w_id = pathname.split("/")[2];
 
   const [data, setData] = React.useState<UserType>({
-    created_at: "",
+    created_at: currentDate,
     email: "",
     is_online: 0,
     password: "",
     u_id: "",
-    updated_at: "",
+    updated_at: currentDate,
     username: "",
     workspace_ids: [],
     workspace_list: [],

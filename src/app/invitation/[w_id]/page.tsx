@@ -4,7 +4,9 @@ import InvitationLandingPage from "@/components/invitation-landing-page/Invitati
 const InvitationLanding: React.FC<{ params: { w_id: string } }> = async (
   props
 ) => {
-  const response = await fetch(`http://localhost:8000/api/get-workspace/${props.params.w_id}`);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-workspace/${props.params.w_id}`
+  );
 
   const data = await response.json();
 
@@ -15,4 +17,4 @@ const InvitationLanding: React.FC<{ params: { w_id: string } }> = async (
   }
 };
 
-export default InvitationLanding
+export default InvitationLanding;

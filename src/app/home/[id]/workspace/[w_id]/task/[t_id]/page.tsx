@@ -15,7 +15,13 @@ const Task: React.FC<{
   const date_now = useDateNow();
 
   React.useEffect(() => {
-    fetch(`/api/get-user/${props.params.id}`)
+    fetch(`/api/get-user/${props.params.id}`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+      cache: "no-cache",
+    })
       .then((res) => res)
       .then((data) => data.json())
       .then((data) => {
@@ -25,20 +31,22 @@ const Task: React.FC<{
       .catch((e) => console.log(e));
   }, []);
 
+  const currentDate = new Date()
+
   const loading_task: TaskType = {
     activity_list: [],
     assigned_member: [],
     author: "",
     comments: [],
-    created_at: date_now.withTime(),
-    deadline: date_now.withTime(),
+    created_at: currentDate,
+    deadline: currentDate,
     description: "",
     priority: "MED",
     seen_by: [],
     status: "IN-PROGRESS",
     t_id: props.params.t_id,
     title: "",
-    updated_at: date_now.withTime(),
+    updated_at: currentDate,
     w_id: "",
     workspace_name: "",
   };

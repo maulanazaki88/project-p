@@ -9,7 +9,7 @@ export async function PUT(
   let body = await req.json();
 
   try {
-    const response = await workspaceAddTask(w_id, body);
+    const response = await workspaceAddTask(w_id, body.t_id);
     return NextResponse.json(response);
   } catch (error) {
     return NextResponse.error();

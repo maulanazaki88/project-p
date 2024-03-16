@@ -100,23 +100,24 @@ a {
 /* FONT */
 
 .x-big {
-  font-size: 50px;
+  font-size: 30px;
 }
 
 .big {
-  font-size: 30px;
+  font-size: 22px;
 }
 
 .md {
-  font-size: 30px;
+  font-size: 16px;
 }
 
 .sm {
-  font-size: 20px;
+  font-size: 12px;
 }
 
 
-@media screen and (max-width: 425px) {
+
+@media screen and (max-width: 500px) {
   .x-big {
     font-size: 30px;
   }

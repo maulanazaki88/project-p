@@ -73,7 +73,7 @@
 
 
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 500px) {
 
   .main {
     flex-direction: column;
@@ -107,7 +107,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 100%;
+    width: 80%;
 
   }
 

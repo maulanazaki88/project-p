@@ -22,7 +22,7 @@ const CalendarCard: React.FC<CalendarCardProps> = (props) => {
     <div className={s.card}>
       <div className={s.label}>
         <span className={[s.date, "medium", "sm"].join(" ")}>
-          {`${days[day]}, ${calendar.calendar(props.date, ["d", "m"])}`}
+          {`${days[day]}, ${calendar.calendar(new Date(props.date), ["d", "m"])}`}
         </span>
       </div>
       <div className={s.content}>

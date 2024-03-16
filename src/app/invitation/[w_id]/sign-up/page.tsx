@@ -14,13 +14,15 @@ const InvitationSignUpPage: React.FC = () => {
   const id_generator = useIdGenerator();
   const date_now = useDateNow();
 
+  const currentDate = new Date();
+
   const [user_data, set_user_data] = React.useState<UserType>({
-    created_at: "",
+    created_at: currentDate,
     email: "",
     is_online: 0,
     password: "",
     u_id: "",
-    updated_at: "",
+    updated_at: currentDate,
     username: "",
     workspace_ids: [],
     workspace_list: [],

@@ -3,13 +3,21 @@ import React from "react";
 import WorkspaceSetupPage from "@/components/workspace-setup-page/WorkspaceSetupPage";
 import Context, { ContextType } from "@/context/Store";
 
-const Workspace: React.FC<{ params: {id: string, w_id: string } }> = (props) => {
-  const {  user_workspaces_ctx, user_data_handler_ctx } = React.useContext(
+const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
+  props
+) => {
+  const { user_workspaces_ctx, user_data_handler_ctx } = React.useContext(
     Context
   ) as ContextType;
 
   React.useEffect(() => {
-    fetch(`/api/get-user/${props.params.id}`)
+    fetch(`/api/get-user/${props.params.id}`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+      cache: "no-cache",
+    })
       .then((res) => res)
       .then((data) => data.json())
       .then((data) => {

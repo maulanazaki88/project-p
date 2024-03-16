@@ -15,7 +15,13 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
   const date_now = useDateNow();
 
   React.useEffect(() => {
-    fetch(`/api/get-user/${props.params.id}`)
+    fetch(`/api/get-user/${props.params.id}`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+      cache: "no-cache",
+    })
       .then((res) => res)
       .then((data) => data.json())
       .then((data) => {
@@ -25,10 +31,12 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
       .catch((e) => console.log(e));
   }, []);
 
+  const currentDate = new Date()
+
   const loading_workspace: WorkspaceType = {
     activity_list: [],
     admin_list: [],
-    created_at: date_now.withTime(),
+    created_at: currentDate,
     description: "",
     member_list: [],
     name: "",
@@ -36,9 +44,9 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
     status: "ON-GOING",
     task_ids: [],
     task_list: [],
-    updated_at: date_now.withTime(),
+    updated_at: currentDate,
     w_id: props.params.w_id,
-    waiting_list: []
+    waiting_list: [],
   };
 
   const workspace = React.useMemo(() => {

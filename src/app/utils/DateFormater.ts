@@ -10,5 +10,5 @@ export function DateFormater(date: Date): string {
   const minutes = padWithZero(date.getMinutes());
   const seconds = padWithZero(date.getSeconds());
 
-  return `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${day}`;
 }

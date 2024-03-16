@@ -29,8 +29,8 @@ export interface WorkspaceType {
   task_ids: string[];
   task_list: TaskType[];
   activity_list: ActivityLogType[];
-  updated_at: string;
-  created_at: string;
+  updated_at: Date;
+  created_at: Date;
 }
 
 export interface TaskType {
@@ -38,16 +38,16 @@ export interface TaskType {
   title: string;
   description: string;
   assigned_member: { u_id: string; username: string }[];
-  deadline: string;
+  deadline: Date;
   priority: TaskPriorityType;
-  created_at: string;
+  created_at: Date;
   activity_list: ActivityLogType[];
   w_id: string;
   workspace_name: string;
   seen_by: { u_id: string; username: string }[];
   comments: ChatBubbleProps[];
   status: ProgressStatusType;
-  updated_at: string;
+  updated_at: Date;
   author: string;
 }
 
@@ -58,9 +58,9 @@ export interface UserType {
   password: string;
   workspace_ids: string[];
   workspace_list: WorkspaceType[];
-  created_at: string;
+  created_at: Date;
   is_online: 0 | 1;
-  updated_at: string;
+  updated_at: Date;
 }
 
 export interface CommentType {

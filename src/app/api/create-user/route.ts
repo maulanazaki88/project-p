@@ -8,7 +8,14 @@ export async function POST(
   let body = await req.json();
   try {
     const response = await createUser(body);
-    return NextResponse.json(response);
+    if (response && response.u_id) {
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/home/${response?.u_id}`,
+        { status: 307 }
+      );
+    } else {
+      return NextResponse.json(response?.message);
+    }
   } catch (error) {
     return NextResponse.error();
   }

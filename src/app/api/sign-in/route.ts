@@ -9,7 +9,14 @@ export async function POST(
 
   try {
     const response = await login(body);
-    return NextResponse.json(response);
+    if (response && response.u_id) {
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/home/${response.u_id}`,
+        { status: 307 }
+      );
+    } else {
+      return NextResponse.json(response?.message);
+    }
   } catch (error) {
     return NextResponse.error();
   }

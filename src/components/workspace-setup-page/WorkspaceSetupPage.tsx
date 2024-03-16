@@ -22,6 +22,8 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
   const id_generator = useIdGenerator();
   const date_now = useDateNow();
 
+  const currentDate = new Date();
+
   const u_id = pathname.split("/")[2];
 
   const { user_data_ctx, workspace_replace_ctx, workspace_create_ctx } =
@@ -34,7 +36,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
       : user_data_ctx
       ? [{ u_id: user_data_ctx.u_id, username: user_data_ctx.username }]
       : [],
-    created_at: props.data ? props.data.created_at : "",
+    created_at: props.data ? props.data.created_at : currentDate,
     description: props.data ? props.data.description : "",
     member_list: props.data
       ? props.data.member_list
@@ -46,9 +48,9 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
     status: props.data ? props.data.status : "ON-GOING",
     task_ids: props.data ? props.data.task_ids : [],
     task_list: props.data ? props.data.task_list : [],
-    updated_at: props.data ? props.data.updated_at : "",
+    updated_at: props.data ? props.data.updated_at : currentDate,
     w_id: props.data ? props.data.w_id : "",
-    waiting_list: []
+    waiting_list: [],
   });
 
   const [buttonDisabled, setButtonDisabled] = React.useState<boolean>(false);
@@ -79,7 +81,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
     console.log("Submit!!!");
     setButtonDisabled(true);
 
-    const date_time = date_now.withTime();
+    const date_time = new Date();
 
     if (props.data) {
       //operasi client-side change
@@ -99,7 +101,9 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
       if (await data.updated_count) {
         console.log("yeyyy");
 
-        router.replace(`/home/${u_id}/workspace/${updated_workspace.w_id}`);
+        router.replace(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}/workspace/${updated_workspace.w_id}`
+        );
       } else {
         console.log("nooo");
         setButtonDisabled(false);
@@ -117,6 +121,9 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
         created_at: date_time,
         updated_at: date_time,
         w_id: w_id,
+        member_list: [
+          { u_id: u_id, username: user_data_ctx?.username as string },
+        ],
       };
 
       const data = await workspace_create_ctx(w_id, {
@@ -124,10 +131,12 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
         workspace: new_workspace,
       });
 
-      if (data && data.updated_count === 1) {
+      if (data && data.w_id) {
         console.log("yeyyy");
 
-        router.replace(`/home/${u_id}/workspace/${w_id}`);
+        router.replace(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}/workspace/${data.w_id}`
+        );
         //no async data in router --> make the code on context executed twice
       } else {
         console.log("nooo");
@@ -148,12 +157,12 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
 
   return (
     <main className={s.main}>
-      {/* <MenuNavbar
+      <MenuNavbar
         closeHandler={() => {
           router.back();
         }}
         title="Workspace Setup"
-      /> */}
+      />
       <form className={s.form} onSubmit={submitData}>
         <div className={s.input}>
           <InputSmall

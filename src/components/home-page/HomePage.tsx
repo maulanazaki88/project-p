@@ -10,17 +10,21 @@ import CardMenu from "@/components/card-menu/CardMenu";
 import { CalendarCardProps } from "@/components/calender-card/CalendarCard";
 import { NotificationCardProps } from "@/components/notification-card/NotificationCard";
 import { TaskType, UserType, WorkspaceType } from "@/type";
-import Context, {
-  ContextType,
-  TaskInit_Act,
-  WorkspaceInit_Act,
-} from "@/context/Store";
+import Context, { ContextType } from "@/context/Store";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { Poppins } from "next/font/google";
+import { DateFormater } from "@/app/utils/DateFormater";
 
 interface HomePageProps {
   data: UserType;
 }
+
+const poppins = Poppins({
+  weight: "600",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const HomePage: React.FC<HomePageProps> = (props) => {
   const {
@@ -48,40 +52,84 @@ const HomePage: React.FC<HomePageProps> = (props) => {
 
   const workspace_list = props.data.workspace_list as WorkspaceType[];
 
-  let task_list: TaskType[] = [];
-  let notification_list: NotificationCardProps[] = [];
+  const task_list = workspace_list
+    .map((w, index) => {
+      console.log(index);
+      console.log("task list inside map: ", w.task_list);
+      return w.task_list.map((task) => {
+        return {
+          ...task,
+          workspace_name: w.name,
+        } as TaskType;
+      });
+    })
+    .flat(1);
+  // let m = 0;
+  // let n = 0;
+  // for (let workspace of workspace_list) {
+  //   let tasks: TaskType[] = [];
+  //   m++;
+  //   for (let task of workspace.task_list) {
+  //     n++;
+  //     tasks.push({ ...task, workspace_name: workspace.name });
+  //   }
+  //   console.log("tasks in loop: ", tasks);
+  //   task_list.push(...tasks);
+  // }
 
-  for (let item of workspace_list) {
-    let tasks: TaskType[] = [];
-    for (let task of item.task_list) {
-      tasks.push({ ...task, workspace_name: item.name });
-    }
-    task_list.push(...tasks);
-    notification_list.push(...item.notification_list);
-  }
+  // console.log("count", { m: m, n: n });
+  console.log("task_list", task_list);
+
+  const calendar_list = React.useMemo(() => {
+    const deadlines = task_list.slice(0).map((task, index) => {
+      return task.deadline;
+    });
+
+    const deadlines_set = new Set(deadlines);
+
+    const deadlines_set_arr = Array.from(deadlines_set);
+
+    const calendar_list =
+      deadlines_set_arr &&
+      deadlines_set_arr.map((d, index) => {
+        return {
+          date: DateFormater(new Date(d)),
+          task_list: task_list.filter((task) => task.deadline === d),
+        } as CalendarCardProps;
+      });
+
+    return calendar_list.sort((a, b) => {
+      let dateA = new Date(a.date);
+      let dateB = new Date(b.date);
+
+      if (dateA < dateB) {
+        return -1;
+      } else if (dateA > dateB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }, [props]);
+
+  console.log("calendar list: ", calendar_list);
+
+  const notification_list: NotificationCardProps[] = workspace_list
+    .map((w, index) => {
+      return w.notification_list.map((n) => {
+        return {
+          ...n,
+          w_id: w.w_id
+        } as NotificationCardProps
+      });
+    })
+    .flat(1);
 
   const color_list = ["#BAE0EE", "#E2D3FE", "rgba(28, 6, 45, 0.2)"];
 
   const searchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   };
-
-  const deadlines = task_list.map((task, index) => {
-    return task.deadline;
-  });
-
-  const deadlines_set = new Set(deadlines);
-
-  const deadlines_set_arr = Array.from(deadlines_set);
-
-  const calendar_list =
-    deadlines_set_arr &&
-    deadlines_set_arr.map((d, index) => {
-      return {
-        date: d,
-        task_list: task_list.filter((task) => task.deadline === d),
-      } as CalendarCardProps;
-    });
 
   const logoutHandler = () => {
     logout_ctx();
@@ -121,7 +169,11 @@ const HomePage: React.FC<HomePageProps> = (props) => {
         }}
       />
       <main className={s.main}>
-        <h2 className={[s.main_title, "big", "medium"].join(" ")}>
+        <h2
+          className={[s.main_title, "big", "medium", poppins.className].join(
+            " "
+          )}
+        >
           Selamat datang, {props.data.username}!
         </h2>
         <InputSmall
@@ -158,7 +210,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                 />
               </div>
             </div>
-            {workspace_list.length > 0 && (
+            {workspace_list.length > 0 ? (
               <div className={s.list_screen}>
                 <ul className={s.list}>
                   {workspace_list
@@ -192,8 +244,20 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                         </li>
                       );
                     })}
+                  <div className={s.white_blur}></div>
                 </ul>
               </div>
+            ) : (
+              <WorkspaceCard
+                description={"Tap to create workspace"}
+                img={"/ilust/team_1.svg"}
+                members={[]}
+                name={"You don't have any workspace"}
+                key={`workspace-empty`}
+                bg_color={"rgba(0, 0, 0, 0.1)"}
+                id={"workspace-empty"}
+                isEmpty
+              />
             )}
           </div>
           <div className={s.todo}>
@@ -207,32 +271,39 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                 </p>
               </div>
             </div>
-            <div className={s.task_list_screen}>
-              <ul className={s.task_list}>
-                {task_list
-                  ?.filter(
-                    (task) =>
-                      task.title.toLowerCase().includes(searchInput) ||
-                      task.description.toLowerCase().includes(searchInput)
-                  )
-                  .map((task, index) => {
-                    return (
-                      <li className={s.item} key={`user-task-${index}`}>
-                        <TaskCard
-                          assigned_member={task.assigned_member}
-                          comments_count={task.comments.length}
-                          deadline={task.deadline}
-                          description={task.description}
-                          name={task.title}
-                          priority={task.priority}
-                          w_id={task.w_id}
-                          id={task.t_id}
-                        />
-                      </li>
-                    );
-                  })}
-              </ul>
-            </div>
+            {task_list.length > 0 ? (
+              <div className={s.task_list_screen}>
+                <ul className={s.task_list}>
+                  {task_list
+                    ?.filter(
+                      (task) =>
+                        task.title.toLowerCase().includes(searchInput) ||
+                        task.description.toLowerCase().includes(searchInput)
+                    )
+                    .map((task, index) => {
+                      return (
+                        <li className={s.item} key={`user-task-${index}`}>
+                          <TaskCard
+                            assigned_member={task.assigned_member}
+                            comments_count={task.comments.length}
+                            deadline={task.deadline}
+                            description={task.description}
+                            name={task.title}
+                            priority={task.priority}
+                            w_id={task.w_id}
+                            id={task.t_id}
+                          />
+                        </li>
+                      );
+                    })}
+                </ul>
+              </div>
+            ) : (
+              <span className={[s.empty_task, "light", "md"].join(" ")}>
+                {" "}
+                Currently you didn't have any task{" "}
+              </span>
+            )}
           </div>
         </div>
       </main>

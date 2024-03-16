@@ -7,6 +7,7 @@ import NotificationCard, {
 } from "../notification-card/NotificationCard";
 import ButtonLarge from "../button-large/ButtonLarge";
 import { useCalendar } from "@/hook/useCalendar";
+import { DateFormater } from "@/app/utils/DateFormater";
 
 interface CardMenuProps {
   calendar_list?: CalendarCardProps[];
@@ -35,26 +36,15 @@ const months = [
 const CardMenu: React.FC<CardMenuProps> = (props) => {
   const calendar = useCalendar();
 
-  props.calendar_list?.sort((a, b) => {
-    let dateA = new Date(a.date);
-    let dateB = new Date(b.date);
-
-    if (dateA < dateB) {
-      return -1;
-    } else if (dateA > dateB) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
+  console.log("available month number", calendar.available_month_number);
 
   const CalendarViews = props.calendar_list && (
     <ul className={s.calendar}>
       {calendar.available_month_number.map((c, index) => {
         const isEmpty = !props.calendar_list?.some(
           (item) =>
-            item.date.split("-")[0] === c.split("-")[0] &&
-            item.date.split("-")[1] === c.split("-")[1]
+            parseInt(item.date.split("-")[0]) === parseInt(c.split("-")[0]) &&
+            parseInt(item.date.split("-")[1]) === parseInt(c.split("-")[1])
         );
         return (
           <li key={`month-${index}`} className={s.month}>
@@ -62,14 +52,18 @@ const CardMenu: React.FC<CardMenuProps> = (props) => {
               months[parseInt(c.split("-")[1]) - 1]
             } ${c.split("-")[0]}`}</h4>
             {isEmpty && (
-              <span className={"medium md soft"} style={{width: "100%"}} >Tidak ada tugas</span>
+              <span className={"medium md soft"} style={{ width: "100%" }}>
+                Tidak ada tugas
+              </span>
             )}
             <ul className={s.list}>
               {props.calendar_list &&
                 props.calendar_list.map((item, index) => {
                   if (
-                    item.date.split("-")[0] === c.split("-")[0] &&
-                    item.date.split("-")[1] === c.split("-")[1]
+                    parseInt(item.date.split("-")[0]) ===
+                      parseInt(c.split("-")[0]) &&
+                    parseInt(item.date.split("-")[1]) ===
+                      parseInt(c.split("-")[1])
                   ) {
                     return (
                       <li className={s.item} key={`calendar-item-${index}`}>
@@ -88,6 +82,8 @@ const CardMenu: React.FC<CardMenuProps> = (props) => {
       })}
     </ul>
   );
+
+  // console.log("calendar views", CalendarViews);
 
   const NotificationViews = props.notification_list && (
     <ul className={s.notif_list}>
@@ -116,7 +112,10 @@ const CardMenu: React.FC<CardMenuProps> = (props) => {
   );
 
   return (
-    <div className={s.menu} style={{ translate: props.isActive ? "0 0" : "100% 0" }}>
+    <div
+      className={s.menu}
+      style={{ translate: props.isActive ? "0 0" : "100% 0" }}
+    >
       <MenuNavbar title={props.title} closeHandler={props.closeHandler} />
       {CalendarViews}
       {NotificationViews}

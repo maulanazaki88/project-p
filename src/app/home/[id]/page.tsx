@@ -9,7 +9,13 @@ const Home: React.FC<{ params: { id: string } }> = (props) => {
 
 
   React.useEffect(() => {
-    fetch(`/api/get-user/${props.params.id}`)
+    fetch(`/api/get-user/${props.params.id}`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+      cache: "no-cache",
+    })
       .then((res) => res)
       .then((data) => data.json())
       .then((data) => {

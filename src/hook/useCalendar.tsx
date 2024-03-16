@@ -48,6 +48,9 @@ export const useCalendar = () => {
 
   return {
     available_month: available_month,
-    available_month_number: available_month_number
+    available_month_number: available_month_number,
+    compareDate: (date: Date) => {
+      
+    }
   }
 };
