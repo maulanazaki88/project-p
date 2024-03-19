@@ -17,6 +17,7 @@ interface CommentsProps {
     time: string;
   }) => void;
   isActive: boolean;
+  isEmbed?: boolean;
 }
 
 const Comments: React.FC<CommentsProps> = (props) => {
@@ -28,8 +29,13 @@ const Comments: React.FC<CommentsProps> = (props) => {
   const [comment_val, set_comment_val] = React.useState<string>("");
 
   return (
-    <div className={s.comments} style={{ translate: props.isActive ? "0 0" : "100% 0" }}>
-      <MenuNavbar closeHandler={props.closeHandler} title={props.task_name} />
+    <div
+      className={[s.comments, props.isEmbed && s.embed].join(" ")}
+      style={{
+        translate: props.isActive ? "0 0" : "100% 0",
+      }}
+    >
+      {!props.isEmbed && <MenuNavbar closeHandler={props.closeHandler} title={props.task_name} />}
       <div className={s.comment_screen}>
         <ul className={s.list}>
           {props.chat_list.map((chat, index) => {

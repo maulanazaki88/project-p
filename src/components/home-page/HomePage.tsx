@@ -14,7 +14,8 @@ import Context, { ContextType } from "@/context/Store";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { Poppins } from "next/font/google";
-import { DateFormater } from "@/app/utils/DateFormater";
+import { DateFormater } from "@/utils/DateFormater";
+import WorkspaceCardPlaceHolder from "../workspace-card/WorkspaceCardPlaceHolder";
 
 interface HomePageProps {
   data: UserType;
@@ -49,6 +50,11 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     React.useState<boolean>(false);
 
   const [showLogoutPopup, setShowLogoutPopup] = React.useState<boolean>(false);
+  const [hide_task_list_scroll, setHideTaskListScroll] =
+    React.useState<boolean>(true);
+
+  const [hide_workspace_list_scroll, setHideWorkspaceListScroll] =
+    React.useState<boolean>(true);
 
   const workspace_list = props.data.workspace_list as WorkspaceType[];
 
@@ -119,8 +125,8 @@ const HomePage: React.FC<HomePageProps> = (props) => {
       return w.notification_list.map((n) => {
         return {
           ...n,
-          w_id: w.w_id
-        } as NotificationCardProps
+          w_id: w.w_id,
+        } as NotificationCardProps;
       });
     })
     .flat(1);
@@ -138,7 +144,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
 
   return (
     <>
-      <HomeNavbar
+      {/* <HomeNavbar
         username={props.data.username}
         calendarHandler={() => {
           setCalendarMenuActive(true);
@@ -151,7 +157,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
         showLogoutPopupHandler={() => {
           setShowLogoutPopup(!showLogoutPopup);
         }}
-      />
+      /> */}
       <CardMenu
         isActive={calendarMenuActive && !notificationMenuActive}
         calendar_list={calendar_list}
@@ -203,7 +209,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                   bg_color="#1C062D"
                   color="#fff"
                   opacity={1}
-                  text="Add +"
+                  text="Add"
                   onClick={() => {
                     router.push(`${pathname}/workspace-setup`);
                   }}
@@ -211,7 +217,18 @@ const HomePage: React.FC<HomePageProps> = (props) => {
               </div>
             </div>
             {workspace_list.length > 0 ? (
-              <div className={s.list_screen}>
+              <div
+                className={[
+                  s.list_screen,
+                  hide_workspace_list_scroll && s.hide_scroll,
+                ].join(" ")}
+                onMouseLeave={() => {
+                  setHideWorkspaceListScroll(true);
+                }}
+                onMouseOver={() => {
+                  setHideWorkspaceListScroll(false);
+                }}
+              >
                 <ul className={s.list}>
                   {workspace_list
                     .filter(
@@ -226,7 +243,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                         <li
                           className={s.item}
                           key={`workspace-item-${index}`}
-                          style={{ marginLeft: index > 0 ? "16px" : "0px" }}
+                          // style={{ marginLeft: index > 0 ? "16px" : "0px" }}
                         >
                           <WorkspaceCard
                             description={workspace.description}
@@ -244,19 +261,23 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                         </li>
                       );
                     })}
+                  {workspace_list.length <= 3 && (
+                    <li className={s.item} key={`workspace-item-placeholder`}>
+                      <WorkspaceCardPlaceHolder
+                        createWorkspaceHandler={() => {
+                          router.push(`${pathname}/workspace-setup`);
+                        }}
+                      />
+                    </li>
+                  )}
                   <div className={s.white_blur}></div>
                 </ul>
               </div>
             ) : (
-              <WorkspaceCard
-                description={"Tap to create workspace"}
-                img={"/ilust/team_1.svg"}
-                members={[]}
-                name={"You don't have any workspace"}
-                key={`workspace-empty`}
-                bg_color={"rgba(0, 0, 0, 0.1)"}
-                id={"workspace-empty"}
-                isEmpty
+              <WorkspaceCardPlaceHolder
+                createWorkspaceHandler={() => {
+                  router.push(`${pathname}/workspace-setup`);
+                }}
               />
             )}
           </div>
@@ -272,7 +293,18 @@ const HomePage: React.FC<HomePageProps> = (props) => {
               </div>
             </div>
             {task_list.length > 0 ? (
-              <div className={s.task_list_screen}>
+              <div
+                className={[
+                  s.task_list_screen,
+                  hide_task_list_scroll && s.hide_scroll,
+                ].join(" ")}
+                onMouseLeave={() => {
+                  setHideTaskListScroll(true);
+                }}
+                onMouseOver={() => {
+                  setHideTaskListScroll(false);
+                }}
+              >
                 <ul className={s.task_list}>
                   {task_list
                     ?.filter(
@@ -281,20 +313,26 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                         task.description.toLowerCase().includes(searchInput)
                     )
                     .map((task, index) => {
-                      return (
-                        <li className={s.item} key={`user-task-${index}`}>
-                          <TaskCard
-                            assigned_member={task.assigned_member}
-                            comments_count={task.comments.length}
-                            deadline={task.deadline}
-                            description={task.description}
-                            name={task.title}
-                            priority={task.priority}
-                            w_id={task.w_id}
-                            id={task.t_id}
-                          />
-                        </li>
-                      );
+                      if (
+                        task.assigned_member.some(
+                          (m) => m.u_id === props.data.u_id
+                        )
+                      ) {
+                        return (
+                          <li className={s.item} key={`user-task-${index}`}>
+                            <TaskCard
+                              assigned_member={task.assigned_member}
+                              comments_count={task.comments.length}
+                              deadline={task.deadline}
+                              description={task.description}
+                              name={task.title}
+                              priority={task.priority}
+                              w_id={task.w_id}
+                              id={task.t_id}
+                            />
+                          </li>
+                        );
+                      }
                     })}
                 </ul>
               </div>

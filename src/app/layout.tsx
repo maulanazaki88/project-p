@@ -1,3 +1,4 @@
+import s from "./layout.module.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import local from "next/font/local";

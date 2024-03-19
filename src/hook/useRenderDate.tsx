@@ -1,4 +1,4 @@
-import { DateFormater } from "@/app/utils/DateFormater";
+import { DateFormater } from "@/utils/DateFormater";
 
 type CalendarType = ("y" | "m" | "d")[];
 

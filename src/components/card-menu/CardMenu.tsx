@@ -7,7 +7,7 @@ import NotificationCard, {
 } from "../notification-card/NotificationCard";
 import ButtonLarge from "../button-large/ButtonLarge";
 import { useCalendar } from "@/hook/useCalendar";
-import { DateFormater } from "@/app/utils/DateFormater";
+import { DateFormater } from "@/utils/DateFormater";
 
 interface CardMenuProps {
   calendar_list?: CalendarCardProps[];

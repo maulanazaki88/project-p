@@ -462,10 +462,10 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           }}
           onClick={overlayAction}
         />
-        <Navbar
+        {/* <Navbar
           title={props.data.name}
           menuHandler={() => setIsMenuActive(true)}
-        />
+        /> */}
         <FormMenu
           closeHandler={() => setDeletePromptActive(false)}
           label={`Ketik: "${props.data.name}"`}
@@ -583,7 +583,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
 
         <main className={s.main}>
           <div className={s.task_board}>
-            <OnlineBar users={props.data.member_list} />
+            {/* <OnlineBar users={props.data.member_list} /> */}
             <div
             dir="ltr"
               className={s.selection_screen}
@@ -598,6 +598,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
                 title="Next Up"
                 key={"next-up-stage-section"}
                 members={props.data.member_list}
+                color_accent="#B4B4B8"
               />
               <TaskStageSection
                 newTask={newTaskHandler}
@@ -606,6 +607,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
                 title="In Progress"
                 key={"in-progress-stage-section"}
                 members={props.data.member_list}
+                color_accent="#F5DD61"
               />
               <TaskStageSection
                 newTask={newTaskHandler}
@@ -614,6 +616,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
                 title="Revised"
                 key={"revised-stage-section"}
                 members={props.data.member_list}
+                color_accent="#FAA300"
               />
               <TaskStageSection
                 newTask={newTaskHandler}
@@ -622,6 +625,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
                 title="Completed"
                 key={"completed-stage-section"}
                 members={props.data.member_list}
+                color_accent="#5356FF"
               />
             </div>
           </div>

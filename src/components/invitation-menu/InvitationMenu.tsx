@@ -55,7 +55,7 @@ const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
         >
           <input
             type="text"
-            className={s.static_input}
+            className={[s.static_input, "sm", "medium"].join(" ")}
             value={invitation_link}
             readOnly
           />

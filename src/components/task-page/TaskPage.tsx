@@ -27,7 +27,7 @@ import { usePathname } from "next/navigation";
 import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
 import InputSmall from "../input-small/InputSmall";
 import FormMenu from "../from-menu/FormMenu";
-import { DateFormater } from "@/app/utils/DateFormater";
+import { DateFormater } from "@/utils/DateFormater";
 
 interface TaskPageProps {
   task_data: TaskType;
@@ -56,6 +56,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     user_task_ctx,
     user_data_ctx,
     task_change_description_ctx,
+    display_width_ctx,
   } = React.useContext(Context) as ContextType;
 
   const getWorkspaceName = (id: string) => {
@@ -136,6 +137,8 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
 
   const [deletePromptWarning, setDeletePromptWarning] =
     React.useState<string>("-");
+
+  const [hide_scroll, setHideScroll] = React.useState<boolean>(true);
 
   //   React.useEffect(() => {
   //     const data: TaskType = {
@@ -263,12 +266,12 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         button_text="Hapus"
         key={"task-delete-prompt"}
       />
-      <Navbar
+      {/* <Navbar
         title={"Detail Tugas"}
         subtitle={getWorkspaceName(props.task_data.w_id)}
         menuHandler={() => setIsMenuActive(true)}
         backSave={backSave}
-      />
+      /> */}
       <BasicMenu
         button_list={menu_list}
         log_list={props.task_data.activity_list}
@@ -321,12 +324,12 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
       />
       <main
         className={s.main}
-        style={{
-          overflowY:
-            isMemberListMenuActive || isCalendarActive || isCommentsActive
-              ? "hidden"
-              : "scroll",
-        }}
+        // style={{
+        //   overflowY:
+        //     isMemberListMenuActive || isCalendarActive || isCommentsActive
+        //       ? "hidden"
+        //       : "scroll",
+        // }}
       >
         <section className={s.task}>
           <div className={s.form}>
@@ -395,9 +398,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                   color="rgba(0, 0, 0, 0.08)"
                   icon="/icons/calendar.svg"
                   opacity={1}
-                  onClick={() => {
-                    setIsCalendarActive(!isCalendarActive);
-                  }}
+                  onClick={() => {}}
                 />
                 <CalendarInput
                   show={true}
@@ -490,6 +491,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
               <p className={[s.label, "medium", "md"].join(" ")}>
                 Participants
               </p>
+
               <div className={s.content}>
                 <SquareButton
                   bg_color="rgba(0, 0, 0, 0.08)"
@@ -502,7 +504,15 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                     setIsMemberListMenuActive(true);
                   }}
                 />
-                <ul className={s.list}>
+                <ul
+                  className={[s.list, hide_scroll && s.hide_scroll].join(" ")}
+                  onMouseOver={() => {
+                    setHideScroll(false);
+                  }}
+                  onMouseLeave={() => {
+                    setHideScroll(true);
+                  }}
+                >
                   {props.task_data.assigned_member.map((member, index) => {
                     return (
                       <li
@@ -631,17 +641,44 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 </ul>
               </div>
             </div>
-            <ButtonLarge
-              bg_color="#080726"
-              color="#fff"
-              text="Comments"
-              icon="/icons/comment_white.svg"
-              key={"comment-btn"}
-              onClick={() => {
-                setIsCommentsActive(true);
-              }}
-            />
+            {display_width_ctx < 500 && (
+              <ButtonLarge
+                bg_color="#080726"
+                color="#fff"
+                text="Comments"
+                icon="/icons/comment_white.svg"
+                key={"comment-btn"}
+                onClick={() => {
+                  setIsCommentsActive(true);
+                }}
+              />
+            )}
           </div>
+          {display_width_ctx > 500 && (
+            <div className={s.comment}>
+              <Comments
+                isEmbed
+                chat_list={props.task_data.comments}
+                closeHandler={() => {
+                  setIsCommentsActive(false);
+                }}
+                task_name={props.task_data.title}
+                workspace_name={props.task_data.title}
+                isActive={true}
+                sendComment={(data) => {
+                  task_add_comment_ctx(props.task_data.t_id, {
+                    chat: {
+                      message: data.message,
+                      time: data.time,
+                      username: data.username,
+                    },
+                    u_id: u_id,
+                    w_id: props.task_data.w_id,
+                  });
+                }}
+              />
+            </div>
+          )}
         </section>
       </main>
     </>

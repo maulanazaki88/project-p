@@ -69,7 +69,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
               props.priority === "HIGH"
                 ? "red"
                 : props.priority === "MED"
-                ? "yellow"
+                ? "rgb(245, 221, 97)"
                 : "green",
           }}
         >

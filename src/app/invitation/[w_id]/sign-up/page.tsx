@@ -16,16 +16,10 @@ const InvitationSignUpPage: React.FC = () => {
 
   const currentDate = new Date();
 
-  const [user_data, set_user_data] = React.useState<UserType>({
-    created_at: currentDate,
-    email: "",
-    is_online: 0,
-    password: "",
-    u_id: "",
-    updated_at: currentDate,
-    username: "",
-    workspace_ids: [],
-    workspace_list: [],
+  const [user_data, set_user_data] = React.useState<{email: string, username: string, password: string}>({
+   email: "",
+   username: "",
+   password: ""
   });
 
   const [warning, setWarning] = React.useState<{
@@ -47,47 +41,20 @@ const InvitationSignUpPage: React.FC = () => {
     setButtonDisabled(true);
     const date_time = date_now.withTime();
 
-    const user = {
-      ...user_data,
-      created_at: date_time,
-      updated_at: date_time,
-      u_id: id_generator.user(),
-    };
-
-    const response = await fetch(`/api/create-user`, {
-      body: JSON.stringify(user),
-      headers: { "content-type": "application/json" },
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signup-via-invitation/`, {
       method: "POST",
-    });
+      headers: {
+        "content-type": "application/json"
+      }, 
+      body: JSON.stringify(user_data)
+    })
 
-    const res = await response.json();
-
-    const message = await res.message;
-
-    if ((await message) == "success" && response.status == 200) {
-      console.log(await res);
-      setVerifyId(await res.u_id);
-    } else if ((await message) == "user-exist") {
-      console.log("nooo");
-      console.log(await res);
-      setButtonDisabled(false);
-      setWarning((prev) => {
-        return {
-          ...prev,
-          username: "Sudah ada username dengan nama ini",
-        };
-      });
+    if(response.ok){
+      router.push(response.url)
     } else {
-      console.log("nooo");
-      console.log(await res);
-      // setButtonDisabled(false);
-      setWarning((prev) => {
-        return {
-          ...prev,
-          username: "Gagal. Terjadi kesalahan pada jaringan",
-        };
-      });
+      alert(await response.json())
     }
+  
   };
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

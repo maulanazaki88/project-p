@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
+    height: 100vh;
     padding: 80px 50px 0 50px;
     color: #000;
     font-family: inherit;
@@ -35,7 +36,7 @@
     flex-direction: column;
     font-family: inherit;
     width: 50%;
-    margin-bottom: 30px
+    /* margin-bottom: 30px */
 }
 
 .workspace {
@@ -48,8 +49,8 @@
 
 .todo {
     align-items: flex-start;
-    width: 30%;
-    min-width: 390px;
+    
+    width: 320px;
     margin-right: 20px;
     /* background-color: cadetblue; */
 }
@@ -86,7 +87,7 @@
     width: 100%;
     overflow-x: scroll;
     overflow-y: hidden;
-    height: 380px;
+    height: 350px;
     /* background-color: aqua; */
 
 }
@@ -99,27 +100,33 @@
 
 .list_screen::-webkit-scrollbar-track {
     height: 0.5em;
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 100vw;
     margin-block: 10px;
-
-
 }
 
 .list_screen::-webkit-scrollbar-thumb {
     width: auto;
     border-radius: 100vw;
     background-color: #1c062d;
+    background-color: rgba(0, 0, 0, 0.5);
 }
-
-
-
 
 .list {
     position: relative;
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
+    align-items:center;
     list-style: none;
+    height: 100%;
+    transform: translate(0, 5%);
+    padding-left: 10px;
+}
+
+.list .item:not(:first-child){
+    margin-left: 16px;
+    
 }
 
 .task_list_screen {
@@ -138,7 +145,7 @@
 
 .task_list_screen::-webkit-scrollbar {
     position: absolute;
-    width: 0.5em;
+    width: 0.4em;
 
 }
 
@@ -347,3 +354,10 @@
 
 }
 
+.hide_scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.hide_scroll::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+}

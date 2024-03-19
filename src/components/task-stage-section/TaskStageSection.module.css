@@ -4,8 +4,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 347px;
-    height: 90%;
+    width: 320px;
+    height: 100%;
     overflow-y: hidden;
     overflow-x: hidden;
 
@@ -26,12 +26,12 @@
 
 .list_screen::-webkit-scrollbar {
     position: absolute;
-    width: 0.5em;
+    width: 0.4em;
 
 }
 
 .list_screen::-webkit-scrollbar-track {
-    width: 8px;
+    width: auto;
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 100vw;
     margin-block: 10px;
@@ -110,4 +110,17 @@
         margin-bottom: 30px;
         padding: 10px 30px 10px 30px;
     }
+}
+
+.hide_scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.0);
+}
+
+.hide_scroll::-webkit-scrollbar-track {
+    width: auto;
+    background-color: rgba(0, 0, 0, 0.0);
+    border-radius: 100vw;
+    margin-block: 10px;
+
+
 }

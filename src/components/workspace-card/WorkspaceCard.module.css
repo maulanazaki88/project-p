@@ -4,11 +4,27 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    padding: 25px;
-    width: 280px;
-    height: 356px;
+    padding: 15px;
+    width: 230px;
+    height: calc(356/280 * 230px);
     border-radius: 15px;
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+}
 
+.placeholder {
+    border: 4px dashed rgba(0, 0, 0, 0.2);
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder .txt {
+    position: relative;
+}
+
+.card:hover{
+    transform: translate(0, -5%) scale(1.05);
+    box-shadow: 0px 4px 7px 1px rgba(0, 0, 0, 0.16);
 }
 
 .figure {
@@ -16,7 +32,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 98px;
+    width: 70px;
     height: auto;
     bottom: 87px;
     right: 20px;
@@ -100,7 +116,7 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: space-between;
-        padding: 10px 10px;
+        padding: 10px;
         width: 250px;
         height: calc(5/4 * 250px);
         border-radius: 15px;

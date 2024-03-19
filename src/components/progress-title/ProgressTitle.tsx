@@ -17,13 +17,21 @@ interface ProgressTitleProps {
 const ProgressTitle: React.FC<ProgressTitleProps> = (props) => {
   return (
     <div className={s.controler}>
-      <div className={s.bar} style={{ backgroundColor: props.bg_color }}>
+      <div
+        className={s.bar}
+        style={{
+          backgroundColor: props.bg_color,
+          borderTop: `4px solid ${props.bg_color_accent}`,
+          color: props.color
+        }}
+      >
         <h3 className={[s.title, "md", "medium"].join(" ")}>{props.title}</h3>
         <div
           className={s.count}
           style={{
-            color: props.bg_color,
-            backgroundColor: props.bg_color_accent,
+            color: props.color,
+            backgroundColor: props.bg_color,
+            border: `2px solid rgba(0, 0, 0, 0.2)`,
           }}
         >
           <span className={[s.text, "sm", "medium"].join(" ")}>

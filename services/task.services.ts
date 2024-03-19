@@ -1,6 +1,6 @@
 import { TaskType } from "@/type";
 import { TaskModel } from "../model/task.model";
-import { DateFormater } from "@/app/utils/DateFormater";
+import { DateFormater } from "@/utils/DateFormater";
 
 export const createTask = async (data: TaskType) => {
   try {
@@ -177,5 +177,17 @@ export const deleteTask = async (t_id: string) => {
     }
   } catch (error: any) {
     console.error("Error deleting task: ", error.message);
+  }
+};
+
+export const getUserAllTask = async (u_id: string) => {
+  try {
+    const tasks = await TaskModel.find({ "assigned_member.u_id": u_id });
+
+    if (tasks) {
+      return tasks;
+    }
+  } catch (error: any) {
+    console.error("Error fetching all task from user: ", error.message);
   }
 };

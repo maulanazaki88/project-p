@@ -10,6 +10,7 @@ interface TaskStageSectionProps {
   title: string;
   status: ProgressStatusType;
   members: { username: string; u_id: string }[];
+  color_accent: string
 }
 
 export type SortType =
@@ -33,6 +34,8 @@ const TaskStageSection: React.FC<TaskStageSectionProps> = (props) => {
   const [sortType, setSortType] = React.useState<"ASCEND" | "DESCEND">(
     "ASCEND"
   );
+
+  const [hide_scroll, setHideScroll] = React.useState<boolean>(true);
 
   const filterFunctions = (type: FilterType) => {
     let fn: (task: TaskType) => boolean;
@@ -145,44 +148,49 @@ const TaskStageSection: React.FC<TaskStageSectionProps> = (props) => {
     }
   }, [props, sort, filter, byAssigned, sortType]);
 
-  const ListViews =
-    props.task_list ? (
-      props.task_list.map((task, index) => {
-        return (
-          <li className={s.task} key={`next-up-${index}`}>
-            <TaskCard
-              assigned_member={task.assigned_member}
-              comments_count={task.comments.length}
-              deadline={task.deadline}
-              description={task.description}
-              name={task.title}
-              priority={task.priority}
-              id={task.t_id}
-              w_id={task.t_id}
-            />
-          </li>
-        );
-      })
-    ) : (
-      <span className={[s.no_task, "sm", "regular"].join(" ")}>
-        Currently no task
-      </span>
-    );
+  const ListViews = props.task_list ? (
+    props.task_list.map((task, index) => {
+      return (
+        <li className={s.task} key={`next-up-${index}`}>
+          <TaskCard
+            assigned_member={task.assigned_member}
+            comments_count={task.comments.length}
+            deadline={task.deadline}
+            description={task.description}
+            name={task.title}
+            priority={task.priority}
+            id={task.t_id}
+            w_id={task.t_id}
+          />
+        </li>
+      );
+    })
+  ) : (
+    <span className={[s.no_task, "sm", "regular"].join(" ")}>
+      Currently no task
+    </span>
+  );
 
   return (
     <section className={s.stage}>
       <ProgressTitle
-        bg_color="#080726"
-        bg_color_accent="#BBE0EF"
-        color="#fff"
-        count={
-          props.task_list ? props.task_list.length : 0
-        }
+        bg_color="#fff"
+        bg_color_accent={props.color_accent}
+        color="#080726"
+        count={props.task_list ? props.task_list.length : 0}
         title={props.title}
         type={props.status}
         newTaskHandler={props.newTask}
       />
-      <div className={s.list_screen}>
+      <div
+        onMouseLeave={() => {
+          setHideScroll(true);
+        }}
+        onMouseOver={() => {
+          setHideScroll(false);
+        }}
+        className={[s.list_screen, hide_scroll && s.hide_scroll].join(" ")}
+      >
         <ul className={s.task_list}>{ListViews}</ul>
       </div>
     </section>

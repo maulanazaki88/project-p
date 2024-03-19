@@ -15,16 +15,9 @@ const InvitationSignInPage: React.FC = () => {
 
   const w_id = pathname.split("/")[2];
 
-  const [data, setData] = React.useState<UserType>({
-    created_at: currentDate,
+  const [data, setData] = React.useState<{ email: string; password: string }>({
     email: "",
-    is_online: 0,
     password: "",
-    u_id: "",
-    updated_at: currentDate,
-    username: "",
-    workspace_ids: [],
-    workspace_list: [],
   });
 
   const [warning, setWarning] = React.useState<{
@@ -49,22 +42,22 @@ const InvitationSignInPage: React.FC = () => {
   const submitHandler: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(`/api/sign-in`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const json = await response.json();
-
-    console.log(await json);
-
-    if (await json) {
-      if (json.message === "success") {
-        setVerifyId(json.u_id);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/login-via-invitation`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({...data, w_id: w_id}),
       }
+    );
+
+    if (res.ok) {
+      router.push(res.url);
+    } else {
+      const json = await res.json()
+      alert(json.message);
     }
   };
 

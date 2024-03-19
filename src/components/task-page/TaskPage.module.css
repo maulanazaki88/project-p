@@ -2,23 +2,33 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100vw;
     height: auto;
-    padding: 0 20px;
     padding-top: 100px;
     padding-bottom: 30px;
     overflow-x: hidden;
+    padding-left: 56px;
 
 }
 
-.form {
-    position: relative;
+.comment {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 50%;
+    position: relative;
+    height: 100%;
+}
+
+.form {
+    padding: 0 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 35%;
     height: auto;
     margin-right: 30px;
 }
@@ -31,6 +41,7 @@
     justify-content: flex-start;
     width: 50%;
     height: auto;
+    margin-right: 20px;
 }
 
 .task {
@@ -41,10 +52,11 @@
     justify-content: center;
     width: 100%;
     height: 100%;
+    padding: 0 20px;
 
 }
 
-.name{
+.name {
     position: relative;
     width: 100%;
     display: flex;
@@ -55,7 +67,7 @@
 
 }
 
-.name_inp{
+.name_inp {
     position: relative;
     width: 100%;
     background-color: transparent;
@@ -86,11 +98,40 @@
     overflow-x: scroll;
 }
 
+.participants .content {
+    overflow-x: hidden;
+}
+
+.participants .list {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    height: 90px;
+    width: 360px;
+}
+
+.participants .list::-webkit-scrollbar {
+    position: absolute;
+    height: 0.4em;
+
+}
+
+.participants .list::-webkit-scrollbar-track {
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 100vw;
+    margin-block: 10px;
+}
+
+.participants .list::-webkit-scrollbar-thumb {
+    height: auto;
+    border-radius: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+}
 
 .content::-webkit-scrollbar {
     position: absolute;
     height: 0.5em;
-    
+
 }
 
 .content::-webkit-scrollbar-track {
@@ -109,11 +150,11 @@
 }
 
 .content:hover::-webkit-scrollbar-thumb {
-    
+
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.deadline > .content {
+.deadline>.content {
     flex-direction: row;
     align-items: center;
     font-family: inherit;
@@ -146,7 +187,7 @@
     margin-left: 0;
 }
 
-.date{
+.date {
     color: #1C062D;
     margin-left: 20px;
 }
@@ -190,11 +231,12 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         justify-content: flex-start;
         width: 100%;
         height: 100%;
         padding: 0 15px;
+
 
     }
 
@@ -278,4 +320,8 @@
     }
 
 
+}
+
+.hide_scroll::-webkit-scrollbar-track, .hide_scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0) !important;
 }

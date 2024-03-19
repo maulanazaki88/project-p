@@ -9,6 +9,7 @@ export async function PUT(
   let body = await req.json();
 
   try {
+    //
     const response = await addMemberWaitingList(w_id, body);
     return NextResponse.json(response);
   } catch (error) {

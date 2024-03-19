@@ -1,6 +1,6 @@
 import { TaskType, WorkspaceType } from "@/type";
 import { WorkspaceModel } from "../model/workspace.model";
-import { DateFormater } from "@/app/utils/DateFormater";
+import { DateFormater } from "@/utils/DateFormater";
 import { NotificationCardProps } from "@/components/notification-card/NotificationCard";
 
 export const createWorkspace = async (data: WorkspaceType) => {
@@ -338,5 +338,19 @@ export const deleteWorkspace = async (w_id: string) => {
     }
   } catch (error: any) {
     console.error("Error deleting workspace: ", error.message);
+  }
+};
+
+export const getUserAllWorkspace = async (u_id: string) => {
+  try {
+    const workspaces = await WorkspaceModel.find({ "member_list.u_id": u_id });
+    if (workspaces) {
+      return workspaces;
+    }
+  } catch (error: any) {
+    console.error(
+      `Error fetching all workspace from user ${u_id} :`,
+      error.message
+    );
   }
 };

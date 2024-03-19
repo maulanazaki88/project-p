@@ -5,26 +5,26 @@ import React from "react";
 import ButtonLarge from "../button-large/ButtonLarge";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Context, { ContextType } from "@/context/Store";
-import { usePathname } from "next/navigation";
+// import Context, { ContextType } from "@/context/Store";
+// import { usePathname } from "next/navigation";
 
 const ConfirmedInvitationPage: React.FC<{ data: UserType }> = (props) => {
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
-  const w_id = pathname.split("/")[2];
+  // const w_id = pathname.split("/")[2];
 
-  const { user_verify_add_worskpace_ctx } = React.useContext(
-    Context
-  ) as ContextType;
+  // const { user_verify_add_worskpace_ctx } = React.useContext(
+  //   Context
+  // ) as ContextType;
 
   const goHome = () => {
     router.push(`/home/${props.data.u_id}`);
   };
 
-  React.useEffect(() => {
-    user_verify_add_worskpace_ctx(props.data.u_id, props.data.username, w_id);
-  }, []);
+  // React.useEffect(() => {
+  //   user_verify_add_worskpace_ctx(props.data.u_id, props.data.username, w_id);
+  // }, []);
 
   return (
     <main className={s.main}>

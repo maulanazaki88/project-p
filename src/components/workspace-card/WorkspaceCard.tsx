@@ -45,6 +45,8 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
       onClick={() => {
         if (props.isEmpty) {
           goToWorkspaceSetup();
+        } else {
+          goToWorkspace(props.id)
         }
       }}
     >

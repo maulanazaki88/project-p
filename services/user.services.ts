@@ -1,6 +1,6 @@
 import { UserModel } from "../model/user.model";
 import { UserType } from "@/type";
-import { DateFormater } from "@/app/utils/DateFormater";
+import { DateFormater } from "@/utils/DateFormater";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
 
@@ -13,16 +13,25 @@ export const login = async (data: { email: string; password: string }) => {
     })) as UserType;
 
     if (record && (await bcrypt.compare(data.password, record.password))) {
-      return { message: "success", u_id: record.u_id };
+      return {
+        message: "success",
+        u_id: record.u_id,
+        email: record.email,
+        username: record.username,
+      };
     } else {
-      return { message: "failed", u_id: "" };
+      return { message: "failed", u_id: "", email: "", username: "" };
     }
   } catch (error: any) {
     console.error("Login error: ", error.message);
   }
 };
 
-export const createUser = async (data: UserType) => {
+export const createUser = async (data: {
+  username: string;
+  email: string;
+  password: string;
+}) => {
   try {
     const exist = await UserModel.exists({ email: data.email });
 
@@ -41,18 +50,27 @@ export const createUser = async (data: UserType) => {
         u_id: u_id,
         password: hashed_password,
         email: data.email.toLocaleLowerCase(),
+        created_at: new Date(),
+        is_online: 0,
+        updated_at: new Date(),
+        workspace_ids: [],
+        workspace_list: [],
       } as UserType)) as UserType;
 
       if (response) {
         return {
           exist: false,
           u_id: response.u_id,
+          username: response.username,
+          email: response.email,
           message: "success",
         };
       } else {
         return {
           exist: false,
           u_id: "",
+          username: "",
+          email: "",
           message: "failed",
         };
       }
@@ -158,7 +176,7 @@ export const userDeleteWorkspace = async (u_id: string, w_id: string) => {
     const response = await UserModel.updateOne(
       { u_id: u_id },
       {
-        $set: { updated_at: currentDate},
+        $set: { updated_at: currentDate },
         $pull: { workspace_ids: w_id },
       }
     );
