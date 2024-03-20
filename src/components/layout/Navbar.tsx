@@ -1,13 +1,14 @@
-"use client"
+"use client";
 import s from "./Navbar.module.css";
 import React from "react";
 import Image from "next/image";
 import RoundButton from "../round-button/RoundButton";
 import UsernameButton from "../username-button/UsernameButton";
 import Context, { ContextType } from "@/context/Store";
+import { usePathname } from "next/navigation";
 
 interface NavbarProps {
-  notificationHandler: () => void;
+  // notificationHandler: () => void;
   calendarHandler: () => void;
   logoutHandler: () => void;
   showLogoutPopup: boolean;
@@ -15,6 +16,8 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = (props) => {
+  const pathname = usePathname();
+  const w_id = pathname.split("/")[4];
   const { user_data_ctx } = React.useContext(Context) as ContextType;
 
   const username = React.useMemo(() => {
@@ -24,11 +27,11 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   }, [user_data_ctx]);
 
   return (
-    <header className={s.navbar}>
+    <header className={[s.navbar, !w_id && s.home].join(" ")}>
       <div className={s.left}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          enable-background="new 0 0 48 48"
+          enableBackground="new 0 0 48 48"
           viewBox="0 0 48 48"
           width="30"
           height="30"
@@ -52,12 +55,12 @@ const Navbar: React.FC<NavbarProps> = (props) => {
         </svg>
       </div>
       <div className={s.right}>
-        <RoundButton
+        {/* <RoundButton
           color="rgba(0, 0, 0, 0.08)"
           icon="/icons/notification.svg"
           opacity={1}
           onClick={props.notificationHandler}
-        />
+        /> */}
         <RoundButton
           color="rgba(0, 0, 0, 0.08)"
           icon="/icons/calendar.svg"

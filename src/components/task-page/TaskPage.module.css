@@ -4,9 +4,9 @@
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
-    height: auto;
-    padding-top: 100px;
-    padding-bottom: 30px;
+    height: 100vh;
+    padding-top: 70px;
+    padding-bottom: 10px;
     overflow-x: hidden;
     padding-left: 56px;
 
@@ -30,7 +30,7 @@
     justify-content: flex-start;
     width: 35%;
     height: auto;
-    margin-right: 30px;
+    margin-right: 20px;
 }
 
 .radio {
@@ -53,6 +53,7 @@
     width: 100%;
     height: 100%;
     padding: 0 20px;
+    padding-top: 20px;
 
 }
 
@@ -179,7 +180,7 @@
 
 .item {
     position: relative;
-    margin-left: 20px;
+    margin-left: 10px;
 
 }
 

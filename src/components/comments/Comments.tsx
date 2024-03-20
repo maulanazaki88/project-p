@@ -24,9 +24,28 @@ const Comments: React.FC<CommentsProps> = (props) => {
   const ctx = React.useContext(Context);
   const date_now = useDateNow();
 
+  const screenRef = React.useRef<HTMLDivElement>(null);
+
   const user_data = ctx?.user_data_ctx;
 
   const [comment_val, set_comment_val] = React.useState<string>("");
+
+  React.useEffect(() => {
+    const screen = screenRef.current;
+
+    if (screen) {
+      screen.scrollTop = screen.scrollHeight * 3;
+    }
+  }, []);
+
+  const setScrollToBottom = () => {
+    const screen = screenRef.current;
+    if (screen) {
+      screen.scrollTop = screen.scrollHeight * 3;
+      console.log("to bottom")
+      set_comment_val("")
+    }
+  };
 
   return (
     <div
@@ -35,8 +54,10 @@ const Comments: React.FC<CommentsProps> = (props) => {
         translate: props.isActive ? "0 0" : "100% 0",
       }}
     >
-      {!props.isEmbed && <MenuNavbar closeHandler={props.closeHandler} title={props.task_name} />}
-      <div className={s.comment_screen}>
+      {!props.isEmbed && (
+        <MenuNavbar closeHandler={props.closeHandler} title={props.task_name} />
+      )}
+      <div className={s.comment_screen} ref={screenRef}>
         <ul className={s.list}>
           {props.chat_list.map((chat, index) => {
             return (
@@ -71,13 +92,15 @@ const Comments: React.FC<CommentsProps> = (props) => {
           color="#79C89F"
           icon="/icons/plane_white.svg"
           opacity={1}
-          onClick={() =>
+          onClick={() => {
+            setScrollToBottom();
             props.sendComment({
               message: comment_val,
               username: user_data?.username ? user_data.username : "-",
               time: date_now.withTime(),
-            })
-          }
+            });
+            
+          }}
           scale={1}
         />
       </div>

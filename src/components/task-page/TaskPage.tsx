@@ -28,6 +28,7 @@ import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
 import InputSmall from "../input-small/InputSmall";
 import FormMenu from "../from-menu/FormMenu";
 import { DateFormater } from "@/utils/DateFormater";
+import TaskControl from "./TaskControl";
 
 interface TaskPageProps {
   task_data: TaskType;
@@ -232,6 +233,8 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     }
   }, [deletePromptActive, isMemberListMenuActive]);
 
+  console.log("created at", props.task_data.created_at);
+
   return (
     <>
       <div
@@ -331,6 +334,12 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         //       : "scroll",
         // }}
       >
+        <TaskControl
+          created_on={new Date(props.task_data.created_at)}
+          workspace_name={props.task_data.workspace_name}
+          showDeleteModalHandler={() => {}}
+          showShareModalHandler={() => {}}
+        />
         <section className={s.task}>
           <div className={s.form}>
             <div className={[s.name, "medium", "big"].join(" ")}>

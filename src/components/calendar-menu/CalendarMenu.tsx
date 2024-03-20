@@ -87,8 +87,11 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
   return (
     <div
       className={s.menu}
-      style={{ translate: props.isActive ? "0 0" : "100% 0" }}
+      style={{ translate: props.isActive ? "-50% -50%" : "-50% 100%" }}
     >
+      <div className={s.header} >
+        <p className={[s.title, "big", "medium"].join(" ")} >Calendar</p>
+      </div>
       <ul className={s.calendar}>
         {calendar.available_month_number.map((c, index) => {
           const isEmpty = !calendar_list?.some(
