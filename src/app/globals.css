@@ -134,3 +134,7 @@ a {
     font-size: 12px;
   }
 }
+
+button, div, a {
+  -webkit-tap-highlight-color: transparent;
+}

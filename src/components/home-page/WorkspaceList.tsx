@@ -31,6 +31,13 @@ const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
       onMouseOver={() => {
         setHideWorkspaceListScroll(false);
       }}
+      onTouchMove={() => {
+        setHideWorkspaceListScroll(false);
+      }}
+      onTouchEnd={() => {
+        setHideWorkspaceListScroll(true);
+      }}
+      
     >
       <ul className={s.list}>
         {props.workspace_list

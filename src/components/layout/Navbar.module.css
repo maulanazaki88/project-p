@@ -21,6 +21,13 @@
 
 .left{
     position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.left *:not(:first-child) {
+    margin-left: 10px;
 }
 
 .right{

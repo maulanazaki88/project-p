@@ -11,7 +11,6 @@ interface AvatarProps {
 
 const Avatar: React.FC<AvatarProps> = (props) => {
 
-  console.log(props.username)
 
   const render_name = props.username.toUpperCase()
 

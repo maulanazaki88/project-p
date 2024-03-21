@@ -14,6 +14,8 @@ import FormModal from "../modal-form/FormModal";
 import InvitationMenu from "../invitation-menu/InvitationMenu";
 
 const Layout = (props: any) => {
+  const { display_width_ctx } = React.useContext(Context) as ContextType;
+
   const pathname = usePathname();
   const router = useRouter();
 
@@ -35,13 +37,15 @@ const Layout = (props: any) => {
   const [show_invitation_menu, setShowInvitationMenu] =
     React.useState<boolean>(false);
 
+  const [show_sidebar, setShowSidebar] = React.useState<boolean>(false);
+
   const backdropAction = () => {
     setShowCalendarMenu(false);
     setShowMemberList(false);
     setShowLogout(false);
     setActiveBackdrop(false);
     setShowWaitingList(false);
-    setShowInvitationMenu(false)
+    setShowInvitationMenu(false);
   };
 
   React.useEffect(() => {
@@ -80,7 +84,7 @@ const Layout = (props: any) => {
       case "Delete Space":
         break;
       case "Share":
-        setShowInvitationMenu(true)
+        setShowInvitationMenu(true);
         break;
       default:
         break;
@@ -96,6 +100,7 @@ const Layout = (props: any) => {
         }}
       />
       <Navbar
+      toggleSidebar={() => setShowSidebar(!show_sidebar)}
         calendarHandler={() => {
           setShowCalendarMenu(true);
           setActiveBackdrop(true);
@@ -109,7 +114,11 @@ const Layout = (props: any) => {
           setShowLogout(!show_logout);
         }}
       />
-      <LayoutSidebar clickHandler={sidebarClickHandler} />
+      <LayoutSidebar
+        clickHandler={sidebarClickHandler}
+        alwaysShow={display_width_ctx && display_width_ctx > 500 ? true : false}
+        show={show_sidebar}
+      />
       <CalendarMenu
         closeHandler={() => {
           backdropAction();

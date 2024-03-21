@@ -70,15 +70,4 @@
     width: 100%;
   }
 
-  .task_list_screen::-webkit-scrollbar,
-  .task_list_screen::-webkit-scrollbar-track,
-  .task_list_screen::-webkit-scrollbar-thumb,
-  .hide_scroll::-webkit-scrollbar-thumb,
-  .hide_scroll::-webkit-scrollbar-track {
-    position: unset;
-    width: unset;
-    background-color: unset;
-    border-radius: unset;
-    margin-block: unset;
-  }
 }

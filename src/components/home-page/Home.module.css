@@ -26,6 +26,7 @@
   height: auto;
   margin-top: 30px;
   max-width: 1357px;
+  min-width: 1266px;
   /* background-color: purple; */
 }
 
@@ -190,13 +191,20 @@
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 920px) {
+  .dashboard {
+    scale: 0.5;
+  }
+}
+
+@media screen and (max-width: 640px) {
   .main {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
+    max-width: 500px;
     padding: 80px 15px 0 15px;
     color: #000;
     font-family: inherit;
@@ -216,6 +224,7 @@
     font-family: inherit;
     width: 100%;
     scale: 1;
+    min-width: 320px;
   }
 
   .workspace,

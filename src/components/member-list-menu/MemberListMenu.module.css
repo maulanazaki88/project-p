@@ -85,7 +85,7 @@
     rotate: 45deg;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 500px) {
     .menu{
         position: fixed;
         display: flex;
@@ -93,6 +93,7 @@
         align-items: center;
         justify-content: flex-start;
         width: 100vw;
+        max-width: 425px;
         height: 60vh;
         border-radius: 15px;
         background-color: #fff;

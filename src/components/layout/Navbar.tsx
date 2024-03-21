@@ -14,6 +14,7 @@ interface NavbarProps {
   logoutHandler: () => void;
   showLogoutPopup: boolean;
   showLogoutPopupHandler: () => void;
+  toggleSidebar: () => void
 }
 
 const Navbar: React.FC<NavbarProps> = (props) => {
@@ -31,6 +32,14 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   return (
     <header className={[s.navbar, !isWorkspace && s.home].join(" ")}>
       <div className={s.left}>
+        <RoundButton 
+          color="transparent"
+          icon="/icons/dot-menu.svg"
+          opacity={1}
+          type="button"
+          scale={1.5}
+          onClick={() => props.toggleSidebar()}
+        />
         <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

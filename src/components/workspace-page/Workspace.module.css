@@ -76,6 +76,7 @@
         height: 100vh;
         background-color: #fff;
         font-family: inherit;
+        padding-left: 0px;
     }
     
     .task_board {

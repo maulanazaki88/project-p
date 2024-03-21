@@ -34,6 +34,12 @@ const TaskList: React.FC<TaskListProps> = (props) => {
         onMouseOver={() => {
           setHideTaskListScroll(false);
         }}
+        onTouchMove={() => {
+          setHideTaskListScroll(false);
+        }}
+        onTouchEnd={() => {
+          setHideTaskListScroll(true);
+        }}
       >
         <ul className={s.task_list}>
           {props.task_list

@@ -15,10 +15,16 @@ export type MenuType =
 
 interface LayoutSidebarProps {
   clickHandler: (type: MenuType) => void;
+  alwaysShow?: boolean;
+  show: boolean;
 }
 
 const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
   const { user_workspaces_ctx } = React.useContext(Context) as ContextType;
+
+  console.log('alwaysShow', props.alwaysShow)
+
+  console.log('show', props.show)
 
   const pathname = usePathname();
 
@@ -33,7 +39,12 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
   }, [user_workspaces_ctx]);
   if (pathname.includes("/workspace/")) {
     return (
-      <div className={s.sidebar}>
+      <div
+        className={s.sidebar}
+        style={{
+          left: props.alwaysShow || props.show ? "0" : "-100%",
+        }}
+      >
         <div className={s.segment}>
           <ul className={s.list}>
             <li className={s.item}>

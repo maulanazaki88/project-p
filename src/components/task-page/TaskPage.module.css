@@ -205,9 +205,10 @@
         justify-content: center;
         width: 100vw;
         height: auto;
-        padding-top: 80px;
+        padding-top: 68px;
         padding-bottom: 30px;
         overflow-x: hidden;
+        padding-left: 0px;
 
     }
 
@@ -219,6 +220,10 @@
         justify-content: flex-start;
         width: 100%;
         height: auto;
+        padding: 0 20px;
+        max-width: 425px;
+        height: auto;
+        margin-right: 0px;
     }
 
     .radio {
@@ -228,14 +233,17 @@
         align-items: center;
         justify-content: flex-start;
         width: 100%;
+        max-width: 425px;
         height: auto;
+        margin-right: 0px;
+        padding: 0 20px;
     }
 
     .task {
         position: relative;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         justify-content: flex-start;
         width: 100%;
         height: 100%;
