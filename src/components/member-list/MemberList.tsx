@@ -6,37 +6,107 @@ import RoundButton from "../round-button/RoundButton";
 import ButtonLarge from "../button-large/ButtonLarge";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import Context, { ContextType } from "@/context/Store";
+import { WorkspaceType } from "@/type";
 
 interface MemberListProps {
-  list: { username: string; u_id: string }[];
-  kickHandler: (data: { u_id: string; w_id: string; username: string }) => void;
-  workspace_name: string;
   closeHandler: () => void;
   show: boolean;
-  w_id: string;
   showWaitingListHandler: () => void;
   showInvitationMenuHandler: () => void;
 }
 
 const MemberList: React.FC<MemberListProps> = (props) => {
+  const {
+    user_workspaces_ctx,
+    workspace_refresh_member,
+    owner_kick_user_workspace,
+  } = React.useContext(Context) as ContextType;
+
   const pathname = usePathname();
+
+  const w_id = pathname.split("/")[4];
+
   const router = useRouter();
 
   const u_id = pathname.split("/")[2];
 
+  const workspace = React.useMemo(() => {
+    const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
+    return workspace;
+  }, [user_workspaces_ctx]);
+
+  const workspace_name = React.useMemo(() => {
+    const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
+    if (workspace) {
+      return workspace.name;
+    } else {
+      return "~";
+    }
+  }, [user_workspaces_ctx]);
+
+  React.useEffect(() => {
+    //fetch
+    if (props.show) {
+      fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-workspace-member-list/${w_id}`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+          },
+          cache: "no-cache",
+        }
+      )
+        .then((res) => res)
+        .then((data) => data.json())
+        .then((data) => {
+          workspace_refresh_member(w_id, {
+            action: "REFRESH",
+            member_list: data,
+            u_id: u_id,
+          });
+        })
+        .catch((e: any) => {
+          console.log(e);
+          alert(e.message);
+        });
+    }
+  }, [props]);
+
+  const kickHandler = async (u_id: string, w_id: string, kick_id: string) => {
+    const data = await owner_kick_user_workspace(u_id, w_id, kick_id);
+
+    const updated_count = await data.updated_count;
+
+    if (updated_count && updated_count > 0) {
+      console.log("Yeyyyy");
+    }
+  };
+
   return (
     <div
       className={s.menu}
-      style={{ translate: props.show ? "0 0" : "100vw 0" }}
+      style={{ translate: props.show ? "-50% -50%" : "-50% 100%" }}
     >
-      <MenuNavbar
-        title={props.workspace_name}
-        closeHandler={props.closeHandler}
+      {/* <MenuNavbar title={workspace_nam  e} closeHandler={props.closeHandler} /> */}
+      <RoundButton
+        color="#fff"
+        icon={"/icons/close_black.svg"}
+        opacity={1}
+        onClick={() => {props.closeHandler()}}
+        scale={1.2}
+        style={{
+          position: "absolute",
+          top: "2%",
+          right: "2%",
+          zIndex: 99
+        }}
       />
+      <h3 className={[s.title, "medium", "md"].join(" ")}>Daftar Anggota</h3>
       <div className={s.ctn_screen}>
-        <h3 className={[s.title, "medium", "md"].join(" ")}>Daftar Anggota</h3>
         <ul className={s.list}>
-          {props.list.map((member, index) => {
+          {workspace?.member_list.map((member, index) => {
             if (member.u_id === u_id) {
               return (
                 <li
@@ -57,11 +127,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
                     icon="/icons/plus_white.svg"
                     opacity={1}
                     onClick={() => {
-                      props.kickHandler({
-                        u_id: member.u_id,
-                        username: member.username,
-                        w_id: props.w_id,
-                      });
+                      kickHandler(u_id, w_id, member.u_id);
                     }}
                     rotate={45}
                   />

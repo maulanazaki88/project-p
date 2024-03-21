@@ -16,6 +16,8 @@ import { usePathname } from "next/navigation";
 import { Poppins } from "next/font/google";
 import { DateFormater } from "@/utils/DateFormater";
 import WorkspaceCardPlaceHolder from "../workspace-card/WorkspaceCardPlaceHolder";
+import WorkspaceList from "./WorkspaceList";
+import TaskList from "./TaskList";
 
 interface HomePageProps {
   data: UserType;
@@ -42,6 +44,8 @@ const HomePage: React.FC<HomePageProps> = (props) => {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const u_id = pathname.split("/")[2];
 
   const [searchInput, setSearchInput] = React.useState<string>("");
   const [calendarMenuActive, setCalendarMenuActive] =
@@ -216,70 +220,10 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                 />
               </div>
             </div>
-            {workspace_list.length > 0 ? (
-              <div
-                className={[
-                  s.list_screen,
-                  hide_workspace_list_scroll && s.hide_scroll,
-                ].join(" ")}
-                onMouseLeave={() => {
-                  setHideWorkspaceListScroll(true);
-                }}
-                onMouseOver={() => {
-                  setHideWorkspaceListScroll(false);
-                }}
-              >
-                <ul className={s.list}>
-                  {workspace_list
-                    .filter(
-                      (workspace) =>
-                        workspace.name.toLowerCase().includes(searchInput) ||
-                        workspace.description
-                          .toLowerCase()
-                          .includes(searchInput)
-                    )
-                    .map((workspace, index) => {
-                      return (
-                        <li
-                          className={s.item}
-                          key={`workspace-item-${index}`}
-                          // style={{ marginLeft: index > 0 ? "16px" : "0px" }}
-                        >
-                          <WorkspaceCard
-                            description={workspace.description}
-                            img={"/ilust/team_1.svg"}
-                            members={workspace.member_list}
-                            name={workspace.name}
-                            key={`workspace-${index}`}
-                            bg_color={
-                              color_list[
-                                (index + color_list.length) % color_list.length
-                              ]
-                            }
-                            id={workspace.w_id}
-                          />
-                        </li>
-                      );
-                    })}
-                  {workspace_list.length <= 3 && (
-                    <li className={s.item} key={`workspace-item-placeholder`}>
-                      <WorkspaceCardPlaceHolder
-                        createWorkspaceHandler={() => {
-                          router.push(`${pathname}/workspace-setup`);
-                        }}
-                      />
-                    </li>
-                  )}
-                  <div className={s.white_blur}></div>
-                </ul>
-              </div>
-            ) : (
-              <WorkspaceCardPlaceHolder
-                createWorkspaceHandler={() => {
-                  router.push(`${pathname}/workspace-setup`);
-                }}
-              />
-            )}
+            <WorkspaceList
+              searchInput={searchInput}
+              workspace_list={workspace_list}
+            />
           </div>
           <div className={s.todo}>
             <div className={s.heading}>
@@ -292,56 +236,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                 </p>
               </div>
             </div>
-            {task_list.length > 0 ? (
-              <div
-                className={[
-                  s.task_list_screen,
-                  hide_task_list_scroll && s.hide_scroll,
-                ].join(" ")}
-                onMouseLeave={() => {
-                  setHideTaskListScroll(true);
-                }}
-                onMouseOver={() => {
-                  setHideTaskListScroll(false);
-                }}
-              >
-                <ul className={s.task_list}>
-                  {task_list
-                    ?.filter(
-                      (task) =>
-                        task.title.toLowerCase().includes(searchInput) ||
-                        task.description.toLowerCase().includes(searchInput)
-                    )
-                    .map((task, index) => {
-                      if (
-                        task.assigned_member.some(
-                          (m) => m.u_id === props.data.u_id
-                        )
-                      ) {
-                        return (
-                          <li className={s.item} key={`user-task-${index}`}>
-                            <TaskCard
-                              assigned_member={task.assigned_member}
-                              comments_count={task.comments.length}
-                              deadline={task.deadline}
-                              description={task.description}
-                              name={task.title}
-                              priority={task.priority}
-                              w_id={task.w_id}
-                              id={task.t_id}
-                            />
-                          </li>
-                        );
-                      }
-                    })}
-                </ul>
-              </div>
-            ) : (
-              <span className={[s.empty_task, "light", "md"].join(" ")}>
-                {" "}
-                Currently you didn&apos;t have any task{" "}
-              </span>
-            )}
+            <TaskList searchInput={searchInput} task_list={task_list} />
           </div>
         </div>
       </main>

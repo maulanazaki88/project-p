@@ -28,10 +28,13 @@ const Task: React.FC<{
         user_data_handler_ctx(data);
         return;
       })
-      .catch((e) => console.log(e));
+      .catch((e: any) => {
+        console.log(e);
+        alert(e.message);
+      });
   }, []);
 
-  const currentDate = new Date()
+  const currentDate = new Date();
 
   const loading_task: TaskType = {
     activity_list: [],

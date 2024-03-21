@@ -1,0 +1,109 @@
+.list_screen {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  height: 350px;
+  /* background-color: aqua; */
+}
+
+.list_screen::-webkit-scrollbar {
+  position: absolute;
+  height: 0.5em;
+}
+
+.list_screen::-webkit-scrollbar-track {
+  height: 0.5em;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 100vw;
+  margin-block: 10px;
+}
+
+.list_screen::-webkit-scrollbar-thumb {
+  width: auto;
+  border-radius: 100vw;
+  background-color: #1c062d;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.list {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  list-style: none;
+  height: 100%;
+  transform: translate(0, 5%);
+  padding-left: 10px;
+}
+
+.list .item:not(:first-child) {
+  margin-left: 16px;
+}
+
+.white_blur {
+  position: sticky;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  width: 100px;
+  height: 500px;
+  right: 0;
+  translate: 10px 0;
+}
+
+.hide_scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.hide_scroll::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+@media screen and (max-width: 500px) {
+  .list_screen {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 250px;
+    overflow-x: scroll;
+  }
+
+  .list {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+  }
+
+  .white_blur {
+    position: sticky;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    width: 50px;
+    height: 500px;
+    right: 0;
+    translate: 10px 0;
+  }
+
+  .list_screen::-webkit-scrollbar, .list_screen::-webkit-scrollbar-track, .list_screen::-webkit-scrollbar-thumb, .hide_scroll::-webkit-scrollbar-thumb, .hide_scroll::-webkit-scrollbar-track {
+    position: unset;
+    height: unset;
+    background-color: unset;
+    border-radius: unset;
+    margin-block: unset;
+  }
+}

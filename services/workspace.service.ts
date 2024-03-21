@@ -249,6 +249,7 @@ export const accWaitingList = async (
   w_id: string,
   user: { u_id: string; username: string }
 ) => {
+  console.log("w_id & user", w_id)
   try {
     const currentDate = new Date();
 
@@ -256,12 +257,13 @@ export const accWaitingList = async (
       { w_id: w_id },
       {
         $set: { updated_at: currentDate },
-        $push: { member_list: user.u_id },
-        $pull: { waiting_list: user.u_id },
+        $push: { member_list: user },
+        $pull: { waiting_list: { u_id: user.u_id } },
       }
     );
 
     if (response) {
+      console.log("acc-waiting-list-res", response);
       return {
         updated_count: response.modifiedCount,
         w_id: w_id,
@@ -352,5 +354,37 @@ export const getUserAllWorkspace = async (u_id: string) => {
       `Error fetching all workspace from user ${u_id} :`,
       error.message
     );
+  }
+};
+
+export const getWorkspaceMemberList = async (w_id: string) => {
+  try {
+    const workspace = (await WorkspaceModel.findOne({
+      w_id: w_id,
+    })) as WorkspaceType;
+
+    if (workspace) {
+      return workspace.member_list;
+    } else {
+      throw new Error();
+    }
+  } catch (error: any) {
+    console.error("Error getting workspace member list: ", error.message);
+  }
+};
+
+export const getWorkspaceWaitingList = async (w_id: string) => {
+  try {
+    const workspace = (await WorkspaceModel.findOne({
+      w_id: w_id,
+    })) as WorkspaceType;
+
+    if (workspace) {
+      return workspace.waiting_list;
+    } else {
+      throw new Error();
+    }
+  } catch (error: any) {
+    console.error("Error getting workspace waiting list");
   }
 };

@@ -21,14 +21,12 @@ export interface ContextType {
     w_id: string
   ) => Promise<any>;
   owner_acc_user_add_workspace_ctx: (
-    u_id: string,
     w_id: string,
     payload: WorkspaceAccWaitingList_Act
   ) => Promise<any>;
   owner_reject_user_add_workspace_ctx: (
-    u_id: string,
     w_id: string,
-    payload: WorkspaceAccWaitingList_Act
+    payload: WorkspaceRejWaitingList_Act
   ) => Promise<any>;
   user_exit_workspace: (u_id: string, w_id: string) => Promise<any>;
   owner_kick_user_workspace: (
@@ -52,6 +50,16 @@ export interface ContextType {
   workspace_create_announcement_ctx: (
     w_id: string,
     payload: WorkspaceCreateAnnouncement_Act
+  ) => void;
+
+  workspace_refresh_member: (
+    w_id: string,
+    payload: WorkspaceRefreshMemberList_Act
+  ) => void;
+
+  workspace_refresh_waiting_list: (
+    w_id: string,
+    payload: WorkspaceRefreshWaitingList_Act
   ) => void;
 
   workspace_delete_ctx: (
@@ -99,7 +107,7 @@ export type WorkspaceChangeName_Act = { name: string; u_id: string };
 export type WorkspaceChangeMember_Act = {
   u_id: string;
   username: string;
-  action: "ADD" | "DEL";
+  action: "ADD" | "DEL" | "REFRESH";
 };
 export type WorkspaceCreateAnnouncement_Act = {
   u_id: string;
@@ -116,6 +124,18 @@ export type WorkspaceChangeTasks_Act = {
 export type WorkspaceReplace_Act = {
   u_id: string;
   workspace: WorkspaceType;
+};
+
+export type WorkspaceRefreshMemberList_Act = {
+  u_id: string;
+  action: "REFRESH";
+  member_list: { u_id: string; username: string }[];
+};
+
+export type WorkspaceRefreshWaitingList_Act = {
+  u_id: string;
+  action: "REFRESH";
+  waiting_list: { u_id: string; username: string }[];
 };
 
 export type WorkspaceAddWaitingList_Act = {
@@ -138,74 +158,42 @@ export type WorkspaceRemoveMember_Act = {
   removed_member: { u_id: string; username: string };
 };
 
+export type WorkspaceActPayload =
+  | WorkspaceChangeName_Act
+  | WorkspaceChangeMember_Act
+  | WorkspaceCreateAnnouncement_Act
+  | WorkspaceDelete_Act
+  | WorkspaceCreate_Act
+  | WorkspaceInit_Act
+  | WorkspaceChangeTasks_Act
+  | WorkspaceReplace_Act
+  | WorkspaceRefreshMemberList_Act
+  | WorkspaceRefreshWaitingList_Act
+  | WorkspaceAddWaitingList_Act
+  | WorkspaceAccWaitingList_Act
+  | WorkspaceRejWaitingList_Act
+  | WorkspaceRemoveMember_Act;
+
 export function isWorkspaceInit(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceInit_Act {
   return (payload as WorkspaceInit_Act).workspace_list !== undefined;
 }
 
 export function isWorkspaceChangeName(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceChangeName_Act {
   return (payload as WorkspaceChangeName_Act).name !== undefined;
 }
 
 export function isWorkspaceChangeMember(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceChangeMember_Act {
   return (payload as WorkspaceChangeMember_Act).action !== undefined;
 }
 
 export function isWorkspaceCreateAnnouncement(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceCreateAnnouncement_Act {
   return (
     (payload as WorkspaceCreateAnnouncement_Act).notification !== undefined
@@ -213,145 +201,63 @@ export function isWorkspaceCreateAnnouncement(
 }
 
 export function isWorkspaceDelete(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceDelete_Act {
   return (payload as WorkspaceDelete_Act).author_id !== undefined;
 }
 
 export function isWorkspaceCreate(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceCreate_Act {
   return (payload as WorkspaceCreate_Act).workspace !== undefined;
 }
 
 export function isWorkspaceChangeTasks(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceChangeTasks_Act {
   return (payload as WorkspaceChangeTasks_Act).t_id !== undefined;
 }
 
 export function isWorkspaceReplace(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceReplace_Act {
   return (payload as WorkspaceReplace_Act).workspace !== undefined;
 }
 
+export function isWorkspaceRefreshMemberList(
+  payload: WorkspaceActPayload
+): payload is WorkspaceRefreshMemberList_Act {
+  return (payload as WorkspaceRefreshMemberList_Act).member_list !== undefined;
+}
+
+export function isWorkspaceRefreshWaitingList(
+  payload: WorkspaceActPayload
+): payload is WorkspaceRefreshWaitingList_Act {
+  return (
+    (payload as WorkspaceRefreshWaitingList_Act).waiting_list !== undefined
+  );
+}
+
 export function isWorkspaceAddWaitingList(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceAddWaitingList_Act {
   return (payload as WorkspaceAddWaitingList_Act).candidate !== undefined;
 }
 
 export function isWorkspaceAccWaitingList(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceAccWaitingList_Act {
   return (payload as WorkspaceAccWaitingList_Act).candidate !== undefined;
 }
 
 export function isWorkspaceRejWaitingList(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceRejWaitingList_Act {
   return (payload as WorkspaceRejWaitingList_Act).candidate !== undefined;
 }
 
 export function isWorkspaceRemoveMember(
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceReplace_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act
+  payload: WorkspaceActPayload
 ): payload is WorkspaceRemoveMember_Act {
   return (payload as WorkspaceRemoveMember_Act).removed_member !== undefined;
 }
@@ -368,22 +274,13 @@ export interface WorkspaceActions {
     | "CHANGE_TASKS"
     | "REPLACE"
     | "REPLACE_LOCAL"
+    | "REFRESH_MEMBER_LIST"
+    | "REFRESH_WAITING_LIST"
     | "ADD_WAITING_LIST"
     | "ACC_WAITING_LIST"
     | "REJ_WAITING_LIST"
     | "REMOVE_MEMBER";
-  payload:
-    | WorkspaceChangeName_Act
-    | WorkspaceChangeMember_Act
-    | WorkspaceCreateAnnouncement_Act
-    | WorkspaceDelete_Act
-    | WorkspaceCreate_Act
-    | WorkspaceInit_Act
-    | WorkspaceChangeTasks_Act
-    | WorkspaceAddWaitingList_Act
-    | WorkspaceAccWaitingList_Act
-    | WorkspaceRejWaitingList_Act
-    | WorkspaceRemoveMember_Act;
+  payload: WorkspaceActPayload;
 }
 
 // Workspace Interface ===========================================================
@@ -393,6 +290,7 @@ export interface WorkspaceActions {
 export type TaskInit_Act = {
   task_list: TaskType[];
 };
+
 export type TaskCreate_Act = {
   u_id: string;
   w_id: string;
@@ -436,6 +334,12 @@ export type TaskChangePriority_Act = {
   priority: TaskPriorityType;
 };
 
+export type MultiTaskRefresh_Act = {
+  u_id: string;
+  w_id: string;
+  tasks: TaskType[];
+};
+
 export type TaskChangeParticipants_Act = {
   u_id: string;
   w_id: string;
@@ -455,6 +359,20 @@ export type TaskAddComment_Act = {
   chat: ChatBubbleProps;
 };
 
+export type TaskActionPayload =
+  | TaskChangeTitle_Act
+  | TaskChangeDescription_Act
+  | TaskChangeDeadline_Act
+  | TaskChangePriority_Act
+  | TaskChangeParticipants_Act
+  | TaskChangeStatus_Act
+  | TaskAddComment_Act
+  | TaskCreate_Act
+  | TaskDelete_Act
+  | TaskInit_Act
+  | TaskReplace_Act
+  | MultiTaskRefresh_Act;
+
 export interface TaskActions {
   t_id: string;
   type:
@@ -469,211 +387,84 @@ export interface TaskActions {
     | "CREATE"
     | "DELETE"
     | "REPLACE"
-    | "REPLACE_LOCAL";
-  payload:
-    | TaskInit_Act
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskReplace_Act;
+    | "REPLACE_LOCAL"
+    | "MULTI_TASK_REFRESH";
+  payload: TaskActionPayload;
 }
 
 export function isTaskInit(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskInit_Act {
   return (payload as TaskInit_Act).task_list !== undefined;
 }
 
 export function isTaskChangeTitle(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskChangeTitle_Act {
   return (payload as TaskChangeTitle_Act).title !== undefined;
 }
 
 export function isTaskChangeDescription(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskChangeDescription_Act {
   return (payload as TaskChangeDescription_Act).description !== undefined;
 }
 
 export function isTaskChangeDeadline(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskChangeDeadline_Act {
   return (payload as TaskChangeDeadline_Act).deadline !== undefined;
 }
 
 export function isTaskChangePriority(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskChangePriority_Act {
   return (payload as TaskChangePriority_Act).priority !== undefined;
 }
 
 export function isTaskChangeParticipants(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskChangeParticipants_Act {
   return (payload as TaskChangeParticipants_Act).member !== undefined;
 }
 
 export function isTaskChangeStatus(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskChangeStatus_Act {
   return (payload as TaskChangeStatus_Act).status !== undefined;
 }
 
 export function isTaskAddComment(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskAddComment_Act {
   return (payload as TaskAddComment_Act).chat !== undefined;
 }
 
 export function isTaskCreate(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskCreate_Act {
   return (payload as TaskCreate_Act).task !== undefined;
 }
 
 export function isTaskReplace(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskCreate_Act {
   return (payload as TaskCreate_Act).task !== undefined;
 }
 
 export function isTaskDelete(
-  payload:
-    | TaskChangeTitle_Act
-    | TaskChangeDescription_Act
-    | TaskChangeDeadline_Act
-    | TaskChangePriority_Act
-    | TaskChangeParticipants_Act
-    | TaskChangeStatus_Act
-    | TaskAddComment_Act
-    | TaskCreate_Act
-    | TaskDelete_Act
-    | TaskInit_Act
-    | TaskReplace_Act
+  payload: TaskActionPayload
 ): payload is TaskDelete_Act {
   return (payload as TaskDelete_Act).delete_id !== undefined;
 }
 
-// Task Interface ================================================================
+export function isMultiTaskRefresh(
+  payload: TaskActionPayload
+): payload is MultiTaskRefresh_Act {
+  return (payload as MultiTaskRefresh_Act).tasks !== undefined;
+}
 
-export enum UserActionKind {}
+// Task Interface ================================================================
 
 const Context = React.createContext<ContextType | null>(null);
 
@@ -977,6 +768,39 @@ export function ContextProvider(props: any) {
           });
         }
         break;
+      case "REFRESH_MEMBER_LIST":
+        if (isWorkspaceRefreshMemberList(action.payload)) {
+          updatedState = init.map((workspace) => {
+            if (
+              workspace.w_id === action.w_id &&
+              isWorkspaceRefreshMemberList(action.payload)
+            ) {
+              return {
+                ...workspace,
+                member_list: action.payload.member_list,
+              };
+            } else {
+              return workspace;
+            }
+          });
+        }
+        break;
+      case "REFRESH_WAITING_LIST":
+        if (isWorkspaceRefreshWaitingList(action.payload)) {
+          updatedState = init.map((workspace) => {
+            if (
+              workspace.w_id === action.w_id &&
+              isWorkspaceRefreshWaitingList(action.payload)
+            ) {
+              return {
+                ...workspace,
+                waiting_list: action.payload.waiting_list,
+              };
+            } else {
+              return workspace;
+            }
+          });
+        }
       default:
         break;
     }
@@ -1018,6 +842,11 @@ export function ContextProvider(props: any) {
       return {
         updated_count: 0,
       };
+    }
+  };
+
+  const refreshMemnberList = async (u_id: string, w_id: string) => {
+    if (!workspaces_verify_access(u_id, w_id)) {
     }
   };
 
@@ -1183,11 +1012,10 @@ export function ContextProvider(props: any) {
   };
 
   const ownerAccUserAddWorkspace = async (
-    u_id: string,
     w_id: string,
     payload: WorkspaceAccWaitingList_Act
   ) => {
-    if (workspaces_verify_access(u_id, w_id)) {
+    if (workspaces_verify_access(payload.u_id, w_id)) {
       dispatchWorkspace({
         payload: payload,
         type: "ACC_WAITING_LIST",
@@ -1208,6 +1036,7 @@ export function ContextProvider(props: any) {
       );
 
       const user_json = await user_response.json();
+      console.log("acc-waiting-list", user_json)
       if (user_json && user_json.updated_count > 0) {
         console.log("UPDATE --workspace_ids-- SUCCESS");
 
@@ -1249,11 +1078,10 @@ export function ContextProvider(props: any) {
   };
 
   const ownerRejUserAddWorkspace = async (
-    u_id: string,
     w_id: string,
     payload: WorkspaceAccWaitingList_Act
   ) => {
-    if (workspaces_verify_access(u_id, w_id)) {
+    if (workspaces_verify_access(payload.u_id, w_id)) {
       dispatchWorkspace({
         payload: payload,
         type: "REJ_WAITING_LIST",
@@ -1570,6 +1398,42 @@ export function ContextProvider(props: any) {
     }
   };
 
+  const workspaceRefreshMemberList = async (
+    w_id: string,
+    payload: WorkspaceRefreshMemberList_Act
+  ) => {
+    if (workspaces_verify_access(payload.u_id, w_id)) {
+      dispatchWorkspace({
+        payload: {
+          ...payload,
+          member_list: payload.member_list,
+        } as WorkspaceRefreshMemberList_Act,
+        type: "REFRESH_MEMBER_LIST",
+        w_id: w_id,
+      });
+    } else {
+      alert("Error: Unverified user!");
+    }
+  };
+
+  const workspaceRefreshWaitingList = async (
+    w_id: string,
+    payload: WorkspaceRefreshWaitingList_Act
+  ) => {
+    if (workspaces_verify_access(payload.u_id, w_id)) {
+      dispatchWorkspace({
+        payload: {
+          ...payload,
+          waiting_list: payload.waiting_list,
+        } as WorkspaceRefreshWaitingList_Act,
+        type: "REFRESH_WAITING_LIST",
+        w_id: w_id,
+      });
+    } else {
+      alert("Error: Unverified user!");
+    }
+  };
+
   // WORKSPACE ============================================================
 
   // TASK =================================================================
@@ -1721,6 +1585,17 @@ export function ContextProvider(props: any) {
                 ...t,
                 comments: t.comments.concat(action.payload.chat),
               };
+            } else {
+              return t;
+            }
+          });
+        }
+        break;
+      case "REPLACE":
+        if (isTaskReplace(action.payload)) {
+          updatedState = init.map((t, index) => {
+            if (t.t_id === action.t_id && isTaskReplace(action.payload)) {
+              return action.payload.task;
             } else {
               return t;
             }
@@ -2181,6 +2056,8 @@ export function ContextProvider(props: any) {
     owner_kick_user_workspace: ownerKickMember,
     user_verify_add_worskpace_ctx: userVerifyAddWorkspace,
     logout_ctx: logout,
+    workspace_refresh_member: workspaceRefreshMemberList,
+    workspace_refresh_waiting_list: workspaceRefreshWaitingList,
   };
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;

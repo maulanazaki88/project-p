@@ -29,6 +29,7 @@ import InputSmall from "../input-small/InputSmall";
 import FormMenu from "../from-menu/FormMenu";
 import { DateFormater } from "@/utils/DateFormater";
 import TaskControl from "./TaskControl";
+import ParticipantList from "./ParticipantList";
 
 interface TaskPageProps {
   task_data: TaskType;
@@ -513,38 +514,10 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                     setIsMemberListMenuActive(true);
                   }}
                 />
-                <ul
-                  className={[s.list, hide_scroll && s.hide_scroll].join(" ")}
-                  onMouseOver={() => {
-                    setHideScroll(false);
-                  }}
-                  onMouseLeave={() => {
-                    setHideScroll(true);
-                  }}
-                >
-                  {props.task_data.assigned_member.map((member, index) => {
-                    return (
-                      <li
-                        className={s.item}
-                        key={`assigned-member-${index}`}
-                        style={{ marginLeft: index > 0 ? "12px" : "0px" }}
-                      >
-                        <UsernameButton
-                          username={member.username}
-                          withDelete
-                          deleteHandler={(username) => {
-                            task_change_participants_ctx(props.task_data.t_id, {
-                              action: "DEL",
-                              member: member,
-                              u_id: u_id,
-                              w_id: props.task_data.w_id,
-                            });
-                          }}
-                        />
-                      </li>
-                    );
-                  })}
-                </ul>
+                <ParticipantList
+                  assigned_member={props.task_data.assigned_member}
+                  t_id={props.task_data.t_id}
+                />
               </div>
             </div>
             <div className={s.status}>

@@ -3,6 +3,8 @@ import React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import MenuNavbar from "../menu-navbar/MenuNavbar";
+import Context, { ContextType } from "@/context/Store";
+import RoundButton from "../round-button/RoundButton";
 
 interface InvitationMenuProps {
   showHandler: () => void;
@@ -11,8 +13,15 @@ interface InvitationMenuProps {
 }
 
 const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
+  const { user_workspaces_ctx } = React.useContext(Context) as ContextType;
+
   const pathname = usePathname();
   const w_id = pathname.split("/")[4];
+
+  const workspace_name = React.useMemo(() => {
+    const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
+    return workspace ? workspace.name : "~";
+  }, [user_workspaces_ctx]);
 
   const baseURL = "http://localhost:3000";
 
@@ -25,18 +34,32 @@ const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
       className={s.menu}
       style={{ translate: props.show ? "0 0" : "0 100vh" }}
     >
-      <MenuNavbar closeHandler={props.closeHandler} title="" />
+      <RoundButton
+        color="#fff"
+        icon={"/icons/close_black.svg"}
+        opacity={1}
+        onClick={() => {props.closeHandler()}}
+        scale={1.2}
+        style={{
+          position: "absolute",
+          top: "2%",
+          right: "2%",
+          zIndex: 99
+        }}
+      />
+      {/* <MenuNavbar closeHandler={props.closeHandler} title="" /> */}
       <div className={s.header}>
-        <h2 className={[s.title, "medium", "md"].join(" ")}>
+        <h2 className={[s.title, "medium", "md", "blend"].join(" ")}>
           Undang teman-teman Anda untuk bergabung dengan workspace Anda!
         </h2>
+        <span className={[s.workspace_name, "big", "medium"].join(" ")}>{workspace_name}</span>
       </div>
       <figure className={s.figure}>
         <Image
           src={"/ilustration/team_1.svg"}
           alt="ilutrasi keren"
-          width={430}
-          height={262}
+          width={350}
+          height={213}
           className={s.ilust}
         />
       </figure>

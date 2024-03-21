@@ -1,0 +1,39 @@
+.modal {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 500px;
+    height: 300px;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+
+}
+
+.modal div {
+    margin-bottom: 20px;
+}
+
+.content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+}
+
+.btn_group {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.btn_group:nth-child(1) {
+    margin-right: 20px;
+}

@@ -1,5 +1,5 @@
 import s from "./RoundButton.module.css";
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import Image from "next/image";
 
 interface RoundButtonProps {
@@ -10,6 +10,8 @@ interface RoundButtonProps {
   scale?: number;
   notification?: number;
   onClick?: (e: any | null) => void;
+  type?: "button" | "reset" | "submit" | undefined;
+  style?: React.CSSProperties
 }
 
 const RoundButton: React.FC<RoundButtonProps> = (props) => {
@@ -19,8 +21,10 @@ const RoundButton: React.FC<RoundButtonProps> = (props) => {
       style={{
         backgroundColor: props.color,
         rotate: props.rotate ? `${props.rotate}deg` : `0deg`,
+        ...props.style
       }}
       onClick={props.onClick}
+      type={props.type ? props.type : "button"}
     >
       <Image
         alt={props.icon}

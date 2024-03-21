@@ -162,6 +162,7 @@ export const userAddWorkspace = async (u_id: string, w_id: string) => {
     );
 
     if (response) {
+      console.log("user-add-wrokspace-response", response)
       return { updated_count: response.modifiedCount, u_id: u_id };
     }
   } catch (error: any) {

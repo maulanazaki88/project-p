@@ -3,12 +3,13 @@ function padWithZero(num: number): string {
 }
 
 export function DateFormater(date: Date): string {
-  const year = date.getFullYear();
-  const month = padWithZero(date.getMonth() + 1);
-  const day = padWithZero(date.getDate());
-  const hours = padWithZero(date.getHours());
-  const minutes = padWithZero(date.getMinutes());
-  const seconds = padWithZero(date.getSeconds());
+  const date_ = new Date(date)
+  const year = date_.getFullYear();
+  const month = padWithZero(date_.getMonth() + 1);
+  const day = padWithZero(date_.getDate());
+  const hours = padWithZero(date_.getHours());
+  const minutes = padWithZero(date_.getMinutes());
+  const seconds = padWithZero(date_.getSeconds());
 
   return `${year}-${month}-${day}`;
 }

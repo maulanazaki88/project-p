@@ -1,12 +1,13 @@
 import s from "./ChatBubble.module.css";
 import React from "react";
 import Context from "@/context/Store";
+import { formatSentTime } from "@/utils/SentTimeFormater";
 
 export interface ChatBubbleProps {
   color?: string;
   username: string;
   message: string;
-  time: string;
+  time: Date;
 }
 
 const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
@@ -30,7 +31,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
         }}
       >
         <span className={[s.time, "sm", "medium", "soft"].join(" ")}>
-          {props.time}
+          {formatSentTime(props.time)}
         </span>
       </div>
     </div>

@@ -1,84 +1,312 @@
 .main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+  padding: 80px 50px 0 50px;
+  color: #000;
+  font-family: inherit;
+}
+
+.main_title {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.dashboard {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  font-family: inherit;
+  width: 100%;
+  height: auto;
+  margin-top: 30px;
+  max-width: 1357px;
+  /* background-color: purple; */
+}
+
+.workspace,
+.todo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  width: 50%;
+  /* margin-bottom: 30px */
+}
+
+.workspace {
+  align-items: flex-start;
+  width: 60%;
+  /* background-color: beige; */
+  margin-right: 30px;
+  margin-left: 20px;
+}
+
+.todo {
+  align-items: flex-start;
+
+  width: 320px;
+  margin-right: 20px;
+  /* background-color: cadetblue; */
+}
+
+.heading {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.workspace > * .header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-right: 20px;
+}
+
+.workspace > * .action {
+  position: relative;
+}
+
+.list_screen {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  height: 350px;
+  /* background-color: aqua; */
+}
+
+.list_screen::-webkit-scrollbar {
+  position: absolute;
+  height: 0.5em;
+}
+
+.list_screen::-webkit-scrollbar-track {
+  height: 0.5em;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 100vw;
+  margin-block: 10px;
+}
+
+.list_screen::-webkit-scrollbar-thumb {
+  width: auto;
+  border-radius: 100vw;
+  background-color: #1c062d;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.list {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  list-style: none;
+  height: 100%;
+  transform: translate(0, 5%);
+  padding-left: 10px;
+}
+
+.list .item:not(:first-child) {
+  margin-left: 16px;
+}
+
+.task_list_screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 45vh;
+  /* background-color: yellow; */
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 10px 15px;
+}
+
+.task_list_screen::-webkit-scrollbar {
+  position: absolute;
+  width: 0.4em;
+}
+
+.task_list_screen::-webkit-scrollbar-track {
+  width: 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 100vw;
+  margin-block: 10px;
+}
+
+.task_list_screen::-webkit-scrollbar-thumb {
+  width: auto;
+  border-radius: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.task_list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  list-style: none;
+}
+
+.task_list > .item {
+  position: relative;
+  margin-bottom: 23px;
+}
+
+.white_blur {
+  position: sticky;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  width: 100px;
+  height: 500px;
+  right: 0;
+  translate: 10px 0;
+}
+
+@media screen and (max-width: 1024px) {
+  .dashboard {
+    scale: 0.8;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .main {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
-    height: 100vh;
-    padding: 80px 50px 0 50px;
+    padding: 80px 15px 0 15px;
     color: #000;
     font-family: inherit;
+  }
 
-}
-
-.main_title {
+  .main_title {
     position: relative;
     margin-bottom: 30px;
-}
+  }
 
-.dashboard {
+  .dashboard {
     position: relative;
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     font-family: inherit;
     width: 100%;
-    height: auto;
-    margin-top: 30px;
-    max-width: 1357px;
-    /* background-color: purple; */
-}
+    scale: 1;
+  }
 
-.workspace, .todo {
+  .workspace,
+  .todo {
+    margin: 0 0 0 0;
+  }
+
+  .workspace,
+  .todo {
     position: relative;
     display: flex;
     flex-direction: column;
     font-family: inherit;
-    width: 50%;
-    /* margin-bottom: 30px */
-}
+    width: 100%;
+    margin: 0;
+    margin-bottom: 30px;
 
-.workspace {
-    align-items: flex-start;
-    width: 60%;
-    /* background-color: beige; */
-    margin-right: 30px;
-    margin-left: 20px;
-}
+    min-width: none;
+  }
 
-.todo {
+  .todo {
     align-items: flex-start;
-    
-    width: 320px;
-    margin-right: 20px;
+    width: 100%;
+    min-width: 320px;
     /* background-color: cadetblue; */
-}
+  }
 
-.heading {
+  .heading {
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
-}
+  }
 
-.workspace>* .header {
+  .workspace > .header {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    margin-right: 20px;
+  }
 
-}
-
-.workspace>* .action {
+  .workspace > .action {
     position: relative;
-}
+  }
 
-.list_screen {
+  .list_screen {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 250px;
+    overflow-x: scroll;
+  }
+
+  .list {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+  }
+
+  .task_list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    list-style: none;
+    width: 100%;
+    padding: 0;
+  }
+
+  .task_list > .item {
+    position: relative;
+    margin-bottom: 23px;
+    width: 100%;
+  }
+
+  .workspace {
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
+    /* background-color: beige; */
+  }
+
+  .list_screen {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -86,278 +314,41 @@
     justify-content: flex-start;
     width: 100%;
     overflow-x: scroll;
-    overflow-y: hidden;
-    height: 350px;
+    height: 330px;
     /* background-color: aqua; */
+  }
 
-}
-
-.list_screen::-webkit-scrollbar {
-    position: absolute;
-    height: 0.5em;
-
-}
-
-.list_screen::-webkit-scrollbar-track {
-    height: 0.5em;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 100vw;
-    margin-block: 10px;
-}
-
-.list_screen::-webkit-scrollbar-thumb {
-    width: auto;
-    border-radius: 100vw;
-    background-color: #1c062d;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.list {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items:center;
-    list-style: none;
-    height: 100%;
-    transform: translate(0, 5%);
-    padding-left: 10px;
-}
-
-.list .item:not(:first-child){
-    margin-left: 16px;
-    
-}
-
-.task_list_screen {
+  .task_list_screen {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    height: 45vh;
+    height: 50vh;
     /* background-color: yellow; */
     overflow-y: scroll;
-    overflow-x: hidden;
-    padding: 10px 15px;
-}
+    padding-top: 10px;
+  }
 
-.task_list_screen::-webkit-scrollbar {
-    position: absolute;
-    width: 0.4em;
-
-}
-
-.task_list_screen::-webkit-scrollbar-track {
-    width: 8px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 100vw;
-    margin-block: 10px;
-
-
-}
-
-.task_list_screen::-webkit-scrollbar-thumb {
-    width: auto;
-    border-radius: 100vw;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-
-.task_list {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    list-style: none;
-
-}
-
-.task_list>.item {
-    position: relative;
-    margin-bottom: 23px;
-}
-
-.white_blur {
+  .white_blur {
     position: sticky;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-    width: 100px;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    width: 50px;
     height: 500px;
     right: 0;
     translate: 10px 0;
-
-}
-
-@media screen and (max-width: 1024px) {
-    .dashboard{
-        scale: 0.8;
-    }
-}
-
-
-@media screen and (max-width: 500px) {
-    .main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100vw;
-        padding: 80px 15px 0 15px;
-        color: #000;
-        font-family: inherit;
-
-    }
-
-    .main_title {
-        position: relative;
-        margin-bottom: 30px;
-    }
-
-    .dashboard {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        font-family: inherit;
-        width: 100%;
-        scale: 1;
-    
-    }
-
-    .workspace, .todo {
-        margin: 0 0 0 0;
-    }
-
-    .workspace, .todo {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        font-family: inherit;
-        width: 100%;
-        margin: 0;
-        margin-bottom: 30px;
-
-        min-width: none;
-    }
-
-    .todo {
-        align-items: flex-start;
-        width: 100%;
-        min-width: 320px;
-        /* background-color: cadetblue; */
-    }
-
-    .heading {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 30px;
-    }
-
-    .workspace>.header {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-    }
-
-    .workspace>.action {
-        position: relative;
-    }
-
-    .list_screen {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100%;
-        height: 250px;
-        overflow-x: scroll;
-    }
-
-
-
-    .list {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        list-style: none;
-    }
-
-    .task_list {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        list-style: none;
-        width: 100%;
-        padding: 0;
-
-    }
-
-    .task_list>.item {
-        position: relative;
-        margin-bottom: 23px;
-        width: 100%;
-    }
-
-    .workspace {
-        align-items: flex-start;
-        width: 100%;
-        height: auto;
-        /* background-color: beige; */
-    }
-
-    .list_screen {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: flex-start;
-        width: 100%;
-        overflow-x: scroll;
-        height: 330px;
-        /* background-color: aqua; */
-
-    }
-
-    .task_list_screen {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100%;
-        height: 50vh;
-        /* background-color: yellow; */
-        overflow-y: scroll;
-        padding-top: 10px;
-    }
-
-    .white_blur {
-        position: sticky;
-        background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-        width: 50px;
-        height: 500px;
-        right: 0;
-        translate: 10px 0;
-    
-    }
-
+  }
 }
 
 .hide_scroll::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .hide_scroll::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
 }

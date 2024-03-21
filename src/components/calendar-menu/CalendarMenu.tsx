@@ -5,6 +5,7 @@ import Context, { ContextType } from "@/context/Store";
 import { TaskType } from "@/type";
 import { DateFormater } from "@/utils/DateFormater";
 import { useCalendar } from "@/hook/useCalendar";
+import RoundButton from "../round-button/RoundButton";
 
 interface CalendarMenuProps {
   isActive: boolean;
@@ -89,8 +90,21 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
       className={s.menu}
       style={{ translate: props.isActive ? "-50% -50%" : "-50% 100%" }}
     >
-      <div className={s.header} >
-        <p className={[s.title, "big", "medium"].join(" ")} >Calendar</p>
+      <RoundButton
+        color="#fff"
+        icon={"/icons/close_black.svg"}
+        opacity={1}
+        onClick={() => {props.closeHandler()}}
+        scale={1.2}
+        style={{
+          position: "absolute",
+          top: "2%",
+          right: "2%",
+          zIndex: 99
+        }}
+      />
+      <div className={s.header}>
+        <p className={[s.title, "big", "medium"].join(" ")}>Calendar</p>
       </div>
       <ul className={s.calendar}>
         {calendar.available_month_number.map((c, index) => {

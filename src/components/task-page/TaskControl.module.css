@@ -8,6 +8,7 @@
     height: 68px;
     border-bottom: 2px solid rgba(0, 0, 0, 0.2);
     padding: 0 30px;
+    background-color: #fff;
     
 }
 
@@ -37,7 +38,7 @@
 }
 
 .share_btn {
-    border-radius: 12px;
+    border-radius: 100vw;
     /* width: 40px;
     height: 40px; */
     background-color: teal;
@@ -51,7 +52,7 @@
 }
 
 .delete_btn {
-    border-radius: 12px;
+    border-radius: 100vw;
     /* width: 40px;
     height: 40px; */
     background-color:crimson;

@@ -2,7 +2,7 @@ import s from "./Comments.module.css";
 import React from "react";
 import MenuNavbar from "../menu-navbar/MenuNavbar";
 import ChatBubble, { ChatBubbleProps } from "../chat-bubble/ChatBubble";
-import Context from "@/context/Store";
+import Context, {ContextType} from "@/context/Store";
 import RoundButton from "../round-button/RoundButton";
 import { useDateNow } from "@/hook/useDateNow";
 
@@ -14,19 +14,21 @@ interface CommentsProps {
   sendComment: (data: {
     message: string;
     username: string;
-    time: string;
+    time: Date;
   }) => void;
   isActive: boolean;
   isEmbed?: boolean;
 }
 
 const Comments: React.FC<CommentsProps> = (props) => {
-  const ctx = React.useContext(Context);
+  const ctx = React.useContext(Context) as ContextType ;
   const date_now = useDateNow();
 
   const screenRef = React.useRef<HTMLDivElement>(null);
 
-  const user_data = ctx?.user_data_ctx;
+  const user_data = ctx.user_data_ctx;
+
+  const task_add_comment_ctx = ctx.task_add_comment_ctx
 
   const [comment_val, set_comment_val] = React.useState<string>("");
 
@@ -36,15 +38,17 @@ const Comments: React.FC<CommentsProps> = (props) => {
     if (screen) {
       screen.scrollTop = screen.scrollHeight * 3;
     }
-  }, []);
+  }, [props]);
 
-  const setScrollToBottom = () => {
-    const screen = screenRef.current;
-    if (screen) {
-      screen.scrollTop = screen.scrollHeight * 3;
-      console.log("to bottom")
-      set_comment_val("")
-    }
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    set_comment_val("")
+
+    props.sendComment({
+      message: comment_val,
+      username: user_data?.username ? user_data.username : "-",
+      time: new Date(),
+    });
   };
 
   return (
@@ -57,6 +61,12 @@ const Comments: React.FC<CommentsProps> = (props) => {
       {!props.isEmbed && (
         <MenuNavbar closeHandler={props.closeHandler} title={props.task_name} />
       )}
+      <div className={s.headers}>
+        <h3 className={[s.title, "md", "medium"].join(" ")}>Comments</h3>
+        <span className={[s.comment_count, "sm", "soft"].join(" ")}>
+          {props.chat_list.length}
+        </span>
+      </div>
       <div className={s.comment_screen} ref={screenRef}>
         <ul className={s.list}>
           {props.chat_list.map((chat, index) => {
@@ -78,7 +88,7 @@ const Comments: React.FC<CommentsProps> = (props) => {
         </ul>
       </div>
 
-      <div className={s.fields}>
+      <form className={s.fields} onSubmit={submitHandler}>
         <input
           type="text"
           className={s.comment_inp}
@@ -92,18 +102,11 @@ const Comments: React.FC<CommentsProps> = (props) => {
           color="#79C89F"
           icon="/icons/plane_white.svg"
           opacity={1}
-          onClick={() => {
-            setScrollToBottom();
-            props.sendComment({
-              message: comment_val,
-              username: user_data?.username ? user_data.username : "-",
-              time: date_now.withTime(),
-            });
-            
-          }}
+          onClick={() => {}}
           scale={1}
+          type="submit"
         />
-      </div>
+      </form>
     </div>
   );
 };

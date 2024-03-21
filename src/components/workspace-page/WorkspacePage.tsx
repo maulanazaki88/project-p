@@ -245,7 +245,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
 
       if (data && data.updated_count === 1) {
         console.log("yeyyy");
-        router.replace(`/home/${u_id}/workspace/${w_id}/task/${t_id}`);
+        // redirect to new task page
+        // router.replace(`/home/${u_id}/workspace/${w_id}/task/${t_id}`);
       } else {
         console.log("Update failed huhu 😭");
       }
@@ -519,7 +520,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
             setShowNotificationForm(true);
           }}
         />
-        <MemberList
+        {/* <MemberList
           closeHandler={() => {
             setShowMemberList(false);
           }}
@@ -536,8 +537,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           showInvitationMenuHandler={() => {
             setShowInvitationMenu(true);
           }}
-        />
-        <WaitingList
+        /> */}
+        {/* <WaitingList
           accHandler={(data) => {
             owner_acc_user_add_workspace_ctx(u_id, data.w_id, {
               u_id: u_id,
@@ -557,7 +558,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           show={showWaitingList}
           workspace_name={props.data.name}
           w_id={props.data.w_id}
-        />
+        /> */}
         <InvitationMenu
           closeHandler={() => {
             setShowInvitationMenu(false);
