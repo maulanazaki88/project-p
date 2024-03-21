@@ -173,30 +173,6 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     router.back();
   };
 
-  // React.useEffect(() => {
-  //   console.log(isCalendarActive);
-  // }, [isCalendarActive]);
-
-  // React.useEffect(() => {
-  //   if (!user_data_ctx) {
-  //     user_data_handler_ctx(props.user_data);
-  //     initialize_workspaces_ctx({
-  //       workspace_list: props.user_data.workspace_list,
-  //     } as WorkspaceInit_Act);
-
-  //     const tasks: TaskType[] = [];
-
-  //     for (let workspace of props.user_data.workspace_list) {
-  //       for (let task of workspace.task_list) {
-  //         tasks.push({ ...task, workspace_name: workspace.name });
-  //       }
-  //     }
-
-  //     initialize_tasks_ctx({ task_list: tasks } as TaskInit_Act);
-  //   }
-  //   // router.refresh();
-  // }, []);
-
   const deleteHandler = async (value: string) => {
     if (value === props.task_data.title) {
       const response = await task_delete_ctx(props.task_data.t_id, {
@@ -270,12 +246,6 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         button_text="Hapus"
         key={"task-delete-prompt"}
       />
-      {/* <Navbar
-        title={"Detail Tugas"}
-        subtitle={getWorkspaceName(props.task_data.w_id)}
-        menuHandler={() => setIsMenuActive(true)}
-        backSave={backSave}
-      /> */}
       <BasicMenu
         button_list={menu_list}
         log_list={props.task_data.activity_list}
@@ -328,12 +298,6 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
       />
       <main
         className={s.main}
-        // style={{
-        //   overflowY:
-        //     isMemberListMenuActive || isCalendarActive || isCommentsActive
-        //       ? "hidden"
-        //       : "scroll",
-        // }}
       >
         <TaskControl
           created_on={new Date(props.task_data.created_at)}
@@ -344,22 +308,6 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         <section className={s.task}>
           <div className={s.form}>
             <div className={[s.name, "medium", "big"].join(" ")}>
-              {/* <p className={[s.label, "medium", "md"].join(" ")}>Nama Task</p> */}
-              {/* <input
-              className={[s.name_inp, "medium", "big"].join(" ")}
-              value={taskForm.title}
-              id="title"
-              type="text"
-              name="title"
-              onChange={changeHandler}
-              onBlur={() => {
-                task_change_title_ctx(props.task_data.t_id, {
-                  title: taskForm.title,
-                  u_id: u_id,
-                  w_id: props.task_data.w_id,
-                });
-              }}
-            /> */}
               <InputSmall
                 icon="/icons/clipboard.svg"
                 label="Nama Task"
@@ -623,7 +571,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 </ul>
               </div>
             </div>
-            {display_width_ctx < 500 && (
+            {(display_width_ctx && display_width_ctx < 500) && (
               <ButtonLarge
                 bg_color="#080726"
                 color="#fff"
@@ -636,7 +584,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
               />
             )}
           </div>
-          {display_width_ctx > 500 && (
+          {(display_width_ctx && display_width_ctx > 500) && (
             <div className={s.comment}>
               <Comments
                 isEmbed

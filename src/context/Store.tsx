@@ -93,7 +93,7 @@ export interface ContextType {
   task_add_comment_ctx: (t_id: string, payload: TaskAddComment_Act) => void;
   task_create_ctx: (t_id: string, payload: TaskCreate_Act) => Promise<any>;
   task_delete_ctx: (t_id: string, payload: TaskDelete_Act) => Promise<any>;
-  display_width_ctx: number;
+  display_width_ctx: number | null;
   task_comments_ctx: CommentType[] | null;
   task_comments_handler_ctx: React.Dispatch<CommentType[]>;
   logout_ctx: () => void;
@@ -1987,7 +1987,7 @@ export function ContextProvider(props: any) {
     CommentType[] | null
   >(null);
 
-  const [display_width, set_display_width] = React.useState<number>(0);
+  const [display_width, set_display_width] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     const getWidth = () => {
