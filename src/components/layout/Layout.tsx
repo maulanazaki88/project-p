@@ -14,7 +14,21 @@ import FormModal from "../modal-form/FormModal";
 import InvitationMenu from "../invitation-menu/InvitationMenu";
 
 const Layout = (props: any) => {
-  const { display_width_ctx } = React.useContext(Context) as ContextType;
+  const [display_width, setDisplayWidth] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    const getWidth = () => {
+      const width = window.innerWidth;
+      if (width) {
+        setDisplayWidth(width);
+        // console.log("display width: " + width);
+      }
+    };
+
+    getWidth();
+
+    window.addEventListener("resize", getWidth);
+  }, []);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -91,6 +105,8 @@ const Layout = (props: any) => {
     }
   };
 
+  // console.log("RENDER LAYOUT");
+
   return (
     <>
       <Backdrop
@@ -100,7 +116,7 @@ const Layout = (props: any) => {
         }}
       />
       <Navbar
-      toggleSidebar={() => setShowSidebar(!show_sidebar)}
+        toggleSidebar={() => setShowSidebar(!show_sidebar)}
         calendarHandler={() => {
           setShowCalendarMenu(true);
           setActiveBackdrop(true);
@@ -116,7 +132,7 @@ const Layout = (props: any) => {
       />
       <LayoutSidebar
         clickHandler={sidebarClickHandler}
-        alwaysShow={display_width_ctx && display_width_ctx > 500 ? true : false}
+        alwaysShow={display_width && display_width > 500 ? true : false}
         show={show_sidebar}
       />
       <CalendarMenu

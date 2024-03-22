@@ -210,7 +210,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     }
   }, [deletePromptActive, isMemberListMenuActive]);
 
-  console.log("created at", props.task_data.created_at);
+  // console.log("created at", props.task_data.created_at);
 
   return (
     <>

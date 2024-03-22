@@ -36,14 +36,14 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     return workspace;
   }, [user_workspaces_ctx]);
 
-  const workspace_name = React.useMemo(() => {
-    const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
-    if (workspace) {
-      return workspace.name;
-    } else {
-      return "~";
-    }
-  }, [user_workspaces_ctx]);
+  // const workspace_name = React.useMemo(() => {
+  //   const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
+  //   if (workspace) {
+  //     return workspace.name;
+  //   } else {
+  //     return "~";
+  //   }
+  // }, [user_workspaces_ctx]);
 
   React.useEffect(() => {
     //fetch

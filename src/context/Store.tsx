@@ -1951,7 +1951,7 @@ export function ContextProvider(props: any) {
       const json = await response.json();
 
       if (json && response.status === 200) {
-        console.log(json);
+        // console.log(json);
       }
     }
   };
@@ -1976,7 +1976,7 @@ export function ContextProvider(props: any) {
       const json = await response.json();
 
       if (json && response.status == 200) {
-        console.log(json);
+        // console.log(json);
       }
     }
   };
@@ -1994,7 +1994,7 @@ export function ContextProvider(props: any) {
       const width = window.innerWidth;
       if (width) {
         set_display_width(width);
-        console.log("display width: " + width);
+        // console.log("display width: " + width);
       }
     };
 
@@ -2059,7 +2059,7 @@ export function ContextProvider(props: any) {
     workspace_refresh_member: workspaceRefreshMemberList,
     workspace_refresh_waiting_list: workspaceRefreshWaitingList,
   };
-
+  // console.log("WORKING CONTEXT")
   return <Context.Provider value={context}>{props.children}</Context.Provider>;
 }
 

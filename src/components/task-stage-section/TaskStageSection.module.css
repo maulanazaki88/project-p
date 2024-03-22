@@ -1,52 +1,92 @@
 .stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 320px;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+
+  /* border: 2px solid cyan; */
+  /* background-color: beige; */
+  /* border: 2px solid red; */
+}
+
+.list_screen {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  margin-top: 30px;
+  overflow-x: hidden;
+}
+
+.list_screen::-webkit-scrollbar {
+  position: absolute;
+  width: 0.4em;
+}
+
+.list_screen::-webkit-scrollbar-track {
+  width: auto;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 100vw;
+  margin-block: 10px;
+}
+
+.list_screen::-webkit-scrollbar-thumb {
+  width: auto;
+  border-radius: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.task_list {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  list-style: none;
+  padding-top: 10px;
+  width: 279px;
+}
+
+.task {
+  position: relative;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .stage {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 320px;
+    width: 100vw;
     height: 100%;
     overflow-y: hidden;
-    overflow-x: hidden;
-
-    /* border: 2px solid cyan; */
-    /* background-color: beige; */
+    scroll-snap-align: center;
     /* border: 2px solid red; */
-}
+  }
 
-.list_screen {
+  .list_screen {
     position: relative;
     display: block;
-    width: 100%;
+    width: 95%;
     height: 100%;
     overflow-y: scroll;
     margin-top: 30px;
     overflow-x: hidden;
-}
+  }
 
-.list_screen::-webkit-scrollbar {
-    position: absolute;
-    width: 0.4em;
-
-}
-
-.list_screen::-webkit-scrollbar-track {
-    width: auto;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 100vw;
-    margin-block: 10px;
-
-
-}
-
-.list_screen::-webkit-scrollbar-thumb {
-    width: auto;
-    border-radius: 100vw;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-
-.task_list {
+  .task_list {
     position: absolute;
     top: 0;
     left: 50%;
@@ -57,70 +97,23 @@
     justify-content: flex-start;
     list-style: none;
     padding-top: 10px;
-    width: 279px;
-}
+    width: 100vw;
+  }
 
-.task {
+  .task {
     position: relative;
-    margin-bottom: 30px;
-    width: 100%;
-}
-
-@media screen and (max-width: 500px) {
-    .stage {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100vw;
-        height: 100%;
-        overflow-y: hidden;
-        scroll-snap-align: center;
-        /* border: 2px solid red; */
-    }
-
-    .list_screen {
-        position: relative;
-        display: block;
-        width: 95%;
-        height: 100%;
-        overflow-y: scroll;
-        margin-top: 30px;
-        overflow-x: hidden;
-    }
-
-    .task_list {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        translate: -50% 0%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        list-style: none;
-        padding-top: 10px;
-        width: 100vw;
-
-    }
-
-    .task {
-        position: relative;
-        margin-bottom: 30px;
-        padding: 10px 30px 10px 30px;
-    }
+    margin-bottom: 10px;
+    padding: 10px 30px 10px 30px;
+  }
 }
 
 .hide_scroll::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.0);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .hide_scroll::-webkit-scrollbar-track {
-    width: auto;
-    background-color: rgba(0, 0, 0, 0.0);
-    border-radius: 100vw;
-    margin-block: 10px;
-
-
+  width: auto;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 100vw;
+  margin-block: 10px;
 }

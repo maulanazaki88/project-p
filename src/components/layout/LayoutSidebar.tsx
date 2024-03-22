@@ -22,16 +22,16 @@ interface LayoutSidebarProps {
 const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
   const { user_workspaces_ctx } = React.useContext(Context) as ContextType;
 
-  console.log('alwaysShow', props.alwaysShow)
+  // console.log('alwaysShow', props.alwaysShow)
 
-  console.log('show', props.show)
+  // console.log('show', props.show)
 
   const pathname = usePathname();
 
   const w_id = pathname.split("/")[4];
-  console.log("sidebar w_id:", w_id);
+  // console.log("sidebar w_id:", w_id);
 
-  console.log("user workspace context: ", user_workspaces_ctx);
+  // console.log("user workspace context: ", user_workspaces_ctx);
 
   const workspace_name = React.useMemo(() => {
     const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);

@@ -36,7 +36,7 @@ const months = [
 const CardMenu: React.FC<CardMenuProps> = (props) => {
   const calendar = useCalendar();
 
-  console.log("available month number", calendar.available_month_number);
+  // console.log("available month number", calendar.available_month_number);
 
   const CalendarViews = props.calendar_list && (
     <ul className={s.calendar}>

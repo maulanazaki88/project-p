@@ -138,3 +138,13 @@ a {
 button, div, a {
   -webkit-tap-highlight-color: transparent;
 }
+
+@media screen and (max-width: 500px) {
+  button:hover, div:hover, a:hover {
+    opacity: 1 !important;
+  }
+
+  button:active {
+    opacity: 0.5 !important;
+  }
+}
