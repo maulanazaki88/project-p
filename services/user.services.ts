@@ -9,7 +9,7 @@ import bcrypt from "bcrypt";
  * 
  * If Autenthicated will return {u_id : u_id, email:email, username:username}
  * 
- * If NOT Authenticated will return {u_id:null, email:null, username:null}
+ * If NOT Authenticated will return {u_id: "", email: "", username: ""}
  * @param data - is for adding user data, email and password
  * @param data.email - user's email
  * @param data.password   user's password
@@ -31,7 +31,7 @@ export const login = async (data: { email: string; password: string }) => {
         username: record.username,
       };
     } else {
-      return { message: "failed", u_id: null, email: null, username: null };
+      return { message: "failed", u_id: "", email: "", username: "" };
     }
   } catch (error: any) {
     console.error("Login error: ", error.message);

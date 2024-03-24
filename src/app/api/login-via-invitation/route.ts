@@ -15,7 +15,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       password: data.password,
     });
 
-    if (login_response?.message === "success") {
+    if (login_response?.message === "success" ) {
       const addMember_response = await addMemberWaitingList(data.w_id, {
         u_id: login_response.u_id,
         username: login_response.username,
