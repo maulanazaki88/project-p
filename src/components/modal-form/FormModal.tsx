@@ -2,7 +2,7 @@ import SquareButton from "../square-button/SquareButton";
 import s from "./FormModal.module.css";
 import React from "react";
 import InputSmall from "../input-small/InputSmall";
-interface FormModalProps {
+export interface FormModalProps {
   title: string;
   text_guide: string;
   placeholder: string;

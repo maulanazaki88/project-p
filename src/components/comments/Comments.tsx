@@ -32,6 +32,8 @@ const Comments: React.FC<CommentsProps> = (props) => {
 
   const [comment_val, set_comment_val] = React.useState<string>("");
 
+  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
   React.useEffect(() => {
     const screen = screenRef.current;
 
@@ -99,12 +101,13 @@ const Comments: React.FC<CommentsProps> = (props) => {
           placeholder={"Ketik komentar"}
         />
         <RoundButton
-          color="#79C89F"
+          color="#1C062D"
           icon="/icons/plane_white.svg"
-          opacity={1}
+          opacity={0.7}
           onClick={() => {}}
-          scale={1}
+          scale={0.7}
           type="submit"
+
         />
       </form>
     </div>

@@ -845,10 +845,6 @@ export function ContextProvider(props: any) {
     }
   };
 
-  const refreshMemnberList = async (u_id: string, w_id: string) => {
-    if (!workspaces_verify_access(u_id, w_id)) {
-    }
-  };
 
   const userExitWorkspace = async (u_id: string, w_id: string) => {
     if (!workspaces_verify_access(u_id, w_id)) {

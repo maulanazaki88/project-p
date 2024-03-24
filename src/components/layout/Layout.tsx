@@ -10,10 +10,12 @@ import Backdrop from "./Backdrop";
 import MemberList from "../member-list/MemberList";
 import Context, { ContextType } from "@/context/Store";
 import WaitingList from "../waiting-list/WaitingList";
-import FormModal from "../modal-form/FormModal";
+import FormModal, { FormModalProps } from "../modal-form/FormModal";
 import InvitationMenu from "../invitation-menu/InvitationMenu";
+import PromptModal, { PromptModalProps } from "../modal-prompt/PromptModal";
 
 const Layout = (props: any) => {
+  const { user_exit_workspace, workspace_delete_ctx } = React.useContext(Context) as ContextType;
   const [display_width, setDisplayWidth] = React.useState<number | null>(null);
 
   React.useEffect(() => {
@@ -53,6 +55,12 @@ const Layout = (props: any) => {
 
   const [show_sidebar, setShowSidebar] = React.useState<boolean>(false);
 
+  const [prompt_modal, setPromptModal] =
+    React.useState<PromptModalProps | null>(null);
+  const [form_modal, setFormModal] = React.useState<FormModalProps | null>(
+    null
+  );
+
   const backdropAction = () => {
     setShowCalendarMenu(false);
     setShowMemberList(false);
@@ -60,6 +68,8 @@ const Layout = (props: any) => {
     setActiveBackdrop(false);
     setShowWaitingList(false);
     setShowInvitationMenu(false);
+    setPromptModal(null);
+    setFormModal(null);
   };
 
   React.useEffect(() => {
@@ -94,8 +104,32 @@ const Layout = (props: any) => {
         setShowWaitingList(true);
         break;
       case "Exit Space":
+        setPromptModal({
+          confirm_act: () => {
+            user_exit_workspace(u_id, w_id);
+          },
+          confirm_text: "Yes",
+          decline_act: () => {
+            backdropAction();
+          },
+          decline_text: "No",
+          text_prompt: "Are you sure you want to exit workspace?",
+          title: "Exit Workspace",
+        });
         break;
       case "Delete Space":
+        setPromptModal({
+          confirm_act: () => {
+            workspace_delete_ctx(w_id, {author_id: u_id});
+          },
+          confirm_text: "Yes",
+          decline_act: () => {
+            backdropAction();
+          },
+          decline_text: "No",
+          text_prompt: "Are you sure you want to delete workspace?",
+          title: "Delete Workspace",
+        });
         break;
       case "Share":
         setShowInvitationMenu(true);
@@ -166,6 +200,8 @@ const Layout = (props: any) => {
           setShowInvitationMenu(true);
         }}
       />
+      {prompt_modal && <PromptModal {...prompt_modal} />}
+      {form_modal && <FormModal {...form_modal} />}
       {/* <NotificationMenu
         newNotificationHandler={() => {}}
         closeHandler={() => {}}
