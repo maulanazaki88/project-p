@@ -15,7 +15,7 @@ export async function POST(
         { status: 307 }
       );
     } else {
-      return NextResponse.json(response?.message, {status: 409});
+      return NextResponse.json({message: "invalid-credentials"}, {status: 401});
     }
   } catch (error) {
     return NextResponse.error();

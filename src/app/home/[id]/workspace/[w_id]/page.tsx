@@ -4,6 +4,7 @@ import WorkspacePage from "@/components/workspace-page/WorkspacePage";
 import Context, { ContextType } from "@/context/Store";
 import { WorkspaceType } from "@/type";
 import { useDateNow } from "@/hook/useDateNow";
+import Loading from "@/components/loading/LoadingLight";
 
 const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
   props
@@ -11,6 +12,8 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
   const { user_workspaces_ctx, user_data_handler_ctx } = React.useContext(
     Context
   ) as ContextType;
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const date_now = useDateNow();
 
@@ -25,13 +28,14 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
       .then((res) => res)
       .then((data) => data.json())
       .then((data) => {
+        setIsLoading(false);
         user_data_handler_ctx(data);
         return;
       })
       .catch((e) => console.log(e));
   }, []);
 
-  const currentDate = new Date()
+  const currentDate = new Date();
 
   const loading_workspace: WorkspaceType = {
     activity_list: [],
@@ -51,14 +55,30 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
 
   const workspace = React.useMemo(() => {
     const data = user_workspaces_ctx.find((w) => w.w_id === props.params.w_id);
-    if (data) {
-      return data;
-    } else {
-      return loading_workspace;
-    }
+    return data;
   }, [user_workspaces_ctx]);
 
-  return <WorkspacePage data={workspace} />;
+  if (
+    !isLoading &&
+    workspace
+  ) {
+    return <WorkspacePage data={workspace} />;
+  } else {
+    return (
+      <div
+        style={{
+          position: "relative",
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loading color="#1a1a2e" size={100} />
+      </div>
+    );
+  }
 };
 
 export default Workspace;

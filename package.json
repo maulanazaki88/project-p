@@ -12,6 +12,7 @@
         "deploy": "npm run build && concurrently \"npm run uvicorn-dev\" \"npm start\""
     },
     "dependencies": {
+        "@lottiefiles/react-lottie-player": "^3.5.3",
         "@tanstack/react-query": "^5.13.4",
         "bcrypt": "^5.1.1",
         "concurrently": "^8.2.2",

@@ -4,6 +4,7 @@ import TaskPage from "@/components/task-page/TaskPage";
 import Context, { ContextType } from "@/context/Store";
 import { TaskType } from "@/type";
 import { useDateNow } from "@/hook/useDateNow";
+import Loading from "@/components/loading/LoadingLight";
 
 const Task: React.FC<{
   params: { id: string; t_id: string };
@@ -11,6 +12,8 @@ const Task: React.FC<{
   const { user_task_ctx, user_data_handler_ctx } = React.useContext(
     Context
   ) as ContextType;
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const date_now = useDateNow();
 
@@ -25,6 +28,7 @@ const Task: React.FC<{
       .then((res) => res)
       .then((data) => data.json())
       .then((data) => {
+        setIsLoading(false);
         user_data_handler_ctx(data);
         return;
       })
@@ -57,14 +61,27 @@ const Task: React.FC<{
   const task = React.useMemo(() => {
     const data = user_task_ctx.find((t) => t.t_id === props.params.t_id);
 
-    if (data) {
-      return data;
-    } else {
-      return loading_task;
-    }
+    return data;
   }, [user_task_ctx]);
 
-  return <TaskPage task_data={task} />;
+  if (task && !isLoading) {
+    return <TaskPage task_data={task} />;
+  } else {
+    return (
+      <div
+        style={{
+          position: "relative",
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loading color="#1a1a2e" size={100} />
+      </div>
+    );
+  }
 };
 
 export default Task;

@@ -4,6 +4,17 @@ import { DateFormater } from "@/utils/DateFormater";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
 
+/**
+ * Assign program to do user authentication
+ * 
+ * If Autenthicated will return {u_id : u_id, email:email, username:username}
+ * 
+ * If NOT Authenticated will return {u_id:null, email:null, username:null}
+ * @param data - is for adding user data, email and password
+ * @param data.email - user's email
+ * @param data.password   user's password
+ * 
+ */
 export const login = async (data: { email: string; password: string }) => {
   try {
     const user_data = data as UserType;
@@ -20,13 +31,26 @@ export const login = async (data: { email: string; password: string }) => {
         username: record.username,
       };
     } else {
-      return { message: "failed", u_id: "", email: "", username: "" };
+      return { message: "failed", u_id: null, email: null, username: null };
     }
   } catch (error: any) {
     console.error("Login error: ", error.message);
   }
 };
 
+/**
+ * Assign program to create user
+ * 
+ * If there is already user with same email will return {exist: true, u_id: null, message:conflict}
+ * 
+ * If there is NO user with same email will return {exist: false, u_id: u_id, message: success }
+ * 
+ * If there is NO user with same email BUT there's internall server error will return {exist: false, u_id: null, message: error }
+ * 
+ 
+ * @param data - is for adding user data
+ * 
+ */
 export const createUser = async (data: {
   username: string;
   email: string;
@@ -39,7 +63,7 @@ export const createUser = async (data: {
       return {
         exist: true,
         u_id: "",
-        message: "failed",
+        message: "conflict",
       };
     } else {
       const u_id = `${data.username}-${uuidv4()}`;
@@ -71,7 +95,7 @@ export const createUser = async (data: {
           u_id: "",
           username: "",
           email: "",
-          message: "failed",
+          message: "error",
         };
       }
     }
@@ -80,6 +104,11 @@ export const createUser = async (data: {
   }
 };
 
+/**
+ *   - will return hydrated user data with same u_id OR null if its unavailable
+ * @param u_id 
+ * @returns
+ */
 export const getUser = async (u_id: string) => {
   try {
     const users = await UserModel.aggregate([
@@ -109,11 +138,27 @@ export const getUser = async (u_id: string) => {
 
     if (users) {
       return users[0];
+    } else {
+      return null
     }
   } catch (error: any) {
     console.error("Error getting user data: ", error.message);
   }
 };
+
+/**
+ * To update user data with object containing subset of UserType data
+ * 
+ * If succeed will return {updated_count: 1, u_id: u_id}
+ * 
+ * * If there are no user with u_id {updated_count: 0}
+ * 
+ * If failed will return null
+ * 
+ * @param u_id - user id that want to be updated
+ * @param data object that subset of UserType
+ * @returns 
+ */
 
 export const updateUser = async (u_id: string, data: any) => {
   try {
@@ -129,12 +174,26 @@ export const updateUser = async (u_id: string, data: any) => {
         updated_count: response.modifiedCount,
         u_id: u_id,
       };
+    } else {
+      return null
     }
   } catch (error: any) {
     console.error("Error update user: ", error.message);
   }
 };
 
+/**
+ * Delete user with u_id
+ * 
+ * If succeed will return {deleted_count: 1, u_id: u_id}
+ * 
+ * If there are no user with u_id {deleted_count: 0}
+ * 
+ * If failed will return null
+ * 
+ * @param u_id - user id that want to be updated
+ * @returns 
+ */
 export const deleteUser = async (u_id: string) => {
   try {
     const response = await UserModel.deleteOne({ u_id: u_id });
@@ -144,11 +203,26 @@ export const deleteUser = async (u_id: string) => {
         deleted_count: response.deletedCount,
         u_id: u_id,
       };
+    } else {
+      return null
     }
   } catch (error: any) {
     console.error("Error delete user: ", error.message);
   }
 };
+
+/**
+ * Commiting adding new w_id to wokrspace_list to user with u_id after being confirmed by workspace owner
+ * 
+ * If succeed will return {updated_count: 1, u_id: u_id}
+ * 
+ * If there are no user with u_id {updated_count: 0}
+ * 
+ * If failed will return null
+ * 
+ * @param u_id - user id that want to be updated
+ * @returns 
+ */
 
 export const userAddWorkspace = async (u_id: string, w_id: string) => {
   const currentDate = new Date();
@@ -164,11 +238,23 @@ export const userAddWorkspace = async (u_id: string, w_id: string) => {
     if (response) {
       console.log("user-add-wrokspace-response", response)
       return { updated_count: response.modifiedCount, u_id: u_id };
+    } else {
+      return
     }
   } catch (error: any) {
     console.error("Error Adding new workspace_id to user: ", error.message);
   }
 };
+
+/**
+ * User with u_id remove w_id from workspace list
+ * 
+ * It is follow action from user commit to delete worksppace or being kicked or exit from workspace
+ * 
+ * @param u_id u_id of user that commiting to delete workspace- must be owner or admin
+ * @param w_id w_id ow workspace that want to be deleted
+ * @returns 
+ */
 
 export const userDeleteWorkspace = async (u_id: string, w_id: string) => {
   const currentDate = new Date();
@@ -184,6 +270,8 @@ export const userDeleteWorkspace = async (u_id: string, w_id: string) => {
 
     if (response) {
       return { updated_count: response.modifiedCount, u_id: u_id };
+    } else {
+      return null
     }
   } catch (error: any) {
     console.error("Error remove workspace_id to user: ", error.message);

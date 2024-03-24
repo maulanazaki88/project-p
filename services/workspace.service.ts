@@ -3,6 +3,17 @@ import { WorkspaceModel } from "../model/workspace.model";
 import { DateFormater } from "@/utils/DateFormater";
 import { NotificationCardProps } from "@/components/notification-card/NotificationCard";
 
+/**
+ * 
+ * Assign program to create new workspace, assigning current user as its owner & admin, expeect return w_id to use it as url slug to redirect to workspace after being created on database
+ * 
+ * Success - return {exist: false, w_id: w_id, message: success}
+ * 
+ * Existing workspace with w_id - return {exist: true, w_id: null}
+ * 
+ * @param data -WorkspaceType data
+ * @returns 
+ */
 export const createWorkspace = async (data: WorkspaceType) => {
   const exist = await WorkspaceModel.exists({ w_id: data.w_id });
 
@@ -11,7 +22,7 @@ export const createWorkspace = async (data: WorkspaceType) => {
       return {
         exist: true,
         w_id: "",
-        message: `workspace-exist`,
+        message: `conflict`,
       };
     } else {
       const currentDate = new Date();
@@ -40,6 +51,18 @@ export const createWorkspace = async (data: WorkspaceType) => {
   }
 };
 
+
+/**
+ * Assign program to update workspace data e.g name, description
+ * 
+ * Success - return {updated_count: 1, w_id: w_id}
+ * 
+ * Failed - return null
+ * 
+ * @param w_id - Addressed workspace
+ * @param data - Subset of workspace object from WorkspaceType
+ * @returns 
+ */
 export const updateWorkspace = async (w_id: string, data: any) => {
   const updated_data = data as WorkspaceType;
 
@@ -61,9 +84,23 @@ export const updateWorkspace = async (w_id: string, data: any) => {
       updated_count: response.modifiedCount,
       w_id: w_id,
     };
+  } else {
+    return null
   }
 };
 
+
+/**
+ * Assign program to update workspace sepcificly on adding memberlist, happen as user with access accept other user request to join
+ * 
+ * Success - return {updated_count: 1, w_id: w_id}
+ * 
+ * No workspace with w_id - return {updated_count: 1, w_id: w_id}
+ * 
+ * @param w_id -addressed workspace w_id
+ * @param user - subset of UserType {username: string, u_id: string} to display its username after being sccepted by owner or admin
+ * @returns 
+ */
 export const workspaceAddMember = async (
   w_id: string,
   user: { username: string; u_id: string }
@@ -84,12 +121,25 @@ export const workspaceAddMember = async (
         updated_count: response.modifiedCount,
         w_id: w_id,
       };
+    } else {
+      return null
     }
   } catch (error: any) {
     console.error("Error adding new member to workspace: ", error.message);
   }
 };
 
+/**
+ * Assign program to update workspace sepcificly on deleting memberlist with u_id, happen as user with access kick other member or member itself exit from workspace
+ * 
+ * Success - return {updated_count: 1, w_id: w_id}
+ * 
+ * No workspace with w_id - return {updated_count: 1, w_id: w_id}
+ * 
+ * @param w_id - addressed workspace w_id
+ * @param user - subset of UserType {username: string, u_id: string} to display its username after being sccepted by owner or admin
+ * @returns 
+ */
 export const workspaceDeleteMember = async (
   w_id: string,
   user: { u_id: string; username: string }
@@ -116,6 +166,16 @@ export const workspaceDeleteMember = async (
   }
 };
 
+/**
+ * Assign program to retrieve hydrated workspace data
+ * 
+ * Success - return data WorkspaceType
+ * 
+ * Failed - return null
+ * 
+ * @param w_id addressed workspace
+ * @returns 
+ */
 export const getWorkspace = async (w_id: string) => {
   try {
     const workspaces = await WorkspaceModel.aggregate([
@@ -140,6 +200,14 @@ export const getWorkspace = async (w_id: string) => {
   }
 };
 
+
+/**
+ * Assign program to update workspace specificly 
+ * 
+ * @param w_id addressed workspace w_id
+ * @param data NotidicaionCardProps data
+ * @returns 
+ */
 export const workspaceCreateAnnouncement = async (
   w_id: string,
   data: NotificationCardProps

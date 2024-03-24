@@ -71,6 +71,10 @@
   color: #080726;
 }
 
+.suggestion_btn:hover {
+  text-decoration: underline;
+}
+
 
 
 @media screen and (max-width: 500px) {

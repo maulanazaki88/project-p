@@ -2,6 +2,7 @@ import s from "./ButtonLarge.module.css";
 import React from "react";
 import Image from "next/image";
 import local from "next/font/local";
+import Loading from "../loading/LoadingLight";
 
 const inter = local({ src: "../fonts/Inter-VariableFont_slnt,wght.ttf" });
 
@@ -13,8 +14,9 @@ export interface ButtonLargeProps {
   notification?: number | null;
   rowReverse?: boolean;
   onClick?: (e: any | null) => void;
-  disabled? :boolean
-  icon_scale?:number
+  disabled?: boolean;
+  icon_scale?: number;
+  isLoading?: boolean;
 }
 
 const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
@@ -25,7 +27,7 @@ const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
       width={12}
       height={12}
       className={s.icon}
-      style={{scale: props.icon_scale ? props.icon_scale : 1}}
+      style={{ scale: props.icon_scale ? props.icon_scale : 1 }}
     />
   );
   const notifViews = props.notification && (
@@ -37,19 +39,30 @@ const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
   return (
     <button
       className={s.btn}
-      disabled={props.disabled}
+      disabled={props.disabled || props.isLoading ? true : false}
       style={{
         backgroundColor: props.bg_color,
         color: props.color,
         flexDirection: props.rowReverse ? "row-reverse" : "row",
+        opacity: props.isLoading || props.disabled ? 0.7 : 1,
       }}
       onClick={props.onClick}
     >
-      <p className={[s.txt, "medium", "blend", inter.className, "sm"].join(" ")}>
-        {props.text}
-      </p>
-      {iconViews}
-      {notifViews}
+      {props.isLoading ? (
+        <Loading />
+      ) : (
+        <div className={s.content}>
+          <p
+            className={[s.txt, "medium", "blend", inter.className, "sm"].join(
+              " "
+            )}
+          >
+            {props.text}
+          </p>
+          {iconViews}
+          {notifViews}
+        </div>
+      )}
     </button>
   );
 };

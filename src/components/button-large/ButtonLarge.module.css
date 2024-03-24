@@ -12,9 +12,26 @@
     outline: none;
     border: none;
     font-family: inherit;
+    transition: all 0.2s ease-out;
+}
+
+.content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
 }
 
 .btn:active {
+    opacity: 0.7;
+    scale: 0.94;
+}
+
+.btn:hover {
     opacity: 0.7;
 }
 

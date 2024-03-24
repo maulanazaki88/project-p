@@ -18,12 +18,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
     });
 
     if (signup_res && signup_res.message === "success") {
-      const addMember_res = await addMemberWaitingList(body.w_id, {
+      const addWaitingList_res = await addMemberWaitingList(body.w_id, {
         u_id: signup_res.u_id,
         username: body.username,
       });
 
-      if (addMember_res && addMember_res.updated_count > 0) {
+      if (addWaitingList_res && addWaitingList_res.updated_count > 0) {
         return NextResponse.redirect(
           `${process.env.NEXT_PUBLIC_BASE_URL}/invitation/${body.w_id}/user/${signup_res.username}`,
           { status: 307 }
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       }
     } else {
       return NextResponse.json(
-        { message: "Failed add member, unauthorized" },
+        { message: "Failed add member, unauthorized initiator" },
         { status: 401 }
       );
     }

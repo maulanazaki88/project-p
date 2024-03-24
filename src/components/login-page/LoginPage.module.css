@@ -74,3 +74,7 @@
     margin: 1ch;
     color: #080726;
   }
+
+  .suggestion_btn:hover {
+    text-decoration: underline;
+  }

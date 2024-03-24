@@ -3,6 +3,7 @@ import React from "react";
 import Avatar from "../avatar/Avatar";
 import RoundButton from "../round-button/RoundButton";
 import ButtonMedium from "../button-medium/ButtonMedium";
+import UsernameButtonSkeleton from "./UsernameButtonSkeleton";
 
 interface UsernameButtonProps {
   username: string;
@@ -14,6 +15,9 @@ interface UsernameButtonProps {
 }
 
 const UsernameButton: React.FC<UsernameButtonProps> = (props) => {
+  if (props.username === "~") {
+    return <UsernameButtonSkeleton />;
+  }
   return (
     <div className={s.btn} onClick={props.onClick}>
       <span className={[s.username, "medium", "sm"].join(" ")}>

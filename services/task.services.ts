@@ -2,6 +2,18 @@ import { TaskType } from "@/type";
 import { TaskModel } from "../model/task.model";
 import { DateFormater } from "@/utils/DateFormater";
 
+/**
+ * Assign program to create task, expected to return t_id as string to used it as url param to redirect to created task after the task written in database
+ *
+ * If succeed will return {exist: false, t_id: t_id, message: success}
+ *
+ * If there are task with same t_id {exist: true, t_id: null, message: conflict}
+ * 
+ * if there is error occur will return {exist: false, t_id: null, message: failed}
+ *
+ * @param data - TaskType
+ * @returns
+ */
 export const createTask = async (data: TaskType) => {
   try {
     const exist = await TaskModel.exists({ t_id: data.t_id });
@@ -9,7 +21,7 @@ export const createTask = async (data: TaskType) => {
     if (exist) {
       return {
         exist: true,
-        t_id: data.t_id,
+        t_id: null,
         message: "conflict",
       };
     } else {
@@ -30,7 +42,7 @@ export const createTask = async (data: TaskType) => {
       } else {
         return {
           exist: false,
-          t_id: "",
+          t_id: null,
           message: "failed",
         };
       }
@@ -39,6 +51,20 @@ export const createTask = async (data: TaskType) => {
     console.error("Create task error: ", error.message);
   }
 };
+
+/**
+ * Assign program to update task 
+ * 
+ * Success: return {updated_count: 1, t_id: t_id}
+ * 
+ * No task with t_id return {updated_count: 0, t_id: t_id}
+ * 
+ * Failed: return null
+ * 
+ * @param t_id t_id of targeted task
+ * @param data subset of TaskType data
+ * @returns 
+ */
 
 export const updateTask = async (t_id: string, data: any) => {
   try {
@@ -58,12 +84,25 @@ export const updateTask = async (t_id: string, data: any) => {
         updated_count: response.modifiedCount,
         t_id: t_id,
       };
+    } else {
+      return null
     }
   } catch (error: any) {
     console.error("Error update task: ", error.message);
   }
 };
 
+
+/**
+ * Assign program to get task by t_id
+ * 
+ * Success: return TaskType
+ * 
+ * Failed: return null
+ * 
+ * @param t_id t_id of addressed task
+ * @returns 
+ */
 export const getTask = async (t_id: string) => {
   try {
     const tasks = await TaskModel.aggregate([
@@ -83,12 +122,28 @@ export const getTask = async (t_id: string) => {
 
     if (tasks) {
       return tasks[0];
+    } else {
+      return null
     }
   } catch (error: any) {
     console.error("Error getting task: ", error.message);
   }
 };
 
+
+/**
+ * Assign program to update task specific on add participant
+ * 
+ * Success: return {updated_count: 1, t_id: t_id}
+ * 
+ * No task with t_id return {updated_count: 0, t_id: t_id}
+ * 
+ * Failed: return null
+ * 
+ * @param t_id t_id of targeted task
+ * @param user minimal user data username & u_id of participant candidate
+ * @returns 
+ */
 export const taskAddParticipant = async (
   t_id: string,
   user: { username: string; u_id: string }
@@ -114,6 +169,20 @@ export const taskAddParticipant = async (
   }
 };
 
+
+/**
+ * Assign program to update task specific on delete participant
+ * 
+ * Success: return {updated_count: 1, t_id: t_id}
+ * 
+ * No task with t_id return {updated_count: 0, t_id: t_id}
+ * 
+ * Failed: return null
+ * 
+ * @param t_id t_id of targeted task
+ * @param user minimal user data username & u_id of participant
+ * @returns 
+ */
 export const taskDeleteParticipant = async (
   t_id: string,
   user: { username: string; u_id: string }
@@ -133,12 +202,27 @@ export const taskDeleteParticipant = async (
         updated_count: response.modifiedCount,
         t_id: t_id,
       };
+    } else {
+      return null
     }
   } catch (error: any) {
     console.error("Error deleting participant to task: ", error.message);
   }
 };
 
+/**
+ * Assign program to update task specific on add comment
+ * 
+ * Success: return {updated_count: 1, t_id: t_id}
+ * 
+ * No task with t_id return {updated_count: 0, t_id: t_id}
+ * 
+ * Failed: return null
+ * 
+ * @param t_id t_id of targeted task
+ * @param comment contains username, message, and sent time
+ * @returns 
+ */
 export const taskAddComment = async (
   t_id: string,
   comment: { username: string; message: string; time: string }
@@ -159,11 +243,26 @@ export const taskAddComment = async (
         updated_count: response.modifiedCount,
         t_id: t_id,
       };
+    } else {
+      return null
     }
   } catch (error: any) {
-    console.error("Error adding participant to task: ", error.message);
+    console.error("Error adding comment to task: ", error.message);
   }
 };
+
+/**
+ * Commit to delete task only if user is has access
+ * 
+ * Success: return {deleted_count: 1, t_id: t_id}
+ * 
+ * No task with t_id: return {deleted_count: 0, t_id: t_id}
+ * 
+ * Failed: return null
+ * 
+ * @param t_id t_id of addressed task
+ * @returns 
+ */
 
 export const deleteTask = async (t_id: string) => {
   try {
@@ -180,12 +279,25 @@ export const deleteTask = async (t_id: string) => {
   }
 };
 
+/**
+ * Assign progran to get all task that has participant with u_id
+ * 
+ * Success: return TaskType[]
+ * 
+ * Failed: return null
+ * 
+ * @param u_id 
+ * @returns 
+ */
+
 export const getUserAllTask = async (u_id: string) => {
   try {
     const tasks = await TaskModel.find({ "assigned_member.u_id": u_id });
 
     if (tasks) {
       return tasks;
+    } else {
+      return null
     }
   } catch (error: any) {
     console.error("Error fetching all task from user: ", error.message);

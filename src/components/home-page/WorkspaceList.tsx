@@ -5,6 +5,7 @@ import React from "react";
 import WorkspaceCard from "../workspace-card/WorkspaceCard";
 import WorkspaceCardPlaceHolder from "../workspace-card/WorkspaceCardPlaceHolder";
 import { usePathname } from "next/navigation";
+import WorkspaceCardSkeleton from "../workspace-card/WorkspaceCardSkeleton";
 
 interface WorkspaceListProps {
   workspace_list: WorkspaceType[];
@@ -74,6 +75,7 @@ const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
                 router.push(`${pathname}/workspace-setup`);
               }}
             />
+            
           </li>
         )}
         <div className={s.white_blur}></div>
