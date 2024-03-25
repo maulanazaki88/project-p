@@ -53,7 +53,6 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
     waiting_list: [],
   });
 
-  const [buttonDisabled, setButtonDisabled] = React.useState<boolean>(false);
   const [verifyId, setVerifyId] = React.useState<string | null>(null);
   const [warning, setWarning] = React.useState<{
     username: string;
@@ -64,6 +63,8 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
     email: "-",
     password: "-",
   });
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const changeHandler = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -77,9 +78,9 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
   };
 
   const submitData: FormEventHandler<HTMLFormElement> = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     console.log("Submit!!!");
-    setButtonDisabled(true);
 
     const date_time = new Date();
 
@@ -100,13 +101,13 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
 
       if (await data.updated_count) {
         console.log("yeyyy");
-
+        setIsLoading(false);
         router.replace(
           `${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}/workspace/${updated_workspace.w_id}`
         );
       } else {
         console.log("nooo");
-        setButtonDisabled(false);
+        setIsLoading(false);
         setWarning((prev) => {
           return {
             ...prev,
@@ -115,6 +116,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
         });
       }
     } else {
+      setIsLoading(true);
       const w_id = id_generator.workspace();
       const new_workspace: WorkspaceType = {
         ...workspace_data,
@@ -133,14 +135,14 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
 
       if (data && data.w_id) {
         console.log("yeyyy");
-
+        setIsLoading(false);
         router.replace(
           `${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}/workspace/${data.w_id}`
         );
         //no async data in router --> make the code on context executed twice
       } else {
         console.log("nooo");
-        setButtonDisabled(false);
+        setIsLoading(false);
         setWarning((prev) => {
           return {
             ...prev,
@@ -157,14 +159,10 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
 
   return (
     <main className={s.main}>
-      {/* <MenuNavbar
-        closeHandler={() => {
-          router.back();
-        }}
-        title="Workspace Setup"
-      /> */}
-      <div className={s.header} >
-        <h2 className={[s.title, "big", "medium"].join(" ")} >Workspace Setup</h2>
+      <div className={s.header}>
+        <h2 className={[s.title, "big", "medium"].join(" ")}>
+          Workspace Setup
+        </h2>
       </div>
       <form className={s.form} onSubmit={submitData}>
         <div className={s.input}>
@@ -198,7 +196,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
             text="Selanjutnya"
             icon="/icons/next_white.svg"
             onClick={() => {}}
-            disabled={buttonDisabled}
+            isLoading={isLoading}
           />
         </div>
       </form>

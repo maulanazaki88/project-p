@@ -165,7 +165,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
       <CardMenu
         isActive={calendarMenuActive && !notificationMenuActive}
         calendar_list={calendar_list}
-        title={"Kalender"}
+        title={"Calendar"}
         closeHandler={() => {
           setCalendarMenuActive(false);
         }}
@@ -173,7 +173,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
       <CardMenu
         isActive={notificationMenuActive && !calendarMenuActive}
         notification_list={notification_list}
-        title={"Notifikasi"}
+        title={"Notification"}
         closeHandler={() => {
           setNotificationMenuActive(false);
         }}
@@ -184,14 +184,14 @@ const HomePage: React.FC<HomePageProps> = (props) => {
             " "
           )}
         >
-          Selamat datang, {props.data.username}!
+          Welcome, {props.data.username}!
         </h2>
         <InputSmall
           icon="/icons/search.svg"
           label=""
           name="search"
           onChange={searchInputChange}
-          placeholder="Cari workspace, tugas"
+          placeholder="Search workspace or tasks"
           type="text"
           value={searchInput}
           warning=""

@@ -173,25 +173,18 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     router.back();
   };
 
-  const deleteHandler = async (value: string) => {
-    if (value === props.task_data.title) {
-      const response = await task_delete_ctx(props.task_data.t_id, {
-        delete_id: props.task_data.t_id,
-        task: props.task_data,
-        u_id: u_id,
-        w_id: props.task_data.w_id,
-      });
+  const deleteHandler = async () => {
+    const response = await task_delete_ctx(props.task_data.t_id, {
+      delete_id: props.task_data.t_id,
+      task: props.task_data,
+      u_id: u_id,
+      w_id: props.task_data.w_id,
+    });
 
-      const deleted_count = await response.deleted_count;
+    const deleted_count = await response.deleted_count;
 
-      if (deleted_count > 0) {
-        router.back();
-      }
-    } else {
-      setDeletePromptWarning("Nama yang dimasukan tidak sama!");
-      setTimeout(() => {
-        setDeletePromptWarning("-");
-      }, 3000);
+    if (deleted_count > 0) {
+      router.back();
     }
   };
 
@@ -235,7 +228,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         name="title"
         show={deletePromptActive}
         submitHandler={({ key, value }) => {
-          deleteHandler(value);
+        
         }}
         title="Hapus Tugas"
         type="SMALL"
@@ -296,13 +289,13 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
           });
         }}
       />
-      <main
-        className={s.main}
-      >
+      <main className={s.main}>
         <TaskControl
           created_on={new Date(props.task_data.created_at)}
           workspace_name={props.task_data.workspace_name}
-          showDeleteModalHandler={() => {}}
+          showDeleteModalHandler={() => {
+            deleteHandler();
+          }}
           showShareModalHandler={() => {}}
         />
         <section className={s.task}>
@@ -571,7 +564,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 </ul>
               </div>
             </div>
-            {(display_width_ctx && display_width_ctx < 500) && (
+            {display_width_ctx && display_width_ctx < 500 && (
               <ButtonLarge
                 bg_color="#080726"
                 color="#fff"
@@ -584,7 +577,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
               />
             )}
           </div>
-          {(display_width_ctx && display_width_ctx > 500) && (
+          {display_width_ctx && display_width_ctx > 500 && (
             <div className={s.comment}>
               <Comments
                 isEmbed

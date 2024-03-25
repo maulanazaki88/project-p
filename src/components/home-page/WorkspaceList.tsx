@@ -38,7 +38,6 @@ const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
       onTouchEnd={() => {
         setHideWorkspaceListScroll(true);
       }}
-      
     >
       <ul className={s.list}>
         {props.workspace_list
@@ -70,12 +69,7 @@ const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
           })}
         {props.workspace_list.length <= 3 && (
           <li className={s.item} key={`workspace-item-placeholder`}>
-            <WorkspaceCardPlaceHolder
-              createWorkspaceHandler={() => {
-                router.push(`${pathname}/workspace-setup`);
-              }}
-            />
-            
+            <WorkspaceCardPlaceHolder />
           </li>
         )}
         <div className={s.white_blur}></div>
@@ -83,13 +77,7 @@ const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
     </div>
   );
 
-  const NoListViews = (
-    <WorkspaceCardPlaceHolder
-      createWorkspaceHandler={() => {
-        router.push(`${pathname}/workspace-setup`);
-      }}
-    />
-  );
+  const NoListViews = <WorkspaceCardPlaceHolder />;
 
   if (props.workspace_list.length > 0) {
     return ExpectedViews;

@@ -43,6 +43,12 @@
 
 .card:hover > .icon {
     scale: 1.5;
+    
+}
+
+.card:active{
+    transform: scale(0.94);
+    opacity: 0.8;
 }
 
 .top, .bottom {

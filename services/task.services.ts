@@ -106,7 +106,7 @@ export const updateTask = async (t_id: string, data: any) => {
 export const getTask = async (t_id: string) => {
   try {
     const tasks = await TaskModel.aggregate([
-      { $match: { t_id: t_id } },
+      { $match: { t_id: decodeURIComponent(t_id) } },
       {
         $lookup: {
           from: "workspaces",

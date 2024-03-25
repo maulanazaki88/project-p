@@ -29,9 +29,18 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
   const pathname = usePathname();
 
   const w_id = pathname.split("/")[4];
+  const u_id = pathname.split("/")[2];
   // console.log("sidebar w_id:", w_id);
 
   // console.log("user workspace context: ", user_workspaces_ctx);
+
+  const workspace = React.useMemo(() => {
+    const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
+    return workspace;
+  }, [user_workspaces_ctx]);
+
+  const isOwner =
+    workspace && workspace.admin_list.some((a) => a.u_id === u_id);
 
   const workspace_name = React.useMemo(() => {
     const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
@@ -93,20 +102,24 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
         </div>
         <div className={s.segment}>
           <ul className={s.list}>
-            <li className={s.item}>
-              <LayoutButton
-                name={"Exit Space"}
-                onClick={props.clickHandler}
-                icon="/icons/exit_black.svg"
-              />
-            </li>
-            <li className={s.item}>
-              <LayoutButton
-                name={"Delete Space"}
-                onClick={props.clickHandler}
-                icon="/icons/delete.svg"
-              />
-            </li>
+            {workspace && !isOwner && (
+              <li className={s.item}>
+                <LayoutButton
+                  name={"Exit Space"}
+                  onClick={props.clickHandler}
+                  icon="/icons/exit_black.svg"
+                />
+              </li>
+            )}
+            {workspace && isOwner && (
+              <li className={s.item}>
+                <LayoutButton
+                  name={"Delete Space"}
+                  onClick={props.clickHandler}
+                  icon="/icons/delete.svg"
+                />
+              </li>
+            )}
           </ul>
         </div>
       </div>

@@ -86,7 +86,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: flex-end;
-        height: 43px;
+        height: 35px;
         width: min-content;
         padding: 0 4px 0px 20px;
         border-radius: 100vw;
@@ -94,7 +94,7 @@
         border: none;
         font-family: inherit;
         margin-left: 8px;
-
+        min-height: 45px;
     }
 
     .username {

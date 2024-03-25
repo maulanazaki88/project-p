@@ -13,11 +13,12 @@ const Task: React.FC<{
     Context
   ) as ContextType;
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const date_now = useDateNow();
 
   React.useEffect(() => {
+    setIsLoading(true)
     fetch(`/api/get-user/${props.params.id}`, {
       method: "GET",
       headers: {

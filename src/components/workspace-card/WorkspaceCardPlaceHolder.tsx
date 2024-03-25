@@ -1,13 +1,15 @@
 import s from "./WorkspaceCard.module.css";
 import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-interface WorkspaceCardPlaceHolderProps {
-  createWorkspaceHandler: () => void;
-}
+const WorkspaceCardPlaceHolder: React.FC = () => {
 
-const WorkspaceCardPlaceHolder: React.FC<WorkspaceCardPlaceHolderProps> = (props) => {
+  const pathname = usePathname();
+
   return (
-    <div onClick={props.createWorkspaceHandler} className={[s.card, s.placeholder].join(" ")}>
+    <Link href={`${pathname}/workspace-setup`} >
+    <div className={[s.card, s.placeholder].join(" ")}>
       <svg
         width="18"
         height="18"
@@ -24,6 +26,7 @@ const WorkspaceCardPlaceHolder: React.FC<WorkspaceCardPlaceHolderProps> = (props
       </svg>
       <p className={[s.txt, "md", "medium"].join(" ")}>New Space</p>
     </div>
+    </Link>
   );
 };
 

@@ -10,7 +10,11 @@ import { useDateNow } from "@/hook/useDateNow";
 import { useIdGenerator } from "@/hook/useIdGenerator";
 import Link from "next/link";
 
-const SignUpPage: React.FC = () => {
+interface SignUpProps {
+  loginLink: string;
+}
+
+const SignUpPage: React.FC<SignUpProps> = (props) => {
   const router = useRouter();
   const id_generator = useIdGenerator();
   const date_now = useDateNow();
@@ -37,10 +41,11 @@ const SignUpPage: React.FC = () => {
     password: "-",
   });
 
-  const [buttonDisabled, setButtonDisabled] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const submitData: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    
     const email_re = /^[a-zA-Z0-9]+@[a-z]+\.[a-zA-Z]+/g;
 
     if (!email_re.test(user_data.email)) {
@@ -51,22 +56,22 @@ const SignUpPage: React.FC = () => {
         };
       });
     } else if (user_data.username.length < 4) {
-        setWarning(prev => {
-          return {
-            ...prev,
-            username: "Username at least consist 4 characters!"
-          }
-        })
-      } else if(user_data.password.length < 8) {
-        setWarning((prev) => {
-          return {
-            ...prev, 
-            password: "Password must consist 8 characters!"
-          }
-        })
-      } else {
+      setWarning((prev) => {
+        return {
+          ...prev,
+          username: "Username at least consist 4 characters!",
+        };
+      });
+    } else if (user_data.password.length < 8) {
+      setWarning((prev) => {
+        return {
+          ...prev,
+          password: "Password must consist 8 characters!",
+        };
+      });
+    } else {
       console.log("Submit!!!");
-      setButtonDisabled(true);
+      setIsLoading(true);
       const date_time = new Date();
 
       const response = await fetch(`/api/create-user`, {
@@ -77,24 +82,47 @@ const SignUpPage: React.FC = () => {
           u_id: id_generator.user(),
         } as UserType),
         method: "POST",
-        
       });
 
       if (response.ok && !response.redirected) {
-        console.log( await response.json());
-        // setVerifyId(await res.u_id);
-      } else if(!response.ok) {
-        console.log("nooo");
         console.log(await response.json());
+        // setVerifyId(await res.u_id);
+      } else if (response.status === 409) {
+        console.log(await response.json());
+        setIsLoading(false);
+        
+        set_user_data((prev) => {
+          return {
+            ...prev,
+            password: "",
+          };
+        });
         // setButtonDisabled(false);
         setWarning((prev) => {
           return {
             ...prev,
-            username: "Error. No internet connection",
+            username: "Conflict. This email is already used",
+          };
+        });
+      } else if (!response.ok) {
+        console.log(await response.json());
+        setIsLoading(false);
+        set_user_data((prev) => {
+          return {
+            ...prev,
+            password: "",
+          };
+        });
+        // setButtonDisabled(false);
+        setWarning((prev) => {
+          return {
+            ...prev,
+            username: "Error, please check internet connection",
           };
         });
       } else {
-        router.replace(response.url)
+        setIsLoading(false);
+        router.replace(response.url);
       }
     }
   };
@@ -161,7 +189,7 @@ const SignUpPage: React.FC = () => {
           text="Selanjutnya"
           icon="/icons/next_white.svg"
           onClick={() => {}}
-          disabled={buttonDisabled}
+          isLoading={isLoading}
         />
       </form>
       <div className={s.suggestion}>
@@ -169,7 +197,7 @@ const SignUpPage: React.FC = () => {
           Sudah memiliki akun?
         </p>
         <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
-          <Link href="/login">Masuk</Link>
+          <Link href={props.loginLink}>Masuk</Link>
         </span>
       </div>
     </main>

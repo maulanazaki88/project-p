@@ -15,7 +15,9 @@ import InvitationMenu from "../invitation-menu/InvitationMenu";
 import PromptModal, { PromptModalProps } from "../modal-prompt/PromptModal";
 
 const Layout = (props: any) => {
-  const { user_exit_workspace, workspace_delete_ctx } = React.useContext(Context) as ContextType;
+  const { user_exit_workspace, workspace_delete_ctx } = React.useContext(
+    Context
+  ) as ContextType;
   const [display_width, setDisplayWidth] = React.useState<number | null>(null);
 
   React.useEffect(() => {
@@ -77,7 +79,9 @@ const Layout = (props: any) => {
       show_calendar_menu ||
       show_member_list ||
       show_waiting_list ||
-      show_invitation_menu
+      show_invitation_menu ||
+      prompt_modal ||
+      form_modal
     ) {
       setActiveBackdrop(true);
     }
@@ -86,6 +90,8 @@ const Layout = (props: any) => {
     show_member_list,
     show_waiting_list,
     show_invitation_menu,
+    prompt_modal,
+    form_modal,
   ]);
 
   const sidebarClickHandler = (e: MenuType) => {
@@ -98,6 +104,7 @@ const Layout = (props: any) => {
         break;
       case "Members":
         setShowMemberList(true);
+
         break;
 
       case "Join Queue":
@@ -120,7 +127,7 @@ const Layout = (props: any) => {
       case "Delete Space":
         setPromptModal({
           confirm_act: () => {
-            workspace_delete_ctx(w_id, {author_id: u_id});
+            workspace_delete_ctx(w_id, { author_id: u_id });
           },
           confirm_text: "Yes",
           decline_act: () => {

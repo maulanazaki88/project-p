@@ -8,6 +8,7 @@ import { color_list } from "../workspace-card/WorkspaceCard";
 import ButtonLarge from "../button-large/ButtonLarge";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const InvitationLandingPage: React.FC<{ data: WorkspaceType }> = (props) => {
   const router = useRouter();
@@ -80,7 +81,7 @@ const InvitationLandingPage: React.FC<{ data: WorkspaceType }> = (props) => {
               Sudah memiliki akun?
             </p>
             <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
-              <a href={`${pathname}/sign-in`}>Masuk</a>
+              <Link href={`${pathname}/login`}>Masuk</Link>
             </span>
           </div>
         </section>

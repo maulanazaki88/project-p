@@ -179,7 +179,7 @@ export const workspaceDeleteMember = async (
 export const getWorkspace = async (w_id: string) => {
   try {
     const workspaces = await WorkspaceModel.aggregate([
-      { $match: { w_id: w_id } },
+      { $match: { w_id: decodeURIComponent(w_id) } },
       {
         $lookup: {
           from: "tasks",

@@ -27,13 +27,13 @@ const TaskControl: React.FC<TaskControlInterface> = (props) => {
       </div>
       <div className={s.right}>
         <span className={[s.created_date, "sm", "medium"].join(" ")}> Created on {calendar.calendar(props.created_on, ["d", "m"])}</span>
-        <button
+        {/* <button
           type="button"
           className={s.share_btn}
           onClick={props.showShareModalHandler}
         >
           Share
-        </button>
+        </button> */}
         <button
           type="button"
           className={s.delete_btn}

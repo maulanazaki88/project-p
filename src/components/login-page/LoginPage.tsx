@@ -8,7 +8,11 @@ import { useRouter } from "next/navigation";
 import { useVerifyEmail } from "@/hook/useVerifyEmail";
 import Link from "next/link";
 
-const LoginPage: React.FC = () => {
+interface LoginPageProps {
+  signupLink: string;
+}
+
+const LoginPage: React.FC<LoginPageProps> = (props) => {
   const verifyEmail = useVerifyEmail();
   const router = useRouter();
 
@@ -27,14 +31,14 @@ const LoginPage: React.FC = () => {
   const [warning, setWarning] = React.useState<{
     email: string;
     password: string;
-    username: string
+    username: string;
   }>({
     email: "-",
     password: "-",
-    username: "-"
+    username: "-",
   });
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData((prev) => {
@@ -46,16 +50,16 @@ const LoginPage: React.FC = () => {
   };
 
   const submitHandler: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    setIsLoading(true)
+    setIsLoading(true);
     e.preventDefault();
     if (!verifyEmail.verifyEmail(data.email)) {
       setWarning((prev) => {
         return {
           ...prev,
-          email: "Please input a valid email!"
-        }
-      })
-    }  else {
+          email: "Please input a valid email!",
+        };
+      });
+    } else {
       const response = await fetch(`/api/sign-in`, {
         method: "POST",
         body: JSON.stringify(data),
@@ -68,15 +72,38 @@ const LoginPage: React.FC = () => {
         // console.log("nooo");
         console.log(await response.json());
         // setButtonDisabled(false);
+        setIsLoading(false);
+        setData((data) => {
+          return {
+            ...data,
+            password: "",
+          };
+        });
         setWarning((prev) => {
           return {
             ...prev,
             username: "Incorrect password or email!",
           };
         });
+      } else if (!response.ok) {
+        console.log(await response.json());
+        // setButtonDisabled(false);
+        setIsLoading(false);
+        setData((data) => {
+          return {
+            ...data,
+            password: "",
+          };
+        });
+        setWarning((prev) => {
+          return {
+            ...prev,
+            username: "Error, please check internet connection",
+          };
+        });
       } else {
-        setIsLoading(false)
-        console.log(response)
+        setIsLoading(false);
+        console.log(response);
         router.replace(response.url);
       }
     }
@@ -120,7 +147,6 @@ const LoginPage: React.FC = () => {
           text="Masuk"
           icon="/icons/next_white.svg"
           isLoading={isLoading}
-
         />
       </form>
       <div className={s.suggestion}>
@@ -128,7 +154,7 @@ const LoginPage: React.FC = () => {
           Belum memiliki akun?
         </p>
         <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
-          <Link href="/login">Daftar gratis!</Link>
+          <Link href={props.signupLink}>Daftar gratis!</Link>
         </span>
       </div>
     </main>
