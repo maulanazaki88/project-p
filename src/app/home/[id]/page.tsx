@@ -14,7 +14,7 @@ const Home: React.FC<{ params: { id: string } }> = (props) => {
 
   React.useEffect(() => {
     setIsLoading(true)
-    fetch(`/api/get-user/${props.params.id}`, {
+    fetch(`/api/user/get/${props.params.id}?u_id=${props.params.id}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",

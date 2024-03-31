@@ -4,56 +4,79 @@ mongoose.connect(process.env.DB_CONN_STRING);
 
 const db = mongoose.connection;
 
-db.on("error", () => {
-  console.error("Failed to connect to MongoDB");
-});
+// db.on("error", () => {
+//   console.error("Failed to connect to MongoDB");
+// });
 
-db.on("open", () => {
-  console.log("Connected to MongoDB!");
-});
+// db.on("open", () => {
+//   console.log("Connected to MongoDB!");
+// });
 
 const TaskSchema: Schema = new Schema({
   t_id: {
-    type: "String",
+    type: String,
   },
   title: {
-    type: "String",
+    type: String,
   },
   description: {
-    type: "String",
+    type: String,
   },
   assigned_member: {
-    type: ["Mixed"],
+    type: [
+      {
+        u_id: String,
+        username: String,
+      },
+    ],
   },
   deadline: {
-    type: "Date",
+    type: Date,
   },
   priority: {
-    type: "String",
+    type: String,
   },
   created_at: {
-    type: "Date",
+    type: Date,
   },
   activity_list: {
-    type: ["Mixed"],
+    type: [
+      {
+        a_id: String,
+        activity_desc: String,
+        created_at: String,
+        activity_type: String,
+      },
+    ],
   },
   w_id: {
-    type: "String",
+    type: String,
   },
   seen_by: {
-    type: ["Mixed"],
+    type: [
+      {
+        u_id: String,
+        username: String,
+      },
+    ],
   },
   comments: {
-    type: ["Mixed"],
+    type: [
+      {
+        username: String,
+        message: String,
+        time: Date,
+      },
+    ],
   },
   status: {
-    type: "String",
+    type: String,
   },
   updated_at: {
-    type: "Date",
+    type: Date,
   },
   author: {
-    type: "String",
+    type: String,
   },
 });
 

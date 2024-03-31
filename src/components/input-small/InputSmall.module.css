@@ -69,3 +69,9 @@
     color: red;
     
 }
+
+@media screen and (max-width: 500px) {
+    .comp {
+        max-width: 425px;
+    }
+}

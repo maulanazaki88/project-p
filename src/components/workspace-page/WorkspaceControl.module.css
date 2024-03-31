@@ -1,0 +1,114 @@
+.control {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 67px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    padding: 0 10px;
+    background-color: #fff;
+    top: 70px;
+    z-index: 99;
+    
+}
+
+.access {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 60px;
+    
+}
+
+.left {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 30px;
+}
+
+.w_name {
+    position: relative;
+    color: #000;
+    margin-right: 20px;
+}
+
+.w_name::after {
+    content: ' ';
+    margin-left: 20px;
+    position: relative;
+    padding: 6px 1.5px ;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.right{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.right > * {
+    position: relative;
+    margin-left: 10px;
+}
+
+.search_field {
+    position: relative;
+    height: 70%;
+    width: 200px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 0 10px;
+}
+
+.search_inp {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+@media screen and (max-width: 500px) {
+    .control {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        width: 100%;
+        height: 68px;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+        padding: 0 10px;
+        background-color: #fff;
+        margin-bottom: 30px;
+    }
+
+    .w_name {
+        display: none;
+    }
+}

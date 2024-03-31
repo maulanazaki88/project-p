@@ -64,8 +64,8 @@ const HomePage: React.FC<HomePageProps> = (props) => {
 
   const task_list = workspace_list
     .map((w, index) => {
-      console.log(index);
-      console.log("task list inside map: ", w.task_list);
+      // console.log(index);
+      // console.log("task list inside map: ", w.task_list);
       return w.task_list.map((task) => {
         return {
           ...task,

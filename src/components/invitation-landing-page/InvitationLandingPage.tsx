@@ -23,7 +23,7 @@ const InvitationLandingPage: React.FC<{ data: WorkspaceType }> = (props) => {
     <main className={s.main}>
       <div className={s.header}>
         <h2 className={[s.title, "medium", "md"].join(" ")}>
-          Ini adalah tautan untuk bergabung ke workspace:
+          This is an invitation link to join workspace:
         </h2>{" "}
         <br />
         <span className={[s.workspace_name, "bold", "big"].join(" ")}>
@@ -43,7 +43,7 @@ const InvitationLandingPage: React.FC<{ data: WorkspaceType }> = (props) => {
         </figure>
         <section className={s.action}>
           <p className={[s.member_title, "md", "medium", "blend"].join(" ")}>
-            Anggota
+            Members
           </p>
           <ul className={s.member_list}>
             {props.data.member_list.map((member, index) => {
@@ -68,20 +68,20 @@ const InvitationLandingPage: React.FC<{ data: WorkspaceType }> = (props) => {
             })}
           </ul>
           <p className={[s.guide, "sm", "medium", "blend"].join(" ")}>
-            Silahkan Daftar atau Masuk untuk bergabung dengan anggota lain!
+            Signup or login to join with other members!
           </p>
           <ButtonLarge
             bg_color="#080726"
             color="#fff"
-            text="Daftar"
+            text="Sign Up"
             onClick={toSignUp}
           />
           <div className={s.suggestion}>
             <p className={[s.suggestion_txt, "sm", "blend"].join(" ")}>
-              Sudah memiliki akun?
+              Already have an account?
             </p>
             <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
-              <Link href={`${pathname}/login`}>Masuk</Link>
+              <Link href={`${pathname}/login`}>Login</Link>
             </span>
           </div>
         </section>

@@ -1,5 +1,5 @@
 "use client";
-import s from "./SignUpPage.module.css";
+import s from './SignUpPage.module.css'
 import React, { FormEventHandler } from "react";
 import InputSmall from "@/components/input-small/InputSmall";
 import ButtonLarge from "@/components/button-large/ButtonLarge";
@@ -12,6 +12,8 @@ import Link from "next/link";
 
 interface SignUpProps {
   loginLink: string;
+  signupAPI: string;
+  w_id?: string;
 }
 
 const SignUpPage: React.FC<SignUpProps> = (props) => {
@@ -45,7 +47,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
 
   const submitData: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    
+
     const email_re = /^[a-zA-Z0-9]+@[a-z]+\.[a-zA-Z]+/g;
 
     if (!email_re.test(user_data.email)) {
@@ -55,6 +57,14 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           email: "Please input a valid email!",
         };
       });
+      setTimeout(() => {
+        setWarning({
+          email: "-",
+          password: "-",
+          username: "-",
+        });
+      }, 5000);
+    
     } else if (user_data.username.length < 4) {
       setWarning((prev) => {
         return {
@@ -62,6 +72,13 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           username: "Username at least consist 4 characters!",
         };
       });
+      setTimeout(() => {
+        setWarning({
+          email: "-",
+          password: "-",
+          username: "-",
+        });
+      }, 5000);
     } else if (user_data.password.length < 8) {
       setWarning((prev) => {
         return {
@@ -69,18 +86,26 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           password: "Password must consist 8 characters!",
         };
       });
+      setTimeout(() => {
+        setWarning({
+          email: "-",
+          password: "-",
+          username: "-",
+        });
+      }, 5000);
     } else {
       console.log("Submit!!!");
       setIsLoading(true);
       const date_time = new Date();
 
-      const response = await fetch(`/api/create-user`, {
+      const response = await fetch(props.signupAPI, {
         body: JSON.stringify({
           ...user_data,
           created_at: date_time,
           updated_at: date_time,
           u_id: id_generator.user(),
-        } as UserType),
+          w_id: props.w_id
+        }),
         method: "POST",
       });
 
@@ -90,7 +115,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
       } else if (response.status === 409) {
         console.log(await response.json());
         setIsLoading(false);
-        
+
         set_user_data((prev) => {
           return {
             ...prev,
@@ -121,7 +146,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           };
         });
       } else {
-        setIsLoading(false);
+        // setIsLoading(false);
         router.replace(response.url);
       }
     }
@@ -140,7 +165,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
     <main className={s.main}>
       <div className={s.heading}>
         <h1 className={[s.title, "medium", "md"].join(" ")}>
-          Daftarkan Akun Anda
+          Signup
         </h1>
       </div>
       <form className={s.form} onSubmit={submitData}>
@@ -148,7 +173,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           icon={"/icons/person_black.svg"}
           onChange={changeHandler}
           name="username"
-          placeholder="Masukan Nama Pengguna"
+          placeholder="Enter Username"
           key={"username-input"}
           value={user_data.username}
           label="Nama Pengguna"
@@ -161,7 +186,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           icon={"/icons/email_black.svg"}
           onChange={changeHandler}
           name="email"
-          placeholder="Masukan Email Anda"
+          placeholder="Enter Email"
           key={"email-input"}
           value={user_data.email}
           label="Email"
@@ -174,7 +199,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           icon={"/icons/lock_black.svg"}
           onChange={changeHandler}
           name="password"
-          placeholder="Masukan Password Anda"
+          placeholder="Enter Password"
           key={"password-input"}
           value={user_data.password}
           label="Password"
@@ -186,7 +211,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
         <ButtonLarge
           bg_color="#080726"
           color="#fff"
-          text="Selanjutnya"
+          text="Signup"
           icon="/icons/next_white.svg"
           onClick={() => {}}
           isLoading={isLoading}
@@ -194,10 +219,10 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
       </form>
       <div className={s.suggestion}>
         <p className={[s.suggestion_txt, "sm", "soft"].join(" ")}>
-          Sudah memiliki akun?
+          Already have an account?
         </p>
         <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
-          <Link href={props.loginLink}>Masuk</Link>
+          <Link href={props.loginLink}>Login</Link>
         </span>
       </div>
     </main>

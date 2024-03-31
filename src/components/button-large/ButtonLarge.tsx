@@ -49,7 +49,7 @@ const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
       onClick={props.onClick}
     >
       {props.isLoading ? (
-        <Loading />
+        <Loading size={30} />
       ) : (
         <div className={s.content}>
           <p

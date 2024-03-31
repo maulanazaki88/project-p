@@ -67,6 +67,13 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
         </div>
         <div className={s.segment}>
           <ul className={s.list}>
+          <li className={s.item}>
+              <LayoutButton
+                name={"Home"}
+                onClick={props.clickHandler}
+                icon="/icons/home_black.svg"
+              />
+            </li>
             <li className={s.item}>
               <LayoutButton
                 name={"Edit Space"}
@@ -78,7 +85,7 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
               <LayoutButton
                 name={"Members"}
                 onClick={props.clickHandler}
-                icon="/icons/team_black.svg"
+                icon="/icons/members_black.svg"
               />
             </li>
             <li className={s.item}>

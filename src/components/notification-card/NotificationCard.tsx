@@ -6,7 +6,7 @@ import Context from "@/context/Store";
 export interface NotificationCardProps {
   username: string;
   message: string;
-  created_at: string;
+  created_at: Date;
   w_id: string;
 }
 

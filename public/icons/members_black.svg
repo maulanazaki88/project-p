@@ -1,0 +1,20 @@
+<svg id="SvgjsSvg1024" width="256" height="256" xmlns="http://www.w3.org/2000/svg" version="1.1"
+    xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
+    <defs id="SvgjsDefs1025"></defs>
+    <g id="SvgjsG1026">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="256" height="256">
+            <circle cx="4" cy="10" r="2" fill="#1c062d" class="color000 svgShape"></circle>
+            <path
+                d="M6.67 13.4A4.19 4.19 0 0 0 5 16.75V17H.75c-.41 0-.75-.34-.75-.75v-.5C0 14.23 1.23 13 2.75 13h2.5c.52 0 1.01.15 1.42.4z"
+                fill="#1c062d" class="color000 svgShape"></path>
+            <circle cx="20" cy="10" r="2" fill="#1c062d" class="color000 svgShape"></circle>
+            <path
+                d="M24 15.75v.5c0 .41-.34.75-.75.75H19v-.25c0-1.37-.66-2.59-1.67-3.35.41-.25.9-.4 1.42-.4h2.5c1.52 0 2.75 1.23 2.75 2.75z"
+                fill="#1c062d" class="color000 svgShape"></path>
+            <circle cx="12" cy="9.5" r="3" fill="#1c062d" class="color000 svgShape"></circle>
+            <path
+                d="M14.75 14h-5.5a2.752 2.752 0 0 0-2.75 2.75v1.5c0 .414.336.75.75.75h9.5a.75.75 0 0 0 .75-.75v-1.5A2.752 2.752 0 0 0 14.75 14z"
+                fill="#1c062d" class="color000 svgShape"></path>
+        </svg>
+    </g>
+</svg>

@@ -17,7 +17,8 @@
 }
 
 .icon {
-    height: 25px !important;
+    height: 15px !important;
+    width: auto;
 }
 
 .modal{

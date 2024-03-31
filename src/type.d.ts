@@ -21,14 +21,14 @@ export interface WorkspaceType {
   w_id: string;
   name: string;
   description: string;
-  notification_list: NotificationCardProps[];
+  notification_list: (NotificationCardProps | never)[];
   status: WorkspaceStatusType;
-  admin_list: { u_id: string; username: string }[];
-  member_list: { u_id: string; username: string }[];
-  waiting_list: {u_id: string; username: string}[];
-  task_ids: string[];
-  task_list: TaskType[];
-  activity_list: ActivityLogType[];
+  admin_list: ({ u_id: string; username: string } | never)[];
+  member_list: ({ u_id: string; username: string } | never)[];
+  waiting_list: ({ u_id: string; username: string } | never)[];
+  task_ids: (string | never)[];
+  task_list: (TaskType | never)[];
+  activity_list: (ActivityLogType | never)[];
   updated_at: Date;
   created_at: Date;
 }
@@ -37,15 +37,15 @@ export interface TaskType {
   t_id: string;
   title: string;
   description: string;
-  assigned_member: { u_id: string; username: string }[];
+  assigned_member: ({ u_id: string; username: string } | never)[];
   deadline: Date;
   priority: TaskPriorityType;
   created_at: Date;
   activity_list: ActivityLogType[];
   w_id: string;
   workspace_name: string;
-  seen_by: { u_id: string; username: string }[];
-  comments: ChatBubbleProps[];
+  seen_by: ({ u_id: string; username: string } | never)[];
+  comments: (ChatBubbleProps | never)[];
   status: ProgressStatusType;
   updated_at: Date;
   author: string;
@@ -56,8 +56,8 @@ export interface UserType {
   username: string;
   email: string;
   password: string;
-  workspace_ids: string[];
-  workspace_list: WorkspaceType[];
+  workspace_ids: (string | never)[];
+  workspace_list: (WorkspaceType | never)[];
   created_at: Date;
   is_online: 0 | 1;
   updated_at: Date;
@@ -66,14 +66,14 @@ export interface UserType {
 export interface CommentType {
   comment_id: string;
   t_id: string;
-  chat_list: ChatBubbleProps[];
-  updated_at: string;
+  chat_list: (ChatBubbleProps | never)[];
+  updated_at: Date;
 }
 
 export interface ActivityLogType {
   a_id: string;
   activity_desc: string;
-  created_at: string;
+  created_at: Date;
   activity_type: "CREATE" | "READ" | "UPDATE" | "DELETE";
 }
 

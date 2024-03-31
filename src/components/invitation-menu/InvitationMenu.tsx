@@ -23,11 +23,15 @@ const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
     return workspace ? workspace.name : "~";
   }, [user_workspaces_ctx]);
 
-  const baseURL = "http://localhost:3000";
-
-  const invitation_link = `${baseURL}/invitation/${w_id}`;
+  const [invitation_link, setInvitationLink] = React.useState<string>(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/invitation/${w_id}`
+  );
 
   const urlencoded = encodeURI(invitation_link);
+
+  React.useEffect(() => {
+    setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/invitation/${w_id}`)
+  }, [props.show])
 
   return (
     <div
@@ -38,21 +42,25 @@ const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
         color="#fff"
         icon={"/icons/close_black.svg"}
         opacity={1}
-        onClick={() => {props.closeHandler()}}
+        onClick={() => {
+          props.closeHandler();
+        }}
         scale={1.2}
         style={{
           position: "absolute",
           top: "2%",
           right: "2%",
-          zIndex: 99
+          zIndex: 99,
         }}
       />
       {/* <MenuNavbar closeHandler={props.closeHandler} title="" /> */}
       <div className={s.header}>
         <h2 className={[s.title, "medium", "md", "blend"].join(" ")}>
-          Undang teman-teman Anda untuk bergabung dengan workspace Anda!
+          Invite your friends to join your workspace!
         </h2>
-        <span className={[s.workspace_name, "big", "medium"].join(" ")}>{workspace_name}</span>
+        <span className={[s.workspace_name, "big", "medium"].join(" ")}>
+          {workspace_name}
+        </span>
       </div>
       <figure className={s.figure}>
         <Image
@@ -65,14 +73,20 @@ const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
       </figure>
       <div className={s.action}>
         <p className={[s.text, "medium", "sm", "blend"].join(" ")}>
-          Klik tautan di bawah untuk menyalin tautan ke papan klip dan bagikan
-          ke teman Anda!
+          Click the link below to copy invitation link to clipboard or share it
+          via your prefered social media!
         </p>
         <div
           className={s.link_field}
           onClick={() => {
             if (navigator) {
               navigator.clipboard.writeText(invitation_link);
+              setInvitationLink("Copied!!!");
+              setTimeout(() => {
+                setInvitationLink(
+                  `${process.env.NEXT_PUBLIC_BASE_URL}/invitation/${w_id}`
+                );
+              }, 4000);
             }
           }}
         >

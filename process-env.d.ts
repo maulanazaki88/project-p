@@ -5,6 +5,7 @@ export declare global {
       PYTHON_HOST: string;
       DB_CONN_STRING: string;
       NEXT_PUBLIC_BASE_URL: string;
+      JWT_SECRET: string
     }
   }
 }

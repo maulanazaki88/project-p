@@ -1,6 +1,9 @@
 import { TaskType } from "@/type";
 import { TaskModel } from "../model/task.model";
 import { DateFormater } from "@/utils/DateFormater";
+import { decrypt, encrypt, updateSession } from "@/lib";
+import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 /**
  * Assign program to create task, expected to return t_id as string to used it as url param to redirect to created task after the task written in database
@@ -8,7 +11,7 @@ import { DateFormater } from "@/utils/DateFormater";
  * If succeed will return {exist: false, t_id: t_id, message: success}
  *
  * If there are task with same t_id {exist: true, t_id: null, message: conflict}
- * 
+ *
  * if there is error occur will return {exist: false, t_id: null, message: failed}
  *
  * @param data - TaskType
@@ -34,6 +37,19 @@ export const createTask = async (data: TaskType) => {
       } as TaskType);
 
       if (response) {
+        const t_accs_payload = {
+          t_id: response.t_id,
+          assigned_member: response.assigned_member,
+        };
+
+        const expires = new Date(Date.now() + 3600 * 1000 * 12);
+        const t_accs_tkn = await encrypt({ t_accs_payload, expires });
+
+        cookies().set("t_accs_tkn", t_accs_tkn, {
+          httpOnly: true,
+          expires,
+        });
+
         return {
           exist: false,
           t_id: data.t_id,
@@ -53,17 +69,17 @@ export const createTask = async (data: TaskType) => {
 };
 
 /**
- * Assign program to update task 
- * 
+ * Assign program to update task
+ *
  * Success: return {updated_count: 1, t_id: t_id}
- * 
+ *
  * No task with t_id return {updated_count: 0, t_id: t_id}
- * 
+ *
  * Failed: return null
- * 
+ *
  * @param t_id t_id of targeted task
  * @param data subset of TaskType data
- * @returns 
+ * @returns
  */
 
 export const updateTask = async (t_id: string, data: any) => {
@@ -85,64 +101,61 @@ export const updateTask = async (t_id: string, data: any) => {
         t_id: t_id,
       };
     } else {
-      return null
+      return null;
     }
   } catch (error: any) {
     console.error("Error update task: ", error.message);
   }
 };
 
-
 /**
  * Assign program to get task by t_id
- * 
+ *
  * Success: return TaskType
- * 
+ *
  * Failed: return null
- * 
+ *
  * @param t_id t_id of addressed task
- * @returns 
+ * @returns
  */
 export const getTask = async (t_id: string) => {
   try {
-    const tasks = await TaskModel.aggregate([
-      { $match: { t_id: decodeURIComponent(t_id) } },
-      {
-        $lookup: {
-          from: "workspaces",
-          localField: "w_id",
-          foreignField: "w_id",
-          pipeline: [{ $project: { _id: 0, name: 1 } }],
-          as: "workspace",
-        },
-      },
-      { $project: { _id: 0 } },
-      { $unwind: "$workspace" },
-    ]);
+    const task = await TaskModel.findOne({ t_id: t_id });
 
-    if (tasks) {
-      return tasks[0];
+    if (task) {
+      const t_accs_payload = {
+        t_id: task.t_id,
+        assigned_member: task.assigned_member,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const t_accs_tkn = await encrypt({ t_accs_payload, expires });
+
+      cookies().set("t_accs_tkn", t_accs_tkn, {
+        httpOnly: true,
+        expires,
+      });
+      return task;
     } else {
-      return null
+      return null;
     }
   } catch (error: any) {
     console.error("Error getting task: ", error.message);
   }
 };
 
-
 /**
  * Assign program to update task specific on add participant
- * 
+ *
  * Success: return {updated_count: 1, t_id: t_id}
- * 
+ *
  * No task with t_id return {updated_count: 0, t_id: t_id}
- * 
+ *
  * Failed: return null
- * 
+ *
  * @param t_id t_id of targeted task
  * @param user minimal user data username & u_id of participant candidate
- * @returns 
+ * @returns
  */
 export const taskAddParticipant = async (
   t_id: string,
@@ -159,6 +172,23 @@ export const taskAddParticipant = async (
     );
 
     if (response) {
+      const task = await TaskModel.findOne(
+        { t_id: t_id },
+        { assigned_member: 1 }
+      );
+
+      const t_accs_payload = {
+        t_id: t_id,
+        assigned_member: task.assigned_member,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const t_accs_tkn = await encrypt({ t_accs_payload, expires });
+
+      cookies().set("t_accs_tkn", t_accs_tkn, {
+        httpOnly: true,
+        expires,
+      });
       return {
         updated_count: response.modifiedCount,
         t_id: t_id,
@@ -169,19 +199,18 @@ export const taskAddParticipant = async (
   }
 };
 
-
 /**
  * Assign program to update task specific on delete participant
- * 
+ *
  * Success: return {updated_count: 1, t_id: t_id}
- * 
+ *
  * No task with t_id return {updated_count: 0, t_id: t_id}
- * 
+ *
  * Failed: return null
- * 
+ *
  * @param t_id t_id of targeted task
  * @param user minimal user data username & u_id of participant
- * @returns 
+ * @returns
  */
 export const taskDeleteParticipant = async (
   t_id: string,
@@ -198,12 +227,29 @@ export const taskDeleteParticipant = async (
     );
 
     if (response) {
+      const task = await TaskModel.findOne(
+        { t_id: t_id },
+        { assigned_member: 1 }
+      );
+
+      const t_accs_payload = {
+        t_id: t_id,
+        assigned_member: task.assigned_member,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const t_accs_tkn = await encrypt({ t_accs_payload, expires });
+
+      cookies().set("t_accs_tkn", t_accs_tkn, {
+        httpOnly: true,
+        expires,
+      });
       return {
         updated_count: response.modifiedCount,
         t_id: t_id,
       };
     } else {
-      return null
+      return null;
     }
   } catch (error: any) {
     console.error("Error deleting participant to task: ", error.message);
@@ -212,16 +258,16 @@ export const taskDeleteParticipant = async (
 
 /**
  * Assign program to update task specific on add comment
- * 
+ *
  * Success: return {updated_count: 1, t_id: t_id}
- * 
+ *
  * No task with t_id return {updated_count: 0, t_id: t_id}
- * 
+ *
  * Failed: return null
- * 
+ *
  * @param t_id t_id of targeted task
  * @param comment contains username, message, and sent time
- * @returns 
+ * @returns
  */
 export const taskAddComment = async (
   t_id: string,
@@ -244,7 +290,7 @@ export const taskAddComment = async (
         t_id: t_id,
       };
     } else {
-      return null
+      return null;
     }
   } catch (error: any) {
     console.error("Error adding comment to task: ", error.message);
@@ -253,15 +299,15 @@ export const taskAddComment = async (
 
 /**
  * Commit to delete task only if user is has access
- * 
+ *
  * Success: return {deleted_count: 1, t_id: t_id}
- * 
+ *
  * No task with t_id: return {deleted_count: 0, t_id: t_id}
- * 
+ *
  * Failed: return null
- * 
+ *
  * @param t_id t_id of addressed task
- * @returns 
+ * @returns
  */
 
 export const deleteTask = async (t_id: string) => {
@@ -281,13 +327,13 @@ export const deleteTask = async (t_id: string) => {
 
 /**
  * Assign progran to get all task that has participant with u_id
- * 
+ *
  * Success: return TaskType[]
- * 
+ *
  * Failed: return null
- * 
- * @param u_id 
- * @returns 
+ *
+ * @param u_id
+ * @returns
  */
 
 export const getUserAllTask = async (u_id: string) => {
@@ -297,7 +343,7 @@ export const getUserAllTask = async (u_id: string) => {
     if (tasks) {
       return tasks;
     } else {
-      return null
+      return null;
     }
   } catch (error: any) {
     console.error("Error fetching all task from user: ", error.message);

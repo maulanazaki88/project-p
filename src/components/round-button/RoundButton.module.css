@@ -16,6 +16,10 @@
     opacity: 0.5;
 }
 
+.highlight:active {
+    background-color: #e5e5e5 !important;
+}
+
 .content {
     position: relative;
     display: flex;

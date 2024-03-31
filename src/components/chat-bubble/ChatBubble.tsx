@@ -19,7 +19,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
     <div className={s.bubble}>
       <div className={s.username_box}>
         <span className={[s.username, "medium", "sm"].join(" ")}>
-          {props.username === user_data?.username ? "Anda" : props.username}
+          {props.username === user_data?.username ? "You" : props.username}
         </span>
       </div>
       <p className={[s.message, "sm", "medium"].join(" ")}>{props.message}</p>

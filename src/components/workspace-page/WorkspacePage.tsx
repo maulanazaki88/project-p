@@ -1,32 +1,24 @@
 "use client";
 import s from "./Workspace.module.css";
 import React from "react";
-import ProgressTitle from "@/components/progress-title/ProgressTitle";
-import Navbar from "@/components/navbar/Navbar";
-import OnlineBar from "@/components/online-bar/OnlineBar";
 import Context, { ContextType } from "@/context/Store";
 import TaskCard from "@/components/task-card/TaskCard";
 import BasicMenu from "@/components/basic-menu/BasicMenu";
 import { ButtonLargeProps } from "@/components/button-large/ButtonLarge";
 import {
-  ActivityLogType,
   ProgressStatusType,
   TaskType,
-  UserType,
   WorkspaceType,
 } from "@/type";
 import { useRouter } from "next/navigation";
-import { getWorkspace } from "@/server/actions";
 import { useDateNow } from "@/hook/useDateNow";
 import CardMenu from "../card-menu/CardMenu";
 import { usePathname } from "next/navigation";
-import FormMenu from "../from-menu/FormMenu";
-import { WorkspaceInit_Act, TaskInit_Act } from "@/context/Store";
+import FormMenu from "../form-menu/FormMenu";
 import { useIdGenerator } from "@/hook/useIdGenerator";
-import WaitingList from "../waiting-list/WaitingList";
-import MemberList from "../member-list/MemberList";
 import InvitationMenu from "../invitation-menu/InvitationMenu";
 import TaskStageSection from "../task-stage-section/TaskStageSection";
+import WorkspaceControl from "./WorkspaceControl";
 
 interface WorkspacePageProps {
   data: WorkspaceType;
@@ -44,100 +36,13 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const w_id = pathname.split("/")[4];
 
   const {
-    display_width_ctx,
     user_data_ctx,
-    user_data_handler_ctx,
-    initialize_workspaces_ctx,
-    initialize_tasks_ctx,
-    user_workspaces_ctx,
     workspace_create_announcement_ctx,
     user_task_ctx,
-    workspace_create_ctx,
     workspace_delete_ctx,
-    owner_acc_user_add_workspace_ctx,
-    owner_reject_user_add_workspace_ctx,
     owner_kick_user_workspace,
     user_exit_workspace,
   } = React.useContext(Context) as ContextType;
-
-  const screenRef = React.useRef<HTMLDivElement | null>(null);
-
-  // const pointerUpHandler = React.useCallback(
-  //   (e: React.TouchEvent<HTMLDivElement>) => {
-  //     const screen = screenRef.current;
-  //     if (display_width_ctx && screen) {
-  //       const mid_point = display_width_ctx / 2;
-  //       const scrollLeft = screen.scrollLeft;
-  //       if (scrollLeft < mid_point) {
-  //         screen.scrollTo({ left: 0, behavior: "smooth" });
-  //       } else if (scrollLeft > mid_point && scrollLeft < mid_point * 3) {
-  //         screen.scrollTo({ left: display_width_ctx, behavior: "smooth" });
-  //       } else if (scrollLeft > mid_point * 3 && scrollLeft < mid_point * 5) {
-  //         screen.scrollTo({ left: display_width_ctx * 2, behavior: "smooth" });
-  //       } else if (scrollLeft > mid_point * 5) {
-  //         screen.scrollTo({ left: display_width_ctx * 3, behavior: "smooth" });
-  //       }
-  //     }
-  //   },
-  //   [display_width_ctx]
-  // );
-
-  const [scroll_position, setScrollPosition] = React.useState<number>(
-    screenRef.current ? screenRef.current.scrollLeft : 0
-  );
-
-  const [on_touch_down, setOnTouchDown] = React.useState<boolean>(false);
-
-  const [on_adjustment, setOnAdjustment] = React.useState<boolean>(false);
-
-  // React.useEffect(() => {
-  //   const mid_point = display_width_ctx / 2;
-  //   if (
-  //     scroll_position < mid_point &&
-  //     screenRef.current &&
-  //     !on_touch_down &&
-  //     !on_adjustment
-  //   ) {
-  //     screenRef.current.scrollTo({ left: 0, behavior: "smooth" });
-  //   } else if (
-  //     scroll_position > mid_point &&
-  //     scroll_position < mid_point * 3 &&
-  //     screenRef.current &&
-  //     !on_touch_down &&
-  //     !on_adjustment
-  //   ) {
-  //     screenRef.current.scrollTo({
-  //       left: display_width_ctx,
-  //       behavior: "smooth",
-  //     });
-  //     setOnAdjustment(true);
-  //   } else if (
-  //     scroll_position > mid_point * 3 &&
-  //     scroll_position < mid_point * 5 &&
-  //     screenRef.current &&
-  //     !on_touch_down &&
-  //     !on_adjustment
-  //   ) {
-  //     screenRef.current.scrollTo({
-  //       left: display_width_ctx * 2,
-  //       behavior: "smooth",
-  //     });
-  //     setOnAdjustment(true);
-  //   } else if (
-  //     scroll_position > mid_point * 5 &&
-  //     screenRef.current &&
-  //     !on_touch_down &&
-  //     !on_adjustment
-  //   ) {
-  //     screenRef.current.scrollTo({
-  //       left: display_width_ctx * 3,
-  //       behavior: "smooth",
-  //     });
-  //     setOnAdjustment(true);
-  //   } else {
-  //     setOnAdjustment(false);
-  //   }
-  // }, [scroll_position, on_touch_down, on_adjustment]);
 
   const [isMenuActive, setIsMenuActive] = React.useState<boolean>(false);
   const [isNotificationMenuActive, setIsNotificationMenuActive] =
@@ -155,6 +60,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const [showMemberList, setShowMemberList] = React.useState<boolean>(false);
   const [showInvitationMenu, setShowInvitationMenu] =
     React.useState<boolean>(false);
+
+  const [search_value, setSearchValue] = React.useState<string>("");
 
   React.useEffect(() => {}, []);
 
@@ -187,38 +94,28 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     }
   };
 
-  // React.useEffect(() => {
-  //   // user_data_handler_ctx(props.user_data);
-
-  //   if (!user_data_ctx) {
-  //     user_data_handler_ctx(props.user_data);
-  //     initialize_workspaces_ctx({
-  //       workspace_list: props.user_data.workspace_list,
-  //     } as WorkspaceInit_Act);
-
-  //     const tasks: TaskType[] = [];
-
-  //     for (let workspace of props.user_data.workspace_list) {
-  //       for (let task of workspace.task_list) {
-  //         tasks.push({ ...task, workspace_name: workspace.name });
-  //       }
-  //     }
-
-  //     initialize_tasks_ctx({ task_list: tasks } as TaskInit_Act);
-  //   }
-
-  //   // router.refresh();
-
-  //   // update data user jika belum terdapat workspace baru yang ditambahkan
-  // }, []);
+  const filtered_user_task = React.useMemo(() => {
+    const lower_case_value = search_value.toLowerCase();
+    if (user_task_ctx && search_value !== "") {
+      return user_task_ctx.filter(
+        (task) =>
+          task.title.toLocaleLowerCase().includes(lower_case_value) ||
+          task.assigned_member.some((member) =>
+            member.username.toLowerCase().includes(lower_case_value)
+          ) ||
+          task.description.toLocaleLowerCase().includes(lower_case_value)
+      );
+    } else {
+      return user_task_ctx;
+    }
+  }, [user_task_ctx, search_value]);
 
   if (props.data !== undefined) {
     const t_id = id_generator.task();
     const date_time = new Date();
-    const date_ = new Date()
+    const date_ = new Date();
 
     const newTaskHandler = async (t: ProgressStatusType) => {
-      console.log("CLICKED");
       const new_task: TaskType = {
         activity_list: [],
         assigned_member: [],
@@ -231,7 +128,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
         seen_by: [],
         status: t,
         t_id: t_id,
-        title: "Tanpa Judul",
+        title: "Untitled",
         updated_at: date_time,
         w_id: w_id,
         workspace_name: "",
@@ -252,19 +149,19 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
       }
     };
 
-    const next_up = user_task_ctx.filter(
+    const next_up = filtered_user_task.filter(
       (task) => task.status === "NEXT-UP" && task.w_id === w_id
     );
 
-    const in_progress = user_task_ctx?.filter(
+    const in_progress = filtered_user_task?.filter(
       (task) => task.status === "IN-PROGRESS" && task.w_id === w_id
     );
 
-    const revised = user_task_ctx?.filter(
+    const revised = filtered_user_task?.filter(
       (task) => task.status === "REVISED" && task.w_id === w_id
     );
 
-    const completed = user_task_ctx?.filter(
+    const completed = filtered_user_task?.filter(
       (task) => task.status === "COMPLETED" && task.w_id === w_id
     );
 
@@ -467,6 +364,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           title={props.data.name}
           menuHandler={() => setIsMenuActive(true)}
         /> */}
+
         <FormMenu
           closeHandler={() => setDeletePromptActive(false)}
           label={`Ketik: "${props.data.name}"`}
@@ -493,7 +391,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
             workspace_create_announcement_ctx(w_id, {
               notification: {
                 message: d.value,
-                created_at: date_now.withTime(),
+                created_at: new Date(),
                 username: user_data_ctx?.username
                   ? user_data_ctx?.username
                   : "",
@@ -520,45 +418,6 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
             setShowNotificationForm(true);
           }}
         />
-        {/* <MemberList
-          closeHandler={() => {
-            setShowMemberList(false);
-          }}
-          kickHandler={(data) => {
-            kickHandler(u_id, w_id, data.u_id);
-          }}
-          list={props.data.member_list}
-          show={showMemberList}
-          w_id={w_id}
-          workspace_name={props.data.name}
-          showWaitingListHandler={() => {
-            setShowWaitingList(true);
-          }}
-          showInvitationMenuHandler={() => {
-            setShowInvitationMenu(true);
-          }}
-        /> */}
-        {/* <WaitingList
-          accHandler={(data) => {
-            owner_acc_user_add_workspace_ctx(u_id, data.w_id, {
-              u_id: u_id,
-              candidate: { u_id: data.u_id, username: data.username },
-            });
-          }}
-          closeHandler={() => {
-            setShowWaitingList(false);
-          }}
-          list={props.data.waiting_list}
-          rejHandler={(data) => {
-            owner_reject_user_add_workspace_ctx(u_id, data.w_id, {
-              u_id: u_id,
-              candidate: { u_id: data.u_id, username: data.username },
-            });
-          }}
-          show={showWaitingList}
-          workspace_name={props.data.name}
-          w_id={props.data.w_id}
-        /> */}
         <InvitationMenu
           closeHandler={() => {
             setShowInvitationMenu(false);
@@ -583,10 +442,19 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
         />
 
         <main className={s.main}>
+          <WorkspaceControl
+            created_on={props.data.created_at}
+            searchInputHandler={(e): void => {
+              setSearchValue(e.target.value);
+            }}
+            search_value={search_value}
+            workspace_desc={props.data.description}
+            workspace_name={props.data.name}
+          />
           <div className={s.task_board}>
             {/* <OnlineBar users={props.data.member_list} /> */}
             <div
-            dir="ltr"
+              dir="ltr"
               className={s.selection_screen}
               // ref={screenRef}
               // onTouchEnd={pointerUpHandler}

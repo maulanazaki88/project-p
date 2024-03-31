@@ -1,18 +1,19 @@
-import { TaskType, WorkspaceType } from "@/type";
+import { WorkspaceType } from "@/type";
 import { WorkspaceModel } from "../model/workspace.model";
-import { DateFormater } from "@/utils/DateFormater";
 import { NotificationCardProps } from "@/components/notification-card/NotificationCard";
+import { encrypt } from "@/lib";
+import { cookies } from "next/headers";
 
 /**
- * 
+ *
  * Assign program to create new workspace, assigning current user as its owner & admin, expeect return w_id to use it as url slug to redirect to workspace after being created on database
- * 
- * Success - return {exist: false, w_id: w_id, message: success}
- * 
+ *
+ * Success - return {exist: false, w_id: w_id, message: success} and create w_accs_tkn with payload u_ids contain admin_list also m_accs_tkn to allow authorized user open workspace and task
+ *
  * Existing workspace with w_id - return {exist: true, w_id: null}
- * 
+ *
  * @param data -WorkspaceType data
- * @returns 
+ * @returns
  */
 export const createWorkspace = async (data: WorkspaceType) => {
   const exist = await WorkspaceModel.exists({ w_id: data.w_id });
@@ -31,6 +32,20 @@ export const createWorkspace = async (data: WorkspaceType) => {
         updated_at: currentDate,
         created_at: currentDate,
       } as WorkspaceType);
+
+      const w_accs_payload = {
+        w_id: data.w_id,
+        admin_list: data.admin_list,
+        member_list: data.member_list,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const w_accs_tkn = await encrypt({ w_accs_payload, expires });
+
+      cookies().set("w_accs_tkn", w_accs_tkn, {
+        expires,
+        httpOnly: true,
+      });
 
       if (response) {
         return {
@@ -51,17 +66,16 @@ export const createWorkspace = async (data: WorkspaceType) => {
   }
 };
 
-
 /**
  * Assign program to update workspace data e.g name, description
- * 
+ *
  * Success - return {updated_count: 1, w_id: w_id}
- * 
+ *
  * Failed - return null
- * 
+ *
  * @param w_id - Addressed workspace
  * @param data - Subset of workspace object from WorkspaceType
- * @returns 
+ * @returns
  */
 export const updateWorkspace = async (w_id: string, data: any) => {
   const updated_data = data as WorkspaceType;
@@ -85,21 +99,20 @@ export const updateWorkspace = async (w_id: string, data: any) => {
       w_id: w_id,
     };
   } else {
-    return null
+    return null;
   }
 };
 
-
 /**
  * Assign program to update workspace sepcificly on adding memberlist, happen as user with access accept other user request to join
- * 
+ *
  * Success - return {updated_count: 1, w_id: w_id}
- * 
+ *
  * No workspace with w_id - return {updated_count: 1, w_id: w_id}
- * 
+ *
  * @param w_id -addressed workspace w_id
  * @param user - subset of UserType {username: string, u_id: string} to display its username after being sccepted by owner or admin
- * @returns 
+ * @returns
  */
 export const workspaceAddMember = async (
   w_id: string,
@@ -117,12 +130,31 @@ export const workspaceAddMember = async (
     );
 
     if (response) {
+      const record = await WorkspaceModel.findOne(
+        { w_id: w_id },
+        { member_list: 1, admin_list: 1 }
+      );
+
+      const w_accs_payload = {
+        w_id: w_id,
+        admin_list: record.admin_list,
+        member_list: record.member_list,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const w_accs_tkn = await encrypt({ w_accs_payload, expires });
+
+      cookies().set("w_accs_tkn", w_accs_tkn, {
+        expires,
+        httpOnly: true,
+      });
+
       return {
         updated_count: response.modifiedCount,
         w_id: w_id,
       };
     } else {
-      return null
+      return null;
     }
   } catch (error: any) {
     console.error("Error adding new member to workspace: ", error.message);
@@ -131,14 +163,14 @@ export const workspaceAddMember = async (
 
 /**
  * Assign program to update workspace sepcificly on deleting memberlist with u_id, happen as user with access kick other member or member itself exit from workspace
- * 
+ *
  * Success - return {updated_count: 1, w_id: w_id}
- * 
+ *
  * No workspace with w_id - return {updated_count: 1, w_id: w_id}
- * 
+ *
  * @param w_id - addressed workspace w_id
  * @param user - subset of UserType {username: string, u_id: string} to display its username after being sccepted by owner or admin
- * @returns 
+ * @returns
  */
 export const workspaceDeleteMember = async (
   w_id: string,
@@ -156,6 +188,24 @@ export const workspaceDeleteMember = async (
     );
 
     if (response) {
+      const record = await WorkspaceModel.findOne(
+        { w_id: w_id },
+        { member_list: 1, admin_list: 1 }
+      );
+
+      const w_accs_payload = {
+        w_id: w_id,
+        admin_list: record.admin_list,
+        member_list: record.member_list,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const w_accs_tkn = await encrypt({ w_accs_payload, expires });
+
+      cookies().set("w_accs_tkn", w_accs_tkn, {
+        expires,
+        httpOnly: true,
+      });
       return {
         updated_count: response.modifiedCount,
         w_id: w_id,
@@ -168,13 +218,13 @@ export const workspaceDeleteMember = async (
 
 /**
  * Assign program to retrieve hydrated workspace data
- * 
+ *
  * Success - return data WorkspaceType
- * 
+ *
  * Failed - return null
- * 
+ *
  * @param w_id addressed workspace
- * @returns 
+ * @returns
  */
 export const getWorkspace = async (w_id: string) => {
   try {
@@ -192,21 +242,36 @@ export const getWorkspace = async (w_id: string) => {
       { $project: { _id: 0 } },
     ]);
 
-    if (workspaces) {
-      return workspaces[0];
+    const workspace = workspaces[0];
+
+    if (workspace) {
+      const w_accs_payload = {
+        w_id: w_id,
+        admin_list: workspace.admin_list,
+        member_list: workspace.member_list,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const w_accs_tkn = await encrypt({ w_accs_payload, expires });
+
+      cookies().set("w_accs_tkn", w_accs_tkn, {
+        expires,
+        httpOnly: true,
+      });
+
+      return workspace;
     }
   } catch (error: any) {
     console.error("Error getting workspace data: ", error.message);
   }
 };
 
-
 /**
- * Assign program to update workspace specificly 
- * 
+ * Assign program to update workspace specificly
+ *
  * @param w_id addressed workspace w_id
  * @param data NotidicaionCardProps data
- * @returns 
+ * @returns
  */
 export const workspaceCreateAnnouncement = async (
   w_id: string,
@@ -280,6 +345,20 @@ export const replaceWorkspace = async (w_id: string, data: WorkspaceType) => {
     } as WorkspaceType);
 
     if (response) {
+      const workspace = await WorkspaceModel.findOne({ w_id: w_id });
+      const w_accs_payload = {
+        w_id: w_id,
+        admin_list: workspace.admin_list,
+        member_list: workspace.member_list,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const w_accs_tkn = await encrypt({ w_accs_payload, expires });
+
+      cookies().set("w_accs_tkn", w_accs_tkn, {
+        expires,
+        httpOnly: true,
+      });
       return { updated_count: response.modifiedCount, w_id: w_id };
     }
   } catch (error: any) {
@@ -317,7 +396,7 @@ export const accWaitingList = async (
   w_id: string,
   user: { u_id: string; username: string }
 ) => {
-  console.log("w_id & user", w_id)
+  console.log("w_id & user", w_id);
   try {
     const currentDate = new Date();
 
@@ -331,6 +410,20 @@ export const accWaitingList = async (
     );
 
     if (response) {
+      const workspace = await WorkspaceModel.findOne({ w_id: w_id });
+      const w_accs_payload = {
+        w_id: w_id,
+        admin_list: workspace.admin_list,
+        member_list: workspace.member_list,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const w_accs_tkn = await encrypt({ w_accs_payload, expires });
+
+      cookies().set("w_accs_tkn", w_accs_tkn, {
+        expires,
+        httpOnly: true,
+      });
       console.log("acc-waiting-list-res", response);
       return {
         updated_count: response.modifiedCount,
@@ -358,6 +451,20 @@ export const rejWaitingList = async (
     );
 
     if (response) {
+      const workspace = await WorkspaceModel.findOne({ w_id: w_id });
+      const w_accs_payload = {
+        w_id: w_id,
+        admin_list: workspace.admin_list,
+        member_list: workspace.member_list,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const w_accs_tkn = await encrypt({ w_accs_payload, expires });
+
+      cookies().set("w_accs_tkn", w_accs_tkn, {
+        expires,
+        httpOnly: true,
+      });
       return {
         updated_count: response.modifiedCount,
         w_id: w_id,
@@ -386,6 +493,20 @@ export const workspaceRemoveMember = async (
     );
 
     if (response) {
+      const workspace = await WorkspaceModel.findOne({ w_id: w_id });
+      const w_accs_payload = {
+        w_id: w_id,
+        admin_list: workspace.admin_list,
+        member_list: workspace.member_list,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const w_accs_tkn = await encrypt({ w_accs_payload, expires });
+
+      cookies().set("w_accs_tkn", w_accs_tkn, {
+        expires,
+        httpOnly: true,
+      });
       return {
         updated_count: response.modifiedCount,
         w_id: w_id,
@@ -401,6 +522,7 @@ export const deleteWorkspace = async (w_id: string) => {
     const response = await WorkspaceModel.deleteOne({ w_id: w_id });
 
     if (response) {
+      cookies().delete("w_accs_tkn");
       return {
         deleted_count: response.deletedCount,
         w_id: w_id,
@@ -456,3 +578,4 @@ export const getWorkspaceWaitingList = async (w_id: string) => {
     console.error("Error getting workspace waiting list");
   }
 };
+

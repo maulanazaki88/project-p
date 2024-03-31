@@ -7,36 +7,67 @@ import { useDateNow } from "@/hook/useDateNow";
 import Loading from "@/components/loading/LoadingLight";
 
 const Task: React.FC<{
-  params: { id: string; t_id: string };
+  params: { id: string; w_id: string; t_id: string };
 }> = (props) => {
-  const { user_task_ctx, user_data_handler_ctx } = React.useContext(
-    Context
-  ) as ContextType;
+  const {
+    user_task_ctx,
+    user_data_handler_ctx,
+    user_data_ctx,
+    workspace_refresh_ctx,
+    task_refresh_ctx,
+    user_workspaces_ctx,
+  } = React.useContext(Context) as ContextType;
 
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
-  const date_now = useDateNow();
-
   React.useEffect(() => {
-    setIsLoading(true)
-    fetch(`/api/get-user/${props.params.id}`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-      },
-      cache: "no-cache",
-    })
-      .then((res) => res)
-      .then((data) => data.json())
-      .then((data) => {
-        setIsLoading(false);
-        user_data_handler_ctx(data);
-        return;
+    if (user_data_ctx) {
+      fetch(
+        `/api/task/get/${props.params.t_id}?u_id=${props.params.id}&w_id=${props.params.w_id}`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+          },
+          cache: "no-cache",
+        }
+      )
+        .then((res) => res)
+        .then((data) => data.json())
+        .then((data) => {
+          const workspace = user_workspaces_ctx.find(
+            (w) => w.w_id === props.params.w_id
+          );
+
+          const workspace_name = workspace ? workspace.name : "~~";
+
+          setIsLoading(false);
+          task_refresh_ctx(props.params.t_id, {
+            task: { ...data, workspace_name: workspace_name },
+            u_id: props.params.id,
+            w_id: props.params.w_id,
+          });
+          return;
+        })
+        .catch((e) => console.log(e));
+    } else {
+      setIsLoading(true);
+      fetch(`/api/user/get/${props.params.id}?u_id=${props.params.id}`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+        cache: "no-cache",
       })
-      .catch((e: any) => {
-        console.log(e);
-        alert(e.message);
-      });
+        .then((res) => res)
+        .then((data) => data.json())
+        .then((data) => {
+          setIsLoading(false);
+          user_data_handler_ctx(data);
+          return;
+        })
+        .catch((e) => console.log(e));
+    }
   }, []);
 
   const currentDate = new Date();
@@ -44,28 +75,28 @@ const Task: React.FC<{
   const loading_task: TaskType = {
     activity_list: [],
     assigned_member: [],
-    author: "",
+    author: "~~",
     comments: [],
     created_at: currentDate,
     deadline: currentDate,
-    description: "",
+    description: "~~",
     priority: "MED",
     seen_by: [],
     status: "IN-PROGRESS",
     t_id: props.params.t_id,
-    title: "",
+    title: "~~",
     updated_at: currentDate,
-    w_id: "",
-    workspace_name: "",
+    w_id: "~~",
+    workspace_name: "~~",
   };
 
   const task = React.useMemo(() => {
     const data = user_task_ctx.find((t) => t.t_id === props.params.t_id);
 
-    return data;
+    return data ? data : loading_task;
   }, [user_task_ctx]);
 
-  if (task && !isLoading) {
+  if (!isLoading) {
     return <TaskPage task_data={task} />;
   } else {
     return (

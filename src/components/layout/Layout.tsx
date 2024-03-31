@@ -7,9 +7,9 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Backdrop from "./Backdrop";
-import MemberList from "../member-list/MemberList";
+import MemberList, { MemoizedMemberList } from "../member-list/MemberList";
 import Context, { ContextType } from "@/context/Store";
-import WaitingList from "../waiting-list/WaitingList";
+import WaitingList, { MemoizedWaitingList } from "../waiting-list/WaitingList";
 import FormModal, { FormModalProps } from "../modal-form/FormModal";
 import InvitationMenu from "../invitation-menu/InvitationMenu";
 import PromptModal, { PromptModalProps } from "../modal-prompt/PromptModal";
@@ -63,7 +63,7 @@ const Layout = (props: any) => {
     null
   );
 
-  const backdropAction = () => {
+  const backdropAction = React.useCallback(() => {
     setShowCalendarMenu(false);
     setShowMemberList(false);
     setShowLogout(false);
@@ -72,7 +72,7 @@ const Layout = (props: any) => {
     setShowInvitationMenu(false);
     setPromptModal(null);
     setFormModal(null);
-  };
+  }, []);
 
   React.useEffect(() => {
     if (
@@ -96,6 +96,9 @@ const Layout = (props: any) => {
 
   const sidebarClickHandler = (e: MenuType) => {
     switch (e) {
+      case "Home":
+        router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}`);
+        break;
       case "Edit Space":
         const target = `${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}/workspace-setup/${w_id}`;
         console.log("target", target);
@@ -112,8 +115,14 @@ const Layout = (props: any) => {
         break;
       case "Exit Space":
         setPromptModal({
-          confirm_act: () => {
-            user_exit_workspace(u_id, w_id);
+          confirm_act: async () => {
+            const res = await user_exit_workspace(u_id, w_id);
+            if (res) {
+              backdropAction();
+              router.replace(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}`
+              );
+            }
           },
           confirm_text: "Yes",
           decline_act: () => {
@@ -126,8 +135,14 @@ const Layout = (props: any) => {
         break;
       case "Delete Space":
         setPromptModal({
-          confirm_act: () => {
-            workspace_delete_ctx(w_id, { author_id: u_id });
+          confirm_act: async () => {
+            const res = await workspace_delete_ctx(w_id, { author_id: u_id });
+            if (res) {
+              backdropAction();
+              router.replace(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}`
+              );
+            }
           },
           confirm_text: "Yes",
           decline_act: () => {
@@ -184,24 +199,22 @@ const Layout = (props: any) => {
         title="Calendar"
         u_id={u_id}
       />
-      <MemberList
-        closeHandler={() => {
-          backdropAction();
-        }}
+      <MemoizedMemberList
+        closeHandler={backdropAction}
         show={show_member_list}
         showWaitingListHandler={() => {
           setShowWaitingList(true);
         }}
-        showInvitationMenuHandler={() => {}}
-      />
-      <WaitingList
-        closeHandler={() => {
-          backdropAction();
+        showInvitationMenuHandler={() => {
+          setShowInvitationMenu(true);
         }}
+      />
+      <MemoizedWaitingList
+        closeHandler={backdropAction}
         show={show_waiting_list}
       />
       <InvitationMenu
-        closeHandler={() => backdropAction()}
+        closeHandler={backdropAction}
         show={show_invitation_menu}
         showHandler={() => {
           setShowInvitationMenu(true);

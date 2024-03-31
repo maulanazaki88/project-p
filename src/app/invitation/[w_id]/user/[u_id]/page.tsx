@@ -5,7 +5,7 @@ const ConfirmedInvitation: React.FC<{ params: { u_id: string } }> = async (
   props
 ) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-user/${props.params.u_id}`, {
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/get/${props.params.u_id}`, {
       method: "GET",
       headers: {
         'content-type' : "application/json"

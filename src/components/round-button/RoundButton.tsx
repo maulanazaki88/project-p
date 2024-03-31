@@ -14,12 +14,13 @@ interface RoundButtonProps {
   type?: "button" | "reset" | "submit" | undefined;
   style?: React.CSSProperties;
   isLoading?: boolean;
+  highlightOnActive?: boolean; 
 }
 
 const RoundButton: React.FC<RoundButtonProps> = (props) => {
   return (
     <button
-      className={s.btn}
+      className={[s.btn, props.highlightOnActive && s.highlight].join(" ")}
       style={{
         backgroundColor: props.color,
         rotate: props.rotate ? `${props.rotate}deg` : `0deg`,

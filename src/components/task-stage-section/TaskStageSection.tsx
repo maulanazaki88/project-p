@@ -146,9 +146,9 @@ const TaskStageSection: React.FC<TaskStageSectionProps> = (props) => {
     } else {
       return [];
     }
-  }, [props, sort, filter, byAssigned, sortType]);
+  }, [props.task_list, sort, filter, byAssigned, sortType]);
 
-  const ListViews = props.task_list ? (
+  const ListViews = props.task_list && props.task_list.length > 0 ? (
     props.task_list.map((task, index) => {
       return (
         <li className={s.task} key={`next-up-${index}`}>

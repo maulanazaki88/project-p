@@ -2,9 +2,10 @@ import s from "./Comments.module.css";
 import React from "react";
 import MenuNavbar from "../menu-navbar/MenuNavbar";
 import ChatBubble, { ChatBubbleProps } from "../chat-bubble/ChatBubble";
-import Context, {ContextType} from "@/context/Store";
+import Context, { ContextType } from "@/context/Store";
 import RoundButton from "../round-button/RoundButton";
 import { useDateNow } from "@/hook/useDateNow";
+import CommentsList, { MemoizedCommentsList } from "./CommentsList";
 
 interface CommentsProps {
   task_name: string;
@@ -21,18 +22,18 @@ interface CommentsProps {
 }
 
 const Comments: React.FC<CommentsProps> = (props) => {
-  const ctx = React.useContext(Context) as ContextType ;
+  const ctx = React.useContext(Context) as ContextType;
   const date_now = useDateNow();
 
   const screenRef = React.useRef<HTMLDivElement>(null);
 
   const user_data = ctx.user_data_ctx;
 
-  const task_add_comment_ctx = ctx.task_add_comment_ctx
+  const task_add_comment_ctx = ctx.task_add_comment_ctx;
 
   const [comment_val, set_comment_val] = React.useState<string>("");
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const screen = screenRef.current;
@@ -44,7 +45,7 @@ const Comments: React.FC<CommentsProps> = (props) => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    set_comment_val("")
+    set_comment_val("");
 
     props.sendComment({
       message: comment_val,
@@ -69,26 +70,7 @@ const Comments: React.FC<CommentsProps> = (props) => {
           {props.chat_list.length}
         </span>
       </div>
-      <div className={s.comment_screen} ref={screenRef}>
-        <ul className={s.list}>
-          {props.chat_list.map((chat, index) => {
-            return (
-              <li
-                className={s.item}
-                style={{
-                  justifyContent:
-                    chat.username === user_data?.username
-                      ? "flex-end"
-                      : "flex-start",
-                }}
-                key={`chat-item-${index}`}
-              >
-                <ChatBubble {...chat} />
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <MemoizedCommentsList chat_list={props.chat_list} />
 
       <form className={s.fields} onSubmit={submitHandler}>
         <input
@@ -107,7 +89,6 @@ const Comments: React.FC<CommentsProps> = (props) => {
           onClick={() => {}}
           scale={0.7}
           type="submit"
-
         />
       </form>
     </div>

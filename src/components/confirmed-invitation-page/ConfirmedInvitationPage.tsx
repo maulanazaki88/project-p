@@ -30,14 +30,14 @@ const ConfirmedInvitationPage: React.FC<{ data: UserType }> = (props) => {
     <main className={s.main}>
       <section className={s.header}>
         <h2 className={[s.title, "medium", "md"].join(" ")}>
-          Hai{" "}
+          Hi{" "}
           <span style={{ textDecoration: "underline" }}>
             {props.data.username}
           </span>
-          ! <br /> Undangan untuk bergabung ke workspace sudah terverifikasi!
+          ! <br /> Invitation to join workspace already sent!
         </h2>
         <p className={[s.subtitle, "medium", "sm"].join(" ")}>
-          Sedang menunggu konfirmasi dari pemilik workspace...
+          Waiting for the workspace owner to confirm your join request...
         </p>
       </section>
       <figure className={s.figure}>
@@ -51,8 +51,7 @@ const ConfirmedInvitationPage: React.FC<{ data: UserType }> = (props) => {
       </figure>
       <section className={s.info}>
         <p className={[s.info_txt, "medium", "sm", "soft"].join(" ")}>
-          Anda akan tergabung kedalam workspace secara otomatis setelah pemilik
-          workspace mangkonfirmasi permintaan bergabung Anda!
+          You will be join the workspace immediately after the owner of workspace accept your request!
         </p>
         <ButtonLarge
           bg_color="#080726"

@@ -50,6 +50,14 @@
 }
 
 .title {
+  line-height: 150%;
+}
+
+.subtitle{
+  line-height: 180%;
+}
+
+.title {
   margin-bottom: 30px;
   width: 80%;
 }

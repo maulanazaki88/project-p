@@ -10,6 +10,8 @@ import Link from "next/link";
 
 interface LoginPageProps {
   signupLink: string;
+  loginAPI: string;
+  w_id?: string;
 }
 
 const LoginPage: React.FC<LoginPageProps> = (props) => {
@@ -60,15 +62,15 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
         };
       });
     } else {
-      const response = await fetch(`/api/sign-in`, {
+      const response = await fetch(props.loginAPI, {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, w_id: props.w_id }),
       });
 
       if (response.ok && !response.redirected) {
         console.log(await response.json());
         // setVerifyId(await res.u_id);
-      } else if (response && response.status === 401) {
+      } else if (!response.ok && response.status === 401) {
         // console.log("nooo");
         console.log(await response.json());
         // setButtonDisabled(false);
@@ -82,9 +84,16 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
         setWarning((prev) => {
           return {
             ...prev,
-            username: "Incorrect password or email!",
+            email: "Incorrect password or email!",
           };
         });
+        setTimeout(() => {
+          setWarning({
+            email: "-",
+            password: "-",
+            username: "-",
+          });
+        }, 5000);
       } else if (!response.ok) {
         console.log(await response.json());
         // setButtonDisabled(false);
@@ -101,8 +110,15 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
             username: "Error, please check internet connection",
           };
         });
+        setTimeout(() => {
+          setWarning({
+            email: "-",
+            password: "-",
+            username: "-",
+          });
+        }, 5000);
       } else {
-        setIsLoading(false);
+        // setIsLoading(false);
         console.log(response);
         router.replace(response.url);
       }
@@ -112,14 +128,14 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
   return (
     <main className={s.main}>
       <div className={s.heading}>
-        <h1 className={[s.title, "medium", "big"].join(" ")}>Masuk</h1>
+        <h1 className={[s.title, "medium", "big"].join(" ")}>Login</h1>
       </div>
       <form className={s.form} onSubmit={submitHandler}>
         <InputSmall
           icon={"/icons/email_black.svg"}
           onChange={changeHandler}
           name="email"
-          placeholder="Masukan Email Anda"
+          placeholder="Enter your Email"
           key={"username-input"}
           value={data.email}
           label="Email"
@@ -132,7 +148,7 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
           icon={"/icons/lock_black.svg"}
           onChange={changeHandler}
           name="password"
-          placeholder="Masukan Password Anda"
+          placeholder="Enter password"
           key={"password-input"}
           value={data.password}
           label="Password"
@@ -144,17 +160,17 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
         <ButtonLarge
           bg_color="#080726"
           color="#fff"
-          text="Masuk"
+          text="Login"
           icon="/icons/next_white.svg"
           isLoading={isLoading}
         />
       </form>
       <div className={s.suggestion}>
         <p className={[s.suggestion_txt, "sm", "soft"].join(" ")}>
-          Belum memiliki akun?
+          Not have an account yet?
         </p>
         <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
-          <Link href={props.signupLink}>Daftar gratis!</Link>
+          <Link href={props.signupLink}>Sign for free!</Link>
         </span>
       </div>
     </main>

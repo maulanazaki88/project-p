@@ -5,11 +5,16 @@ import { TaskType, UserType, WorkspaceType } from "@/type";
 import { DateFormater } from "@/utils/DateFormater";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
+import { NextRequest, NextResponse } from "next/server";
+import { decrypt, encrypt } from "@/lib";
+import { updateSession } from "@/lib";
+import { cookies } from "next/headers";
 
 /**
  * Assign program to do user authentication
  *
- * If Autenthicated will return {u_id : u_id, email:email, username:username}
+ * If Autenthicated will return {u_id : u_id, email: email, username: username}
+ * - And will set swift_session cookie to client
  *
  * If NOT Authenticated will return {u_id: "", email: "", username: ""}
  * @param data - is for adding user data, email and password
@@ -27,6 +32,21 @@ export const login = async (data: { email: string; password: string }) => {
     })) as UserType;
 
     if (record && (await bcrypt.compare(data.password, record.password))) {
+      const safe_user = {
+        u_id: record.u_id,
+        email: record.email,
+        username: record.username,
+        workspace_ids: record.workspace_ids,
+      };
+
+      const expires = new Date(Date.now() + 3600 * 1000 * 12);
+      const swift_session = await encrypt({ safe_user, expires });
+
+      cookies().set("swift_session", swift_session, {
+        expires,
+        httpOnly: true,
+      });
+
       return {
         message: "success",
         u_id: record.u_id,
@@ -50,6 +70,8 @@ export const login = async (data: { email: string; password: string }) => {
  * 
  * If there is NO user with same email BUT there's internall server error will return {exist: false, u_id: null, message: error }
  * 
+ * If success will create user along with place holder data for getting started
+ * - Also set swift_session to client cookie
  
  * @param data - is for adding user data
  * 
@@ -186,6 +208,20 @@ export const createUser = async (data: {
       ])) as TaskType[];
 
       if (response && workspace_res && tasks_res) {
+        const safe_user = {
+          u_id: response.u_id,
+          email: response.email,
+          username: response.username,
+          workspace_ids: response.workspace_ids,
+        };
+
+        const expires = new Date(Date.now() + 3600 * 1000 * 12);
+        const swift_session = await encrypt({ safe_user, expires });
+
+        cookies().set("swift_session", swift_session, {
+          expires,
+          httpOnly: true,
+        });
         return {
           exist: false,
           u_id: response.u_id,
@@ -381,3 +417,4 @@ export const userDeleteWorkspace = async (u_id: string, w_id: string) => {
     console.error("Error remove workspace_id to user: ", error.message);
   }
 };
+

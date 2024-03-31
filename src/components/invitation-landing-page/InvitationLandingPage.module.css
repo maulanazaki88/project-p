@@ -107,6 +107,10 @@
     margin-left: 5px;
 }
 
+.suggestion_btn:active{
+    text-decoration: underline;
+}
+
 @media screen and (max-width: 500px) {
     .content{
         flex-direction: column;

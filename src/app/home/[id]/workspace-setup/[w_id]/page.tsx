@@ -11,7 +11,7 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
   ) as ContextType;
 
   React.useEffect(() => {
-    fetch(`/api/get-user/${props.params.id}`, {
+    fetch(`/api/user/get/${props.params.id}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",

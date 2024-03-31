@@ -21,9 +21,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const pathname = usePathname();
   const u_id = pathname.split("/")[2];
   const isWorkspace = pathname.includes("/workspace/");
-  const { user_data_ctx, display_width_ctx } = React.useContext(
-    Context
-  ) as ContextType;
+  const { user_data_ctx } = React.useContext(Context) as ContextType;
 
   const username = React.useMemo(() => {
     return user_data_ctx && user_data_ctx.username
@@ -31,17 +29,34 @@ const Navbar: React.FC<NavbarProps> = (props) => {
       : "~";
   }, [user_data_ctx]);
 
+  const [display_width, setDisplayWidth] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    const width = window.innerWidth;
+    function getNavbarWidth() {
+      setDisplayWidth(width);
+    }
+
+    window.addEventListener("resize", getNavbarWidth);
+    getNavbarWidth();
+    return function cleanUp() {
+      window.removeEventListener("resize", getNavbarWidth);
+    };
+  }, []);
+
   return (
     <header className={[s.navbar, !isWorkspace && s.home].join(" ")}>
       <div className={s.left}>
-        {display_width_ctx && display_width_ctx < 500 && (
+        { pathname.includes("/workspace/") && display_width && display_width < 500 && (
           <RoundButton
             color="transparent"
             icon="/icons/dot-menu.svg"
             opacity={1}
             type="button"
-            scale={1.5}
+            scale={1.2}
             onClick={() => props.toggleSidebar()}
+            highlightOnActive
+            style={{scale: 1.2}}
           />
         )}
         <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}`}>

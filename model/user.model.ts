@@ -4,39 +4,39 @@ mongoose.connect(process.env.DB_CONN_STRING);
 
 const db = mongoose.connection;
 
-db.on("error", () => {
-  console.error("Failed to connect to MongoDB");
-});
+// db.on("error", () => {
+//   console.error("Failed to connect to MongoDB");
+// });
 
-db.on("open", () => {
-  console.log("Connected to MongoDB!");
-});
+// db.on("open", () => {
+//   console.log("Connected to MongoDB!");
+// });
 
 
 const UserSchema: Schema = new Schema({
   u_id: {
-    type: "String",
+    type: String,
   },
   username: {
-    type: "String",
+    type: String,
   },
   email: {
-    type: "String",
+    type: String,
   },
   password: {
-    type: "String",
+    type: String,
   },
   workspace_ids: {
-    type: ["String"],
+    type: [String],
   },
   created_at: {
-    type: "Date",
+    type: Date,
   },
   updated_at: {
-    type: "Date",
+    type: Date,
   },
   is_online: {
-    type: "Number",
+    type: Number,
   },
 });
 

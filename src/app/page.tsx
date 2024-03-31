@@ -44,27 +44,27 @@ export default function Home() {
               " "
             )}
           >
-            Mengelola Pekerjaan Tim Anda
+            Swiftly Manage Your Projects
           </h1>
           <h2 className={[s.subtitle, "regular", "sm", "soft"].join(" ")}>
-            Manajemen Proyek Tanpa Ribet:
-            <br /> Simple & Kekinian
+            Simple Project Management Tools:
+            <br /> Quick & Easy
           </h2>
         </div>
-        <Link href="/sign-up">
+        <Link href="/signup">
           <ButtonLarge
             bg_color="#080726"
             color="#fff"
-            text="Daftar gratis!"
+            text="Start Free!"
             onClick={() => {}}
           />
         </Link>
         <div className={s.suggestion}>
           <p className={[s.suggestion_txt, "sm", "soft"].join(" ")}>
-            Sudah memiliki akun?
+            Already have an account?
           </p>
           <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
-            <Link href="/login">Masuk</Link>
+            <Link href="/login">Login</Link>
           </span>
         </div>
       </div>

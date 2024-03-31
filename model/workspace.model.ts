@@ -4,50 +4,74 @@ mongoose.connect(process.env.DB_CONN_STRING);
 
 const db = mongoose.connection;
 
-db.on("error", () => {
-  console.error("Failed to connect to MongoDB");
-});
+// db.on("error", () => {
+//   console.error("Failed to connect to MongoDB");
+// });
 
-db.on("open", () => {
-  console.log("Connected to MongoDB!");
-});
+// db.on("open", () => {
+//   console.log("Connected to MongoDB!");
+// });
 
 const WorkspaceSchema: Schema = new Schema({
   w_id: {
-    type: "String",
+    type: String,
   },
   name: {
-    type: "String",
+    type: String,
   },
   description: {
-    type: "String",
+    type: String,
   },
   notification_list: {
-    type: ["Mixed"],
+    type: [
+      {
+        username: String,
+        message: String,
+        created_at: String,
+        w_id: String,
+      },
+    ],
   },
   status: {
-    type: "String",
+    type: String,
   },
   admin_list: {
-    type: ["Mixed"],
+    type: [
+      {
+        u_id: String,
+        username: String,
+      },
+    ],
   },
   member_list: {
-    type: ["Mixed"],
+    type: [
+      {
+        u_id: String,
+        username: String,
+      },
+    ],
   },
   task_ids: {
-    type: ["String"],
+    type: [String],
   },
   activity_list: {
-    type: ["Mixed"],
+    type: [
+      {
+        a_id: String,
+        activity_desc: String,
+        created_at: Date,
+        activity_type: String,
+      },
+    ],
   },
   updated_at: {
-    type: "Date",
+    type: Date,
   },
   created_at: {
-    type: "Date",
+    type: Date,
   },
   waiting_list: {
-    type: ["Mixed"],
+    type: [{ u_id: String, username: String }],
   },
 });
 

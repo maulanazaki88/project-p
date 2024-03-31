@@ -111,7 +111,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
         setWarning((prev) => {
           return {
             ...prev,
-            username: "Gagal. Terjadi kesalahan pada jaringan",
+            username: "Internet connection error",
           };
         });
       }
@@ -124,6 +124,9 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
         updated_at: date_time,
         w_id: w_id,
         member_list: [
+          { u_id: u_id, username: user_data_ctx?.username as string },
+        ],
+        admin_list: [
           { u_id: u_id, username: user_data_ctx?.username as string },
         ],
       };
@@ -146,7 +149,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
         setWarning((prev) => {
           return {
             ...prev,
-            username: "Gagal. Terjadi kesalahan pada jaringan",
+            username: "Internet connection error",
           };
         });
       }
@@ -168,10 +171,10 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
         <div className={s.input}>
           <InputSmall
             icon="/icons/clipboard.svg"
-            label="Nama Workspace"
+            label="Workspace Name"
             name="name"
             onChange={changeHandler}
-            placeholder="Masukan nama workspace"
+            placeholder="Enter workspace name"
             type="text"
             value={workspace_data.name}
             warning={warning.username}
@@ -179,10 +182,10 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
             maxChar={15}
           />
           <InputLarge
-            label="Deskripsi workspace"
+            label="Workspace Description"
             name="description"
             onChange={changeHandler}
-            placeholder="Masukan deskripsi"
+            placeholder="Workspace Description"
             value={workspace_data.description}
             key={"workspace-description-input"}
             maxChar={100}

@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Context, { ContextType } from "@/context/Store";
 import { WorkspaceType } from "@/type";
+import UsernameItem from "../username-button/UsernameItem";
 
 interface MemberListProps {
   closeHandler: () => void;
@@ -49,7 +50,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     //fetch
     if (props.show) {
       fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-workspace-member-list/${w_id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/workspace/get/member-list/${w_id}`,
         {
           method: "GET",
           headers: {
@@ -72,9 +73,15 @@ const MemberList: React.FC<MemberListProps> = (props) => {
           alert(e.message);
         });
     }
-  }, [props]);
+  }, [props.show]);
 
-  const kickHandler = async (u_id: string, w_id: string, kick_id: string) => {
+  const isOwner = React.useMemo(() => {
+    const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
+
+    return workspace && workspace.admin_list.some((u) => u.u_id === u_id);
+  }, [user_workspaces_ctx]);
+
+  const kickHandler = async (kick_id: string) => {
     const data = await owner_kick_user_workspace(u_id, w_id, kick_id);
 
     const updated_count = await data.updated_count;
@@ -94,46 +101,56 @@ const MemberList: React.FC<MemberListProps> = (props) => {
         color="#fff"
         icon={"/icons/close_black.svg"}
         opacity={1}
-        onClick={() => {props.closeHandler()}}
+        onClick={() => {
+          props.closeHandler();
+        }}
         scale={1.2}
         style={{
           position: "absolute",
           top: "2%",
           right: "2%",
-          zIndex: 99
+          zIndex: 99,
         }}
       />
-      <h3 className={[s.title, "medium", "md"].join(" ")}>Daftar Anggota</h3>
+      <h3 className={[s.title, "medium", "md"].join(" ")}>Member List</h3>
       <div className={s.ctn_screen}>
         <ul className={s.list}>
+          <li
+            className={s.item}
+            key={`candidate-you}`}
+            // style={{ justifyContent: "flex-start" }}
+          >
+            <UsernameItem
+              u_id={u_id}
+              username={"You"}
+              kickHandler={kickHandler}
+              isOwner={
+                workspace?.admin_list.some((w) => w.u_id === u_id)
+                  ? true
+                  : false
+              }
+              isSelf
+            />
+          </li>
           {workspace?.member_list.map((member, index) => {
-            if (member.u_id === u_id) {
+            if (member.u_id !== u_id) {
               return (
-                <li
-                  className={s.item}
-                  key={`candidate-${index}`}
-                  style={{ justifyContent: "flex-start" }}
-                >
-                  <UsernameButton username={member.username} />
+                <li className={s.item} key={`candidate-${index}`}>
+                  <UsernameItem
+                    u_id={member.u_id}
+                    username={member.username}
+                    kickHandler={kickHandler}
+                    isOwner={
+                      workspace?.admin_list.some((w) => w.u_id === member.u_id)
+                        ? true
+                        : false
+                    }
+                  />
                 </li>
               );
+            } else {
+              return null;
             }
-            return (
-              <li className={s.item} key={`candidate-${index}`}>
-                <UsernameButton username={member.username} />
-                <div className={s.btn_group}>
-                  <RoundButton
-                    color="red"
-                    icon="/icons/plus_white.svg"
-                    opacity={1}
-                    onClick={() => {
-                      kickHandler(u_id, w_id, member.u_id);
-                    }}
-                    rotate={45}
-                  />
-                </div>
-              </li>
-            );
           })}
         </ul>
       </div>
@@ -141,7 +158,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
         <ButtonLarge
           bg_color="#080726"
           color="#fff"
-          text="Lihat Antrian Bergabung"
+          text="Waiting List"
           icon="/icons/queue_white.svg"
           onClick={props.showWaitingListHandler}
           rowReverse
@@ -149,7 +166,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
         <ButtonLarge
           bg_color="#080726"
           color="#fff"
-          text="Undang orang lain!"
+          text="Invite friends"
           icon="/icons/plus_white.svg"
           onClick={props.showInvitationMenuHandler}
           rowReverse
@@ -160,3 +177,5 @@ const MemberList: React.FC<MemberListProps> = (props) => {
 };
 
 export default MemberList;
+
+export const MemoizedMemberList = React.memo(MemberList);
