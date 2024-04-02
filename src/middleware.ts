@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { protectHomeRoute, protectWorkspaceRoute, updateSession } from "./lib";
+import {
+  autoLogin,
+  protectHomeRoute,
+  protectWorkspaceRoute,
+  updateSession,
+} from "./lib";
 import { protectTasks } from "./lib";
 import { protectWorkspace } from "./lib";
 import { protectUser } from "./lib";
@@ -14,6 +19,13 @@ export async function middleware(request: NextRequest) {
   // console.log("swift_session: ", swift_session);
   // console.log("w_accs_tkn: ", w_accs_tkn);
   // console.log("t_accs_tkn: ", t_accs_tkn);
+  if (request.nextUrl.pathname === "/" && swift_session) {
+    console.log(
+      "MIDDLEWARE INTERCEPT: ",
+      `${request.nextUrl.pathname} method: ${method}`
+    );
+    return await autoLogin(swift_session, request);
+  }
   if (
     request.nextUrl.pathname.startsWith("/home/") &&
     !request.nextUrl.pathname.includes("/api/")

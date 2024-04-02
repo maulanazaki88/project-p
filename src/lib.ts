@@ -1,4 +1,5 @@
 import { SignJWT, jwtVerify } from "jose";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 const key = new TextEncoder().encode(process.env.JWT_SECRET);
@@ -152,7 +153,7 @@ export const protectUser = async (
     // console.log("u_id: ", u_id);
 
     if (safe_user && u_id === safe_user.u_id) {
-      return await updateSession("swift_session", req)  ;
+      return await updateSession("swift_session", req);
     } else {
       return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
@@ -165,6 +166,23 @@ export const protectUser = async (
       { status: 401 }
     );
   }
+};
+
+export const autoLogin = async (token: string, req: NextRequest) => {
+  try {
+    const { safe_user } = await decrypt(token);
+
+    if (safe_user) {
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/home/${safe_user.u_id}`
+      );
+    } else {
+      cookies().delete("swift_session");
+      cookies().delete("w_accs_tkn");
+      cookies().delete("t_accs_tkn");
+      return NextResponse.next();
+    }
+  } catch (error) {}
 };
 
 export const protectHomeRoute = async (

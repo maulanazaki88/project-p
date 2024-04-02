@@ -106,7 +106,7 @@ const Layout = (props: any) => {
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/logout`
       );
       if (response.ok) {
-        router.refresh();
+        location.reload()
       } else {
         alert("Logout error");
       }
@@ -205,7 +205,7 @@ const Layout = (props: any) => {
           setShowCalendarMenu(true);
           setActiveBackdrop(true);
         }}
-        logoutHandler={() => {}}
+        logoutHandler={logoutHandler}
         // notificationHandler={() => {
         //   setNotificationMenuActive(!notificationMenuActive);
         // }}
