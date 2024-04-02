@@ -19,7 +19,7 @@ const WorkspaceControl: React.FC<Props> = (props) => {
     <div className={s.control}>
       <div className={s.left}>
         <div className={s.info}>
-          <span className={[s.w_name, "md", "regular"].join(" ")}>
+          <span className={[s.w_name].join(" ")}>
             {props.workspace_name.toLocaleUpperCase()}
           </span>
           <span className={[s.w_desc, "sm", "regular", "soft"].join(" ")}>
@@ -29,7 +29,7 @@ const WorkspaceControl: React.FC<Props> = (props) => {
           </span>
         </div>
 
-        <div className={s.access}>
+        {/* <div className={s.access}>
           <RoundButton
             color="transparent"
             icon="/icons/edit_access_black.svg"
@@ -48,16 +48,16 @@ const WorkspaceControl: React.FC<Props> = (props) => {
               scale: 1,
             }}
           />
-        </div>
+        </div> */}
       </div>
       <div className={s.right}>
-        <span className={[s.created_date, "sm", "medium"].join(" ")}>
-          Created on {calendar.calendar(props.created_on, ["d", "m", "y"])} {}
+        <span className={[s.created_date, "sm", "medium", 'soft'].join(" ")}>
+          {calendar.calendar(props.created_on, ["d", "m", "y"])} {}
         </span>
         <div className={s.search_field}>
           <input
             name="search"
-            className={[s.search_inp, "sm", "medium"].join(" ")}
+            className={[s.search_inp, "sm", "medium", "blend"].join(" ")}
             type="text"
             value={props.search_value}
             onChange={props.searchInputHandler}

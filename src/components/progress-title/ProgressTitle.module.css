@@ -68,21 +68,6 @@
         justify-content: space-between;
         width: 88%;
     }
-
-    .bar {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        height: 50px;
-        width: 184px;
-        padding: 0 14px;
-        border-radius: 8px;
-        font-family: inherit;
-
-    }
-
     .title {
         position: relative;
         /* color: #fff; */

@@ -117,7 +117,7 @@ a {
 
 
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 640px) {
   .x-big {
     font-size: 30px;
   }
@@ -139,7 +139,7 @@ button, div, a {
   -webkit-tap-highlight-color: transparent;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 640px) {
   button:hover, div:hover, a:hover {
     opacity: 1 !important;
   }

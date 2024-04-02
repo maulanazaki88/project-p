@@ -28,7 +28,9 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
 
   const pathname = usePathname();
 
-  const w_id = pathname.split("/")[4];
+  const w_id = React.useMemo(() => {
+    return pathname.split("/")[4];
+  }, [pathname]);
   const u_id = pathname.split("/")[2];
   // console.log("sidebar w_id:", w_id);
 
@@ -45,7 +47,8 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
   const workspace_name = React.useMemo(() => {
     const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
     return workspace ? workspace.name : "~";
-  }, [user_workspaces_ctx]);
+  }, [user_workspaces_ctx, pathname]);
+
   if (pathname.includes("/workspace/")) {
     return (
       <div
@@ -67,7 +70,7 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
         </div>
         <div className={s.segment}>
           <ul className={s.list}>
-          <li className={s.item}>
+            <li className={s.item}>
               <LayoutButton
                 name={"Home"}
                 onClick={props.clickHandler}

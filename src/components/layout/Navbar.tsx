@@ -1,7 +1,6 @@
 "use client";
 import s from "./Navbar.module.css";
 import React from "react";
-import Image from "next/image";
 import RoundButton from "../round-button/RoundButton";
 import UsernameButton from "../username-button/UsernameButton";
 import Context, { ContextType } from "@/context/Store";
@@ -15,6 +14,9 @@ interface NavbarProps {
   showLogoutPopup: boolean;
   showLogoutPopupHandler: () => void;
   toggleSidebar: () => void;
+  search_value: string;
+  searchInputHandler: React.Dispatch<string>;
+  showSearchModalHandler: React.Dispatch<boolean>;
 }
 
 const Navbar: React.FC<NavbarProps> = (props) => {
@@ -32,8 +34,9 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const [display_width, setDisplayWidth] = React.useState<number | null>(null);
 
   React.useEffect(() => {
-    const width = window.innerWidth;
+    
     function getNavbarWidth() {
+      const width = window.innerWidth;
       setDisplayWidth(width);
     }
 
@@ -47,18 +50,6 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   return (
     <header className={[s.navbar, !isWorkspace && s.home].join(" ")}>
       <div className={s.left}>
-        { pathname.includes("/workspace/") && display_width && display_width < 500 && (
-          <RoundButton
-            color="transparent"
-            icon="/icons/dot-menu.svg"
-            opacity={1}
-            type="button"
-            scale={1.2}
-            onClick={() => props.toggleSidebar()}
-            highlightOnActive
-            style={{scale: 1.2}}
-          />
-        )}
         <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -86,6 +77,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           </svg>
         </Link>
       </div>
+      <div className={s.mid}></div>
       <div className={s.right}>
         {/* <RoundButton
           color="rgba(0, 0, 0, 0.08)"
@@ -93,10 +85,43 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           opacity={1}
           onClick={props.notificationHandler}
         /> */}
+        {/* <div className={s.search_field}>
+          <input
+            type="text"
+            name="search"
+            value={props.search_value}
+            onChange={(e) => {
+              props.searchInputHandler(e.target.value);
+            }}
+            placeholder={"Search workspace or task"}
+            className={[s.search_inp, "sm", "medium", "blend"].join(" ")}
+          />
+        </div> */}
+        {display_width && display_width > 640 ? (
+          <button
+            className={[s.search_btn, "sm", "medium", "blend"].join(" ")}
+            type="button"
+            onClick={() => props.showSearchModalHandler(true)}
+          >
+            Search workspace or task
+          </button>
+        ) : (
+          <RoundButton
+            color="rgba(255, 255, 255, 0.2)"
+            icon="/icons/search_white.svg"
+            opacity={0.5}
+            scale={1}
+            onClick={() => {
+              props.showSearchModalHandler(true);
+            }}
+            highlightOnActive
+          />
+        )}
+
         <RoundButton
-          color="rgba(0, 0, 0, 0.08)"
-          icon="/icons/calendar.svg"
-          opacity={1}
+          color="rgba(255, 255, 255, 0.2)"
+          icon="/icons/calendar_white.svg"
+          opacity={0.5}
           onClick={props.calendarHandler}
         />
         <UsernameButton

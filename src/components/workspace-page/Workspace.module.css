@@ -1,16 +1,81 @@
 .main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f5f5f5;
+  font-family: inherit;
+  padding-left: 56px;
+}
+
+.task_board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  padding-top: 60px;
+  /* background-color: antiquewhite; */
+}
+
+.selection_screen {
+  position: relative;
+  display: grid;
+  grid-template-columns: 330px 330px 330px 330px;
+  width: 100%;
+  height: 100%;
+  overflow-x: scroll;
+  margin-top: 30px;
+  /* border: 2px solid purple; */
+}
+
+.selection_screen::-webkit-scrollbar {
+  position: absolute;
+  height: 0.5em;
+}
+
+.selection_screen::-webkit-scrollbar-track {
+  height: 0.5em;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 100vw;
+  margin-block: 10px;
+}
+
+.selection_screen::-webkit-scrollbar-thumb {
+  width: auto;
+  border-radius: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.selection_display {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: auto;
+  height: 100%;
+  /* background-color: blueviolet; */
+}
+
+@media screen and (max-width: 640px) {
+  .main {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100vw;
     height: 100vh;
-    background-color: #F5F5F5;
+    background-color: #fff;
     font-family: inherit;
-    padding-left: 56px;
-}
+    padding-left: 0px;
+  }
 
-.task_board {
+  .task_board {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -18,157 +83,85 @@
     justify-content: flex-start;
     width: 100%;
     height: 100%;
-    padding-top: 60px;
+    padding-top: 0px;
     /* background-color: antiquewhite; */
-}
+  }
 
-.selection_screen {
+  .selection_screen {
     position: relative;
     display: grid;
-        grid-template-columns: 330px 330px 330px 330px;
-    width: 100%;
-    height: 100%;
+    grid-template-columns: auto auto auto auto;
     overflow-x: scroll;
     margin-top: 30px;
+    scroll-snap-type: x mandatory;
     /* border: 2px solid purple; */
-}
+  }
 
-.selection_screen::-webkit-scrollbar {
-    position: absolute;
-    height: 0.5em;
-    
-}
-
-.selection_screen::-webkit-scrollbar-track {
-    height: 0.5em;
-    background-color: rgba(0, 0, 0, 0.0);
-    border-radius: 100vw;
-    margin-block: 10px;
-
-
-}
-
-.selection_screen::-webkit-scrollbar-thumb {
-    width: auto;
-    border-radius: 100vw;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.selection_display {
+  .selection_display {
     position: absolute;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    width: auto;
+    width: 400vw;
     height: 100%;
-    /* background-color: blueviolet; */
-}
+  }
 
+  .stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100%;
+    overflow-y: hidden;
+    /* border: 2px solid red; */
+  }
 
-@media screen and (max-width: 500px) {
-    .main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100vw;
-        height: 100vh;
-        background-color: #fff;
-        font-family: inherit;
-        padding-left: 0px;
-    }
-    
-    .task_board {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100%;
-        height: 100%;
-        padding-top: 100px;
-        /* background-color: antiquewhite; */
-    }
-    
-    .selection_screen {
-        position: relative;
-        display: grid;
-        grid-template-columns: auto auto auto auto;
-        overflow-x: scroll;
-        margin-top: 30px;
-        scroll-snap-type: x mandatory;
-        /* border: 2px solid purple; */
-    }
-    
-    .selection_display {
-        position: absolute;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        width: 400vw;
-        height: 100%;
-    }
-    
-    .stage {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100vw;
-        height: 100%;
-        overflow-y: hidden;
-        /* border: 2px solid red; */
-    }
-    
-    .list_screen {
-        position: relative;
-        display: block;
-        width: 100%;
-        height: 100%;
-        overflow-y: scroll;
-        margin-top: 30px;
-        overflow-x: hidden;
-    }
-    
-    .task_list {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        translate: -50% 0%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        list-style: none;
-        padding-top: 10px;
-    }
-    
-    .task {
-        position: relative;
-        margin-bottom: 30px;
-    }
+  .list_screen {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    margin-top: 30px;
+    overflow-x: hidden;
+  }
 
-    .selection_screen::-webkit-scrollbar {
-        position: unset;
-        width: unset;
-        
-    }
-    
-    .selection_screen::-webkit-scrollbar-track {
-        width: unset;
-        background-color: unset;
-        border-radius: unset;
-        margin-block: unset;
-    
-    
-    }
-    
-    .selection_screen::-webkit-scrollbar-thumb {
-        width: unset;
-        border-radius: unset;
-        background-color: unset;
-    }
+  .task_list {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    list-style: none;
+    padding-top: 10px;
+  }
+
+  .task {
+    position: relative;
+    margin-bottom: 30px;
+  }
+
+  .selection_screen::-webkit-scrollbar {
+    position: unset;
+    width: unset;
+  }
+
+  .selection_screen::-webkit-scrollbar-track {
+    width: unset;
+    background-color: unset;
+    border-radius: unset;
+    margin-block: unset;
+  }
+
+  .selection_screen::-webkit-scrollbar-thumb {
+    width: unset;
+    border-radius: unset;
+    background-color: unset;
+  }
 }

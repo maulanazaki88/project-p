@@ -8,23 +8,38 @@ interface SquareButtonProps {
   color: string;
   bg_color: string;
   opacity: number;
-  onClick?: () => void
+  border?: string;
+  onClick?: () => void;
 }
 
 const SquareButton: React.FC<SquareButtonProps> = (props) => {
   const ContentViews = props.icon ? (
-    <Image alt={props.icon} src={props.icon} width={18} height={18} style={{opacity: props.opacity}}/>
+    <Image
+      alt={props.icon}
+      src={props.icon}
+      width={18}
+      height={18}
+      style={{ opacity: props.opacity }}
+    />
   ) : (
     <span
       style={{ color: props.color }}
-      className={[s.text, "medium", "sm", "blend"].join(" ")}
+      className={[s.text, "bold", "sm", "blend"].join(" ")}
     >
       {props.text}
     </span>
   );
 
   return (
-    <button type="button" onClick={props.onClick} style={{ backgroundColor: props.bg_color }} className={s.btn}>
+    <button
+      type="button"
+      onClick={props.onClick}
+      style={{
+        backgroundColor: props.bg_color,
+        border: props.border ? props.border : "none",
+      }}
+      className={s.btn}
+    >
       {ContentViews}
     </button>
   );

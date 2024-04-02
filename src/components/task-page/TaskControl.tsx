@@ -29,30 +29,11 @@ const TaskControl: React.FC<TaskControlInterface> = (props) => {
   return (
     <div className={s.control}>
       <div className={s.left}>
-        <span className={[s.w_name, "md", "light"].join(" ")}>{props.workspace_name.toLocaleUpperCase()}</span>
-        <div className={s.access} >
-          <RoundButton
-            color="transparent"
-            icon="/icons/edit_access_black.svg"
-            opacity={0.5}
-            scale={0.8}
-            style={{
-              scale: 1
-            }}
-          />
-          <RoundButton
-            color="transparent"
-            icon="/icons/eye_black.svg"
-            opacity={0.5}
-            scale={0.8}
-            style={{
-              scale: 1
-            }}
-          />
-        </div>
+        <span className={[s.w_name].join(" ")}>{props.workspace_name.toLocaleUpperCase()}</span>
+        
       </div>
       <div className={s.right}>
-        <span className={[s.created_date, "sm", "medium"].join(" ")}> Created on {calendar.calendar(props.created_on, ["d", "m"])}</span>
+        <span className={[s.created_date, "sm", "medium", 'soft'].join(" ")}>{calendar.calendar(props.created_on, ["d", "m"])}</span>
         {/* <button
           type="button"
           className={s.share_btn}

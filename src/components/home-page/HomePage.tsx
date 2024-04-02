@@ -1,11 +1,7 @@
 "use client";
 import s from "./Home.module.css";
 import React from "react";
-import HomeNavbar from "@/components/home-navbar/HomeNavbar";
-import InputSmall from "@/components/input-small/InputSmall";
 import SquareButton from "@/components/square-button/SquareButton";
-import WorkspaceCard from "@/components/workspace-card/WorkspaceCard";
-import TaskCard from "@/components/task-card/TaskCard";
 import CardMenu from "@/components/card-menu/CardMenu";
 import { CalendarCardProps } from "@/components/calender-card/CalendarCard";
 import { NotificationCardProps } from "@/components/notification-card/NotificationCard";
@@ -15,7 +11,6 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { Poppins } from "next/font/google";
 import { DateFormater } from "@/utils/DateFormater";
-import WorkspaceCardPlaceHolder from "../workspace-card/WorkspaceCardPlaceHolder";
 import WorkspaceList from "./WorkspaceList";
 import TaskList from "./TaskList";
 
@@ -186,17 +181,6 @@ const HomePage: React.FC<HomePageProps> = (props) => {
         >
           Welcome, {props.data.username}!
         </h2>
-        <InputSmall
-          icon="/icons/search.svg"
-          label=""
-          name="search"
-          onChange={searchInputChange}
-          placeholder="Search workspace or tasks"
-          type="text"
-          value={searchInput}
-          warning=""
-          hideCap
-        />
         <div className={s.dashboard}>
           <div className={s.workspace}>
             <div className={s.heading}>

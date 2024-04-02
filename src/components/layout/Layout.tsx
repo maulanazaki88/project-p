@@ -1,18 +1,18 @@
 "use client";
 import CalendarMenu from "../calendar-menu/CalendarMenu";
-import NotificationMenu from "../notification-menu/NotificationMenu";
 import LayoutSidebar, { MenuType } from "./LayoutSidebar";
 import Navbar from "./Navbar";
 import React from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Backdrop from "./Backdrop";
-import MemberList, { MemoizedMemberList } from "../member-list/MemberList";
+import { MemoizedMemberList } from "../member-list/MemberList";
 import Context, { ContextType } from "@/context/Store";
-import WaitingList, { MemoizedWaitingList } from "../waiting-list/WaitingList";
+import { MemoizedWaitingList } from "../waiting-list/WaitingList";
 import FormModal, { FormModalProps } from "../modal-form/FormModal";
 import InvitationMenu from "../invitation-menu/InvitationMenu";
 import PromptModal, { PromptModalProps } from "../modal-prompt/PromptModal";
+import SearchModal from "../modal-search/SearchModal";
 
 const Layout = (props: any) => {
   const { user_exit_workspace, workspace_delete_ctx } = React.useContext(
@@ -62,6 +62,9 @@ const Layout = (props: any) => {
   const [form_modal, setFormModal] = React.useState<FormModalProps | null>(
     null
   );
+  const [search_value, setSearchValue] = React.useState<string>("");
+  const [show_search_modal, setShowSearchModal] =
+    React.useState<boolean>(false);
 
   const backdropAction = React.useCallback(() => {
     setShowCalendarMenu(false);
@@ -72,6 +75,7 @@ const Layout = (props: any) => {
     setShowInvitationMenu(false);
     setPromptModal(null);
     setFormModal(null);
+    setShowSearchModal(false);
   }, []);
 
   React.useEffect(() => {
@@ -81,7 +85,8 @@ const Layout = (props: any) => {
       show_waiting_list ||
       show_invitation_menu ||
       prompt_modal ||
-      form_modal
+      form_modal ||
+      show_search_modal
     ) {
       setActiveBackdrop(true);
     }
@@ -92,7 +97,21 @@ const Layout = (props: any) => {
     show_invitation_menu,
     prompt_modal,
     form_modal,
+    show_search_modal,
   ]);
+
+  const logoutHandler = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/logout`
+      );
+      if (response.ok) {
+        router.refresh();
+      } else {
+        alert("Logout error");
+      }
+    } catch (error) {}
+  };
 
   const sidebarClickHandler = (e: MenuType) => {
     switch (e) {
@@ -171,6 +190,15 @@ const Layout = (props: any) => {
           backdropAction();
         }}
       />
+      <SearchModal
+        closeHandler={() => {
+          backdropAction();
+        }}
+        show={show_search_modal}
+        value={search_value}
+        u_id={u_id}
+        searchChangeHandler={setSearchValue}
+      />
       <Navbar
         toggleSidebar={() => setShowSidebar(!show_sidebar)}
         calendarHandler={() => {
@@ -185,10 +213,13 @@ const Layout = (props: any) => {
         showLogoutPopupHandler={() => {
           setShowLogout(!show_logout);
         }}
+        search_value={search_value}
+        searchInputHandler={setSearchValue}
+        showSearchModalHandler={setShowSearchModal}
       />
       <LayoutSidebar
         clickHandler={sidebarClickHandler}
-        alwaysShow={display_width && display_width > 500 ? true : false}
+        alwaysShow={display_width && display_width > 640 ? true : false}
         show={show_sidebar}
       />
       <CalendarMenu

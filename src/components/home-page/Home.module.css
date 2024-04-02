@@ -62,7 +62,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 30px;
+  margin-bottom: 0px;
+}
+
+.todo .heading {
+  margin-bottom: 40px;
 }
 
 .workspace > * .header {
@@ -185,14 +189,22 @@
   translate: 10px 0;
 }
 
-@media screen and (max-width: 1024px) {
-  .dashboard {
+@media screen and (max-width: 1124px) {
+  /* .dashboard {
+    scale: 0.8;
+  } */
+
+  .main {
     scale: 0.8;
   }
 }
 
 @media screen and (max-width: 920px) {
-  .dashboard {
+  /* .dashboard {
+    scale: 0.5;
+  } */
+
+  .main {
     scale: 0.5;
   }
 }
@@ -204,10 +216,11 @@
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
-    max-width: 500px;
-    padding: 80px 15px 0 15px;
+    
+    padding: 30px 15px 0 15px;
     color: #000;
     font-family: inherit;
+    scale: 1;
   }
 
   .main_title {

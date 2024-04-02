@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateSession } from "./lib";
+import { protectHomeRoute, protectWorkspaceRoute, updateSession } from "./lib";
 import { protectTasks } from "./lib";
 import { protectWorkspace } from "./lib";
 import { protectUser } from "./lib";
 
 export async function middleware(request: NextRequest) {
-  
-
   const method = request.method;
 
   const swift_session = request.cookies.get("swift_session")?.value;
@@ -17,6 +15,22 @@ export async function middleware(request: NextRequest) {
   // console.log("w_accs_tkn: ", w_accs_tkn);
   // console.log("t_accs_tkn: ", t_accs_tkn);
   if (
+    request.nextUrl.pathname.startsWith("/home/") &&
+    !request.nextUrl.pathname.includes("/api/")
+  ) {
+    console.log(
+      "MIDDLEWARE INTERCEPT: ",
+      `${request.nextUrl.pathname} method: ${method}`
+    );
+
+    const u_id = request.nextUrl.pathname.split("/")[2];
+    console.log("u_id: ", u_id);
+    if (u_id && swift_session) {
+      return await protectHomeRoute(u_id, swift_session, request);
+    } else {
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}`);
+    }
+  } else if (
     request.nextUrl.pathname.startsWith("/api/workspace") &&
     method === "POST"
   ) {
@@ -30,23 +44,24 @@ export async function middleware(request: NextRequest) {
     if (swift_session && u_id && w_id) {
       return await protectUser(w_id, u_id, swift_session, request, method);
     } else {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
   } else if (
     request.nextUrl.pathname.startsWith("/api/workspace") &&
     method === "GET"
   ) {
+    console.log("authorization", swift_session);
     console.log(
       "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
+      `${request.nextUrl.pathname} method: ${method} authorization: ${swift_session}`
     );
     const u_id = request.nextUrl.searchParams.get("u_id");
     const w_id = request.nextUrl.searchParams.get("w_id");
-    console.log("authorization", swift_session);
+
     if (swift_session && u_id && w_id) {
       return await protectUser(w_id, u_id, swift_session, request, method);
     } else {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
   } else if (
     request.nextUrl.pathname.startsWith("/api/workspace") &&
@@ -62,7 +77,7 @@ export async function middleware(request: NextRequest) {
     if (w_accs_tkn && u_id && w_id) {
       return await protectWorkspace(w_id, u_id, w_accs_tkn, request, method);
     } else {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
   } else if (
     request.nextUrl.pathname.startsWith("/api/task") &&
@@ -77,7 +92,7 @@ export async function middleware(request: NextRequest) {
     if (w_accs_tkn && u_id && w_id) {
       return await protectWorkspace(w_id, u_id, w_accs_tkn, request, method);
     } else {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
   } else if (
     request.nextUrl.pathname.startsWith("/api/task") &&
@@ -89,10 +104,10 @@ export async function middleware(request: NextRequest) {
       "MIDDLEWARE INTERCEPT: ",
       `${request.nextUrl.pathname} method: ${method}`
     );
-    if (t_accs_tkn && u_id && w_id) {
-      return await protectWorkspace(w_id, u_id, t_accs_tkn, request, method);
+    if (w_accs_tkn && u_id && w_id) {
+      return await protectWorkspace(w_id, u_id, w_accs_tkn, request, method);
     } else {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
   } else if (
     request.nextUrl.pathname.startsWith("/api/task") &&
@@ -104,10 +119,10 @@ export async function middleware(request: NextRequest) {
       "MIDDLEWARE INTERCEPT: ",
       `${request.nextUrl.pathname} method: ${method}`
     );
-    if (w_accs_tkn && u_id && w_id) {
-      return await protectWorkspace(w_id, u_id, w_accs_tkn, request, method);
+    if (swift_session && u_id && w_id) {
+      return await protectUser(w_id, u_id, swift_session, request, method);
     } else {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
   } else if (
     request.nextUrl.pathname.startsWith("/api/task") &&
@@ -122,7 +137,7 @@ export async function middleware(request: NextRequest) {
     if (t_accs_tkn && u_id && t_id) {
       return await protectTasks(t_id, u_id, t_accs_tkn, request, method);
     } else {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
   } else if (
     request.nextUrl.pathname.startsWith("/api/user") &&
@@ -137,7 +152,7 @@ export async function middleware(request: NextRequest) {
     if (swift_session && u_id && w_id) {
       return await protectUser(w_id, u_id, swift_session, request, method);
     } else {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
   } else {
     return await updateSession("swift_session", request);

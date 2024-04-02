@@ -151,17 +151,8 @@ export const protectUser = async (
     // console.log("safe_user from token: ", safe_user);
     // console.log("u_id: ", u_id);
 
-    if (
-      (type === "DELETE" || type === "PUT") &&
-      safe_user &&
-      u_id === safe_user.u_id
-    ) {
-      return await updateSession("swift_session", req);
-    } else if (
-      (type === "GET" || type === "POST") &&
-      w_id &&
-      safe_user.workspace_ids.some((w: any) => w === w_id)
-    ) {
+    if (safe_user && u_id === safe_user.u_id) {
+      return await updateSession("swift_session", req)  ;
     } else {
       return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
@@ -173,5 +164,46 @@ export const protectUser = async (
       },
       { status: 401 }
     );
+  }
+};
+
+export const protectHomeRoute = async (
+  u_id: string,
+  token: string,
+  req: NextRequest
+) => {
+  try {
+    const { safe_user } = await decrypt(token);
+
+    if (safe_user.u_id === u_id) {
+      return await updateSession("swift_session", req);
+    } else {
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+    }
+  } catch (error: any) {
+    console.error("Error accessing home route: ", error.message);
+  }
+};
+
+export const protectWorkspaceRoute = async (
+  u_id: string,
+  w_id_param: string,
+  token: string,
+  req: NextRequest
+) => {
+  try {
+    const { w_accs_payload } = await decrypt(token);
+
+    if (
+      w_accs_payload &&
+      w_accs_payload.member_list.some((member: any) => member.u_id === u_id) &&
+      w_id_param === w_accs_payload.w_id
+    ) {
+      return await updateSession("w_accs_tkn", req);
+    } else {
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/login`);
+    }
+  } catch (error: any) {
+    console.error("Error accessing workspace route: ", error.message);
   }
 };

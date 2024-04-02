@@ -47,6 +47,7 @@
     background-color: #d9d9d9;
 }
 
+
 .circle, .fill{
     position: relative;
     display: flex;
@@ -56,6 +57,12 @@
     height: 30px;
     border-radius: 50%;
     background-color: #d9d9d9;
+    
+}
+
+
+.circle {
+    margin-left: 20px;
 }
 
 .fill{

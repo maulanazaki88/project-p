@@ -1,7 +1,6 @@
 "use client";
 import s from "./TaskPage.module.css";
 import React from "react";
-import InputLarge from "@/components/input-large/InputLarge";
 import { TaskType } from "@/type";
 import RoundButton from "@/components/round-button/RoundButton";
 import SquareButton from "@/components/square-button/SquareButton";
@@ -16,7 +15,6 @@ import CalendarInput from "../calender-input/CalendarInput";
 import { useDateNow } from "@/hook/useDateNow";
 import { MemberListMenuMemo } from "../member-list-menu/MemberListMenu";
 import { usePathname } from "next/navigation";
-import InputSmall from "../input-small/InputSmall";
 import { DateFormater } from "@/utils/DateFormater";
 import TaskControl from "./TaskControl";
 import ParticipantList from "./ParticipantList";
@@ -28,7 +26,6 @@ interface TaskPageProps {
 const TaskPage: React.FC<TaskPageProps> = (props) => {
   const router = useRouter();
   const pathname = usePathname();
-  const dateNow = useDateNow();
 
   const u_id = pathname.split("/")[2];
   const t_id = pathname.split("/")[6];
@@ -259,9 +256,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         />
         <section className={s.task}>
           <div className={s.control}>
-            <div className={s.form}>
-              <div className={[s.name, "medium", "big"].join(" ")}>
-                <InputSmall
+            {/* <InputSmall
                   icon="/icons/clipboard.svg"
                   label="Nama Task"
                   name="title"
@@ -280,27 +275,24 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                       w_id: props.task_data.w_id,
                     });
                   }}
-                />
-              </div>
-              <div className={s.desc}>
-                <InputLarge
-                  onChange={changeHandler}
-                  label="Deskripsi Task"
-                  name="description"
-                  placeholder="📋 Deskripsi"
-                  value={taskForm.description}
-                  showLabel
-                  onBlur={() => {
-                    task_change_description_ctx(props.task_data.t_id, {
-                      description: taskForm.description,
-                      u_id: u_id,
-                      w_id: props.task_data.w_id,
-                    });
-                  }}
-                  maxChar={200}
-                />
-              </div>
-            </div>
+                /> */}
+            <input
+              type="text"
+              value={taskForm.title}
+              onChange={changeHandler}
+              placeholder={"Task title"}
+              name="title"
+              aria-label="Task Name"
+              className={[s.task_title_input, "x-big", "medium"].join(" ")}
+              onBlur={() => {
+                task_change_title_ctx(props.task_data.t_id, {
+                  title: taskForm.title,
+                  u_id: u_id,
+                  w_id: props.task_data.w_id,
+                });
+              }}
+            />
+
             <div className={s.radio}>
               <div className={s.deadline}>
                 <p className={[s.label, "medium", "md"].join(" ")}>Deadline</p>
@@ -335,15 +327,15 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                       <SquareButton
                         bg_color={
                           props.task_data.priority === "LOW"
-                            ? "#1C062D"
-                            : "rgba(0, 0, 0, 0.08)"
+                            ? "#87A922"
+                            : "transparent"
                         }
                         color={
                           props.task_data.priority === "LOW"
                             ? "#fff"
-                            : "#1C062D"
+                            : "#87A922"
                         }
-                        opacity={1}
+                        opacity={props.task_data.priority === "LOW" ? 1 : 0.5}
                         text="Low"
                         onClick={() => {
                           task_change_priority_ctx(props.task_data.t_id, {
@@ -352,6 +344,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                             w_id: props.task_data.w_id,
                           });
                         }}
+                        border="2px solid #87A922 "
                         key={"low-priority-btn"}
                       />
                     </li>
@@ -359,13 +352,13 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                       <SquareButton
                         bg_color={
                           props.task_data.priority === "MED"
-                            ? "#1C062D"
-                            : "rgba(0, 0, 0, 0.08)"
+                            ? "#f5dd61"
+                            : "transparent"
                         }
                         color={
                           props.task_data.priority === "MED"
                             ? "#fff"
-                            : "#1C062D"
+                            : "#f5dd61"
                         }
                         opacity={1}
                         text="Med"
@@ -377,19 +370,20 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                             w_id: props.task_data.w_id,
                           });
                         }}
+                        border="2px solid #f5dd61"
                       />
                     </li>
                     <li className={s.item}>
                       <SquareButton
                         bg_color={
                           props.task_data.priority === "HIGH"
-                            ? "#1C062D"
-                            : "rgba(0, 0, 0, 0.08)"
+                            ? "#B80000"
+                            : "transparent"
                         }
                         color={
                           props.task_data.priority === "HIGH"
                             ? "#fff"
-                            : "#1C062D"
+                            : "#B80000"
                         }
                         opacity={1}
                         text="High"
@@ -401,6 +395,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           });
                         }}
                         key={"high-priority-btn"}
+                        border={'2px solid #B80000'}
                       />
                     </li>
                   </ul>
@@ -532,7 +527,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                   </ul>
                 </div>
               </div>
-              {display_width && display_width < 500 && (
+              {/* {display_width && display_width < 640 && (
                 <ButtonLarge
                   bg_color="#080726"
                   color="#fff"
@@ -543,11 +538,48 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                     setIsCommentsActive(true);
                   }}
                 />
-              )}
+              )} */}
+            </div>
+            <div className={s.desc}>
+              {/* <InputLarge
+                  onChange={changeHandler}
+                  label="Deskripsi Task"
+                  name="description"
+                  placeholder="📋 Deskripsi"
+                  value={taskForm.description}
+                  showLabel
+                  onBlur={() => {
+                    task_change_description_ctx(props.task_data.t_id, {
+                      description: taskForm.description,
+                      u_id: u_id,
+                      w_id: props.task_data.w_id,
+                    });
+                  }}
+                  maxChar={200}
+                /> */}
+              <h3 className={[s.desc_label, "md", "medium"].join(" ")}>
+                Description
+              </h3>
+              <textarea
+                className={[s.task_description_text, 'md', 'regular'].join(' ')}
+                onChange={changeHandler}
+                aria-label="Task Description"
+                name="description"
+                placeholder="Description"
+                value={taskForm.description}
+                onBlur={() => {
+                  task_change_description_ctx(props.task_data.t_id, {
+                    description: taskForm.description,
+                    u_id: u_id,
+                    w_id: props.task_data.w_id,
+                  });
+                }}
+                maxLength={200}
+              />
             </div>
           </div>
 
-          {display_width && display_width > 500 && (
+          {display_width && display_width > 640 && (
             <div className={s.comment}>
               <Comments
                 isEmbed

@@ -38,8 +38,8 @@
   align-items: center;
   list-style: none;
   height: 100%;
-  transform: translate(0, 5%);
-  padding-left: 10px;
+  transform: translate(0, 0%);
+  padding-left: 0px;
 }
 
 .list .item:not(:first-child) {

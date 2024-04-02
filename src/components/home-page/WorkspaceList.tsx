@@ -1,11 +1,9 @@
 import s from "./WorkspaceList.module.css";
 import { WorkspaceType } from "@/type";
-import router from "next/router";
 import React from "react";
 import WorkspaceCard from "../workspace-card/WorkspaceCard";
 import WorkspaceCardPlaceHolder from "../workspace-card/WorkspaceCardPlaceHolder";
 import { usePathname } from "next/navigation";
-import WorkspaceCardSkeleton from "../workspace-card/WorkspaceCardSkeleton";
 
 interface WorkspaceListProps {
   workspace_list: WorkspaceType[];

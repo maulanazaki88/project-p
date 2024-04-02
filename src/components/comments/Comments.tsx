@@ -1,11 +1,11 @@
 import s from "./Comments.module.css";
 import React from "react";
 import MenuNavbar from "../menu-navbar/MenuNavbar";
-import ChatBubble, { ChatBubbleProps } from "../chat-bubble/ChatBubble";
+import { ChatBubbleProps } from "../chat-bubble/ChatBubble";
 import Context, { ContextType } from "@/context/Store";
 import RoundButton from "../round-button/RoundButton";
 import { useDateNow } from "@/hook/useDateNow";
-import CommentsList, { MemoizedCommentsList } from "./CommentsList";
+import { MemoizedCommentsList } from "./CommentsList";
 
 interface CommentsProps {
   task_name: string;

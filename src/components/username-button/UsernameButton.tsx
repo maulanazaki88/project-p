@@ -1,9 +1,9 @@
 import s from "./UsernameButton.module.css";
 import React from "react";
-import Avatar from "../avatar/Avatar";
 import RoundButton from "../round-button/RoundButton";
 import ButtonMedium from "../button-medium/ButtonMedium";
 import UsernameButtonSkeleton from "./UsernameButtonSkeleton";
+import Image from "next/image";
 
 interface UsernameButtonProps {
   username: string;
@@ -20,10 +20,19 @@ const UsernameButton: React.FC<UsernameButtonProps> = (props) => {
   }
   return (
     <div className={s.btn} onClick={props.onClick}>
-      <span className={[s.username, "medium", "sm"].join(" ")}>
+      <span className={[s.username, "medium", "sm", ].join(" ")}>
         {props.username}
       </span>
-      <Avatar bg_color="#395B96" txt_color="#fff" username={props.username} />
+      <div className={s.account}>
+        <Image
+          className={s.icon}
+          src={"/icons/person_white.svg"}
+          alt="account"
+          width={18}
+          height={18}
+        />
+      </div>
+
       {props.withDelete && (
         <div className={s.deleteBtn}>
           <RoundButton

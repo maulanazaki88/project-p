@@ -2,6 +2,7 @@ import s from "./MemberListMenu.module.css";
 import React from "react";
 import UsernameButton from "../username-button/UsernameButton";
 import Image from "next/image";
+import UsernameItem from "../username-button/UsernameItem";
 
 interface MemberListMenuProps {
   member_list: { username: string; u_id: string }[];
@@ -44,7 +45,12 @@ const MemberListMenu: React.FC<MemberListMenuProps> = (props) => {
                 );
               }}
             >
-              <UsernameButton username={member.username} />
+              <UsernameItem
+                isOwner={false}
+                kickHandler={() => {}}
+                u_id={member.u_id}
+                username={member.username}
+              />
               <div className={s.circle}>
                 <div
                   className={s.fill}
@@ -63,4 +69,4 @@ const MemberListMenu: React.FC<MemberListMenuProps> = (props) => {
 
 export default MemberListMenu;
 
-export const MemberListMenuMemo = React.memo(MemberListMenu)
+export const MemberListMenuMemo = React.memo(MemberListMenu);
