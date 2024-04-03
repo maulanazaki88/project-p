@@ -256,26 +256,6 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         />
         <section className={s.task}>
           <div className={s.control}>
-            {/* <InputSmall
-                  icon="/icons/clipboard.svg"
-                  label="Nama Task"
-                  name="title"
-                  onChange={changeHandler}
-                  placeholder="Nama task"
-                  type="text"
-                  value={taskForm.title}
-                  warning={""}
-                  key={"Nama task input"}
-                  maxChar={25}
-                  showLabel
-                  onBlur={() => {
-                    task_change_title_ctx(props.task_data.t_id, {
-                      title: taskForm.title,
-                      u_id: u_id,
-                      w_id: props.task_data.w_id,
-                    });
-                  }}
-                /> */}
             <input
               type="text"
               value={taskForm.title}
@@ -395,7 +375,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           });
                         }}
                         key={"high-priority-btn"}
-                        border={'2px solid #B80000'}
+                        border={"2px solid #B80000"}
                       />
                     </li>
                   </ul>
@@ -527,41 +507,13 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                   </ul>
                 </div>
               </div>
-              {/* {display_width && display_width < 640 && (
-                <ButtonLarge
-                  bg_color="#080726"
-                  color="#fff"
-                  text="Comments"
-                  icon="/icons/comment_white.svg"
-                  key={"comment-btn"}
-                  onClick={() => {
-                    setIsCommentsActive(true);
-                  }}
-                />
-              )} */}
             </div>
             <div className={s.desc}>
-              {/* <InputLarge
-                  onChange={changeHandler}
-                  label="Deskripsi Task"
-                  name="description"
-                  placeholder="📋 Deskripsi"
-                  value={taskForm.description}
-                  showLabel
-                  onBlur={() => {
-                    task_change_description_ctx(props.task_data.t_id, {
-                      description: taskForm.description,
-                      u_id: u_id,
-                      w_id: props.task_data.w_id,
-                    });
-                  }}
-                  maxChar={200}
-                /> */}
               <h3 className={[s.desc_label, "md", "medium"].join(" ")}>
                 Description
               </h3>
               <textarea
-                className={[s.task_description_text, 'md', 'regular'].join(' ')}
+                className={[s.task_description_text, "md", "regular"].join(" ")}
                 onChange={changeHandler}
                 aria-label="Task Description"
                 name="description"
@@ -578,32 +530,29 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
               />
             </div>
           </div>
-
-          {display_width && display_width > 640 && (
-            <div className={s.comment}>
-              <Comments
-                isEmbed
-                chat_list={props.task_data.comments}
-                closeHandler={() => {
-                  setIsCommentsActive(false);
-                }}
-                task_name={props.task_data.title}
-                workspace_name={props.task_data.title}
-                isActive={true}
-                sendComment={(data) => {
-                  task_add_comment_ctx(props.task_data.t_id, {
-                    chat: {
-                      message: data.message,
-                      time: data.time,
-                      username: data.username,
-                    },
-                    u_id: u_id,
-                    w_id: props.task_data.w_id,
-                  });
-                }}
-              />
-            </div>
-          )}
+          <div className={s.comment}>
+            <Comments
+              isEmbed
+              chat_list={props.task_data.comments}
+              closeHandler={() => {
+                setIsCommentsActive(false);
+              }}
+              task_name={props.task_data.title}
+              workspace_name={props.task_data.title}
+              isActive={true}
+              sendComment={(data) => {
+                task_add_comment_ctx(props.task_data.t_id, {
+                  chat: {
+                    message: data.message,
+                    time: data.time,
+                    username: data.username,
+                  },
+                  u_id: u_id,
+                  w_id: props.task_data.w_id,
+                });
+              }}
+            />
+          </div>
         </section>
       </main>
     </>

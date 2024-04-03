@@ -16,7 +16,7 @@ interface WaitingListProps {
 }
 
 const WaitingList: React.FC<WaitingListProps> = (props) => {
-  const currentDate = new Date()
+  const currentDate = new Date();
   const loading_workspace = {
     activity_list: [],
     admin_list: [],
@@ -62,7 +62,7 @@ const WaitingList: React.FC<WaitingListProps> = (props) => {
   React.useEffect(() => {
     if (props.show) {
       fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/workspace/get/waiting-list/${w_id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/workspace/get/waiting-list/${w_id}?w_id=${w_id}&u_id=${u_id}`,
         {
           method: "GET",
           headers: {

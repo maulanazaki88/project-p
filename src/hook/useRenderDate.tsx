@@ -12,7 +12,7 @@ export function useRenderDate() {
 
     const showYear = currentDate.getFullYear() !== year;
 
-    const months = [
+    const mon = [
       "Jan",
       "Feb",
       "Mar",
@@ -25,12 +25,27 @@ export function useRenderDate() {
       "Oct",
       "Nov",
       "Dec",
+    ]
+
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
 
     if (type.some((c) => c === "y")) {
-      return `${months[month - 1]} ${day}${showYear ? ", " + year : ""}`;
+      return `${months[month - 1]} ${day}, ${year}`;
     } else {
-      return `${day} ${months[month - 1]}`;
+      return `${day} ${mon[month - 1]}`;
     }
   };
 

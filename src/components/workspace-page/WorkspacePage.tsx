@@ -5,11 +5,7 @@ import Context, { ContextType } from "@/context/Store";
 import TaskCard from "@/components/task-card/TaskCard";
 import BasicMenu from "@/components/basic-menu/BasicMenu";
 import { ButtonLargeProps } from "@/components/button-large/ButtonLarge";
-import {
-  ProgressStatusType,
-  TaskType,
-  WorkspaceType,
-} from "@/type";
+import { ProgressStatusType, TaskType, WorkspaceType } from "@/type";
 import { useRouter } from "next/navigation";
 import { useDateNow } from "@/hook/useDateNow";
 import CardMenu from "../card-menu/CardMenu";
@@ -19,6 +15,8 @@ import { useIdGenerator } from "@/hook/useIdGenerator";
 import InvitationMenu from "../invitation-menu/InvitationMenu";
 import TaskStageSection from "../task-stage-section/TaskStageSection";
 import WorkspaceControl from "./WorkspaceControl";
+import ModalWorkspaceInfo from "../modal-workspace-info/ModalWorkspaceInfo";
+import Backdrop from "../layout/Backdrop";
 
 interface WorkspacePageProps {
   data: WorkspaceType;
@@ -50,7 +48,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const [showNotificationForm, setShowNotificationForm] =
     React.useState<boolean>(false);
   const [verifyId, setVerifyId] = React.useState<string | null>(null);
-  const [showOverlay, setShowOverlay] = React.useState<boolean>(false);
+  const [show_backdrop, setShowBackdrop] = React.useState<boolean>(false);
   const [deletePromptActive, setDeletePromptActive] =
     React.useState<boolean>(false);
   const [deletePromptWarning, setDeletePromptWarning] =
@@ -61,15 +59,18 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const [showInvitationMenu, setShowInvitationMenu] =
     React.useState<boolean>(false);
 
+  const [show_workspace_info, setShowWorkspaceInfo] =
+    React.useState<boolean>(false);
+
   const [search_value, setSearchValue] = React.useState<string>("");
 
   React.useEffect(() => {}, []);
 
   React.useEffect(() => {
     if (deletePromptActive) {
-      setShowOverlay(true);
+      setShowBackdrop(true);
     } else {
-      setShowOverlay(false);
+      setShowBackdrop(false);
     }
   }, [deletePromptActive]);
 
@@ -341,30 +342,23 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
       }
     };
 
-    const overlayAction = () => {
+    const backdropAction = () => {
       setDeletePromptActive(false);
+      setShowWorkspaceInfo(false);
     };
 
     return (
       <>
-        <div
-          className={s.overlay}
-          style={{
-            position: "fixed",
-            zIndex: 888,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "#000",
-            opacity: 0.5,
-            display: showOverlay ? "block" : "none",
-          }}
-          onClick={overlayAction}
-        />
+        <Backdrop isActive={show_backdrop} onClick={backdropAction} />
         {/* <Navbar
           title={props.data.name}
           menuHandler={() => setIsMenuActive(true)}
         /> */}
-
+        <ModalWorkspaceInfo
+          {...props.data}
+          show={show_workspace_info}
+          closeHandler={backdropAction}
+        />
         <FormMenu
           closeHandler={() => setDeletePromptActive(false)}
           label={`Ketik: "${props.data.name}"`}
@@ -450,6 +444,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
             search_value={search_value}
             workspace_desc={props.data.description}
             workspace_name={props.data.name}
+            showWorkspaceInfoHandler={setShowWorkspaceInfo}
           />
           <div className={s.task_board}>
             {/* <OnlineBar users={props.data.member_list} /> */}

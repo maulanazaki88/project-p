@@ -1,13 +1,10 @@
 import s from "./MemberList.module.css";
 import React from "react";
-import MenuNavbar from "../menu-navbar/MenuNavbar";
-import UsernameButton from "../username-button/UsernameButton";
 import RoundButton from "../round-button/RoundButton";
 import ButtonLarge from "../button-large/ButtonLarge";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Context, { ContextType } from "@/context/Store";
-import { WorkspaceType } from "@/type";
 import UsernameItem from "../username-button/UsernameItem";
 
 interface MemberListProps {
@@ -50,7 +47,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     //fetch
     if (props.show) {
       fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/workspace/get/member-list/${w_id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/workspace/get/member-list/${w_id}?u_id=${u_id}&w_id=${w_id}`,
         {
           method: "GET",
           headers: {

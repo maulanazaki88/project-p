@@ -1,8 +1,6 @@
 "use client";
 import s from "./ParticipantList.module.css";
 import React from "react";
-import UsernameButton from "../username-button/UsernameButton";
-import RoundButton from "../round-button/RoundButton";
 import Context, { ContextType } from "@/context/Store";
 import { usePathname } from "next/navigation";
 
@@ -42,7 +40,7 @@ const ParticipantList: React.FC<ParticipantListProps> = (props) => {
             key={`assigned-member-${index}`}
             style={{ marginLeft: index > 0 ? "12px" : "0px" }}
           >
-            <div title={member.username} className={[s.participant, "md", "regular"].join(" ")} style={{backgroundColor: color_list[index % 3]}}>
+            <div title={member.username} className={[s.participant, "sm", "regular"].join(" ")} style={{backgroundColor: color_list[index % 3]}}>
               {member.username.slice(0, 2).toLocaleUpperCase()}
             </div>
           </li>

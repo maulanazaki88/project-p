@@ -78,7 +78,7 @@
   max-width: 1440px;
   height: 100vh;
   padding: 0 20px;
-  padding-top: 70px;
+  padding-top: 120px;
   overflow-y: hidden;
   overflow-x: hidden;
   padding-right: 400px;
@@ -94,6 +94,8 @@
   overflow-y: auto;
   overflow-x: auto;
   padding-right: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .control::-webkit-scrollbar {
@@ -255,19 +257,69 @@
   .main {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     width: 100vw;
-    height: auto;
+    height: 100vh;
     padding-top: 0px;
     padding-bottom: 30px;
-    overflow-x: hidden;
     padding-left: 0px;
     padding-bottom: 50px;
+    
+  }
+
+  .task {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto;
+    width: 100vw;
+    height: 100%;
+    padding: 0px;
+    margin-top: 90px;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    transform: rotateX(180deg);
+  }
+
+  .task::-webkit-scrollbar {
+    height: 0.15rem;
+    position: absolute;
+  }
+
+  .task::-webkit-scrollbar-track {
+    height: auto;
+    background-color: transparent;
+    
+
+  }
+
+  .task::-webkit-scrollbar-thumb {
+    height: auto;
+    background-color: #1c062d;
   }
 
   .control {
-    width: 100%;
+    width: 100vw;
+    height: 100%;
+    overflow-y: scroll;
+    padding: 0 15px;
+    padding-top: 20px;
+    scroll-snap-align: center;
+    transform: rotateX(180deg);
+    
+  }
+
+  .comment {
+    position: relative;
+    width: 100vw;
+    height: 100%;
+    z-index: 10;
+    padding-top: 0;
+    padding-bottom: 0;
+    right: 0;
+    overflow-x: hidden;
+    scroll-snap-align: center;
+    transform: rotateX(180deg);
   }
 
   .task_title_input {
@@ -286,16 +338,7 @@
     padding: 0 0px;
   }
 
-  .task {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    height: 100%;
-    padding: 0 15px;
-  }
+ 
 
   .name {
     position: relative;
@@ -368,7 +411,7 @@
 
   .item {
     position: relative;
-    margin-left: 20px;
+    margin-left: 10px;
   }
 
   .item:nth-child(1) {

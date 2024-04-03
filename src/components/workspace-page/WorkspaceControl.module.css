@@ -1,26 +1,19 @@
 .control {
-  position: relative;
+  position: fixed;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  min-width: 785px;
-  height: 68px;
+  width: 100vw;
+  min-width: 700px;
+  height: 62px;
   border-bottom: 2px solid rgba(0, 0, 0, 0.2);
-  padding: 0 10px;
   background-color: #fff;
   top: 50px;
+  left: 0;
   z-index: 20;
-}
-
-.access {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  width: 60px;
+  padding-left: 70px;
+  padding-right: 10px;
 }
 
 .left {
@@ -44,13 +37,25 @@
   color: #000;
   font-weight: 600;
   font-size: 18px;
+  margin-right: 10px;
+}
+
+.w_desc {
+  width: auto;
+  max-width: 350px;
+  min-width: 135px;
+  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* border: 1px solid black; */
 }
 
 .w_desc::before {
   content: " ";
-  margin-right: 20px;
+  margin-right: 10px;
   position: relative;
-  padding: 6px 1.5px;
+  padding: 0px 1.2px;
   background-color: rgba(0, 0, 0, 0.2);
 }
 

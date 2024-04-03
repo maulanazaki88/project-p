@@ -10,6 +10,7 @@ interface Props {
   search_value: string;
   searchInputHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
   created_on: Date;
+  showWorkspaceInfoHandler: React.Dispatch<boolean>;
 }
 
 const WorkspaceControl: React.FC<Props> = (props) => {
@@ -23,10 +24,18 @@ const WorkspaceControl: React.FC<Props> = (props) => {
             {props.workspace_name.toLocaleUpperCase()}
           </span>
           <span className={[s.w_desc, "sm", "regular", "soft"].join(" ")}>
-            {`${props.workspace_desc.slice(0, 40)}${
-              props.workspace_desc.length > 40 ? "..." : ""
-            }`}
+            {`${props.workspace_desc}`}
           </span>
+          <RoundButton
+            color="transparent"
+            icon="/icons/info_black.svg"
+            opacity={0.8}
+            highlightOnActive
+            onClick={() => {
+              props.showWorkspaceInfoHandler(true);
+            }}
+            scale={0.9}
+          />
         </div>
 
         {/* <div className={s.access}>
@@ -51,9 +60,6 @@ const WorkspaceControl: React.FC<Props> = (props) => {
         </div> */}
       </div>
       <div className={s.right}>
-        <span className={[s.created_date, "sm", "medium", 'soft'].join(" ")}>
-          {calendar.calendar(props.created_on, ["d", "m", "y"])} {}
-        </span>
         <div className={s.search_field}>
           <input
             name="search"
