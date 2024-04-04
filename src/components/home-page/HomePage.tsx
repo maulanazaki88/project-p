@@ -27,11 +27,6 @@ const poppins = Poppins({
 const HomePage: React.FC<HomePageProps> = (props) => {
   const {
     user_data_ctx,
-    user_data_handler_ctx,
-    initialize_workspaces_ctx,
-    initialize_tasks_ctx,
-    user_workspaces_ctx,
-    user_task_ctx,
     logout_ctx,
   } = React.useContext(Context) as ContextType;
 
@@ -47,13 +42,6 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     React.useState<boolean>(false);
   const [notificationMenuActive, setNotificationMenuActive] =
     React.useState<boolean>(false);
-
-  const [showLogoutPopup, setShowLogoutPopup] = React.useState<boolean>(false);
-  const [hide_task_list_scroll, setHideTaskListScroll] =
-    React.useState<boolean>(true);
-
-  const [hide_workspace_list_scroll, setHideWorkspaceListScroll] =
-    React.useState<boolean>(true);
 
   const workspace_list = props.data.workspace_list as WorkspaceType[];
 

@@ -17,6 +17,7 @@ import TaskStageSection from "../task-stage-section/TaskStageSection";
 import WorkspaceControl from "./WorkspaceControl";
 import ModalWorkspaceInfo from "../modal-workspace-info/ModalWorkspaceInfo";
 import Backdrop from "../layout/Backdrop";
+import Indicator from "./Indicator";
 
 interface WorkspacePageProps {
   data: WorkspaceType;
@@ -33,12 +34,57 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const u_id = pathname.split("/")[2];
   const w_id = pathname.split("/")[4];
 
+  const screenRef = React.useRef<HTMLDivElement>(null);
+
+  const [display_width, setDisplayWidth] = React.useState<number | null>(null);
+  const [stage, setStage] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    function getDisplayWidth() {
+      const width = window.innerWidth;
+      setDisplayWidth(width);
+    }
+
+    getDisplayWidth();
+    window.addEventListener("resize", getDisplayWidth);
+  }, []);
+
+  React.useEffect(() => {
+    const screen = screenRef.current;
+    if (screen && display_width && display_width < 640) {
+      const indicatorInterval = setInterval(() => {
+        const scrollLeft = screen.scrollLeft;
+        if (scrollLeft < display_width) {
+          setStage(0);
+        } else if (
+          scrollLeft >= display_width &&
+          scrollLeft < display_width * 2
+        ) {
+          setStage(1);
+        } else if (
+          scrollLeft >= display_width * 2 &&
+          scrollLeft < display_width * 3
+        ) {
+          setStage(2);
+        } else if (
+          scrollLeft >= display_width * 3 &&
+          scrollLeft < display_width * 4
+        ) {
+          setStage(3);
+        }
+      }, 250);
+
+      return function cleanUp() {
+        clearInterval(indicatorInterval);
+      };
+    }
+  }, [display_width]);
+
   const {
     user_data_ctx,
     workspace_create_announcement_ctx,
     user_task_ctx,
     workspace_delete_ctx,
-    owner_kick_user_workspace,
     user_exit_workspace,
   } = React.useContext(Context) as ContextType;
 
@@ -82,16 +128,6 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     if (updated_one && updated_one > 0) {
       console.log("Yeyyyy");
       router.replace(`/home/${u_id}`);
-    }
-  };
-
-  const kickHandler = async (u_id: string, w_id: string, kick_id: string) => {
-    const data = await owner_kick_user_workspace(u_id, w_id, kick_id);
-
-    const updated_count = await data.updated_count;
-
-    if (updated_count && updated_count > 0) {
-      console.log("Yeyyyy");
     }
   };
 
@@ -164,98 +200,6 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
 
     const completed = filtered_user_task?.filter(
       (task) => task.status === "COMPLETED" && task.w_id === w_id
-    );
-
-    const NextUpViews = next_up ? (
-      next_up.map((task, index) => {
-        return (
-          <li className={s.task} key={`next-up-${index}`}>
-            <TaskCard
-              assigned_member={task.assigned_member}
-              comments_count={task.comments.length}
-              deadline={task.deadline}
-              description={task.description}
-              name={task.title}
-              priority={task.priority}
-              w_id={task.w_id}
-              id={task.t_id}
-            />
-          </li>
-        );
-      })
-    ) : (
-      <span className={[s.no_task, "sm", "reguler"].join(" ")}>
-        Currently no task
-      </span>
-    );
-
-    const InProgressViews = in_progress ? (
-      in_progress.map((task, index) => {
-        return (
-          <li className={s.task} key={`in-progress-${index}`}>
-            <TaskCard
-              assigned_member={task.assigned_member}
-              comments_count={task.comments.length}
-              deadline={task.deadline}
-              description={task.description}
-              name={task.title}
-              priority={task.priority}
-              w_id={task.w_id}
-              id={task.t_id}
-            />
-          </li>
-        );
-      })
-    ) : (
-      <span className={[s.no_task, "sm", "reguler"].join(" ")}>
-        Currently no task
-      </span>
-    );
-
-    const RevisedViews = revised ? (
-      revised.map((task, index) => {
-        return (
-          <li className={s.task} key={`revised-${index}`}>
-            <TaskCard
-              assigned_member={task.assigned_member}
-              comments_count={task.comments.length}
-              deadline={task.deadline}
-              description={task.description}
-              name={task.title}
-              priority={task.priority}
-              w_id={task.w_id}
-              id={task.t_id}
-            />
-          </li>
-        );
-      })
-    ) : (
-      <span className={[s.no_task, "sm", "reguler"].join(" ")}>
-        Currently no task
-      </span>
-    );
-
-    const CompletedViews = completed ? (
-      completed.map((task, index) => {
-        return (
-          <li className={s.task} key={`completed-${index}`}>
-            <TaskCard
-              assigned_member={task.assigned_member}
-              comments_count={task.comments.length}
-              deadline={task.deadline}
-              description={task.description}
-              name={task.title}
-              priority={task.priority}
-              w_id={task.w_id}
-              id={task.t_id}
-            />
-          </li>
-        );
-      })
-    ) : (
-      <span className={[s.no_task, "sm", "reguler"].join(" ")}>
-        Currently no task
-      </span>
     );
 
     const menu_list: ButtonLargeProps[] = [
@@ -354,6 +298,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           title={props.data.name}
           menuHandler={() => setIsMenuActive(true)}
         /> */}
+        {display_width && display_width < 640 && <Indicator stage={stage} />}
         <ModalWorkspaceInfo
           {...props.data}
           show={show_workspace_info}
@@ -451,7 +396,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
             <div
               dir="ltr"
               className={s.selection_screen}
-              // ref={screenRef}
+              ref={screenRef}
               // onTouchEnd={pointerUpHandler}
             >
               {/* <div className={s.selection_display}> */}

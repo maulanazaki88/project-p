@@ -20,23 +20,23 @@ export async function middleware(request: NextRequest) {
   // console.log("w_accs_tkn: ", w_accs_tkn);
   // console.log("t_accs_tkn: ", t_accs_tkn);
   if (request.nextUrl.pathname === "/" && swift_session) {
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
-    );
+    // console.log(
+    //   "MIDDLEWARE INTERCEPT: ",
+    //   `${request.nextUrl.pathname} method: ${method}`
+    // );
     return await autoLogin(swift_session, request);
   }
   if (
     request.nextUrl.pathname.startsWith("/home/") &&
     !request.nextUrl.pathname.includes("/api/")
   ) {
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
-    );
+    // console.log(
+    //   "MIDDLEWARE INTERCEPT: ",
+    //   `${request.nextUrl.pathname} method: ${method}`
+    // );
 
     const u_id = request.nextUrl.pathname.split("/")[2];
-    console.log("u_id: ", u_id);
+    // console.log("u_id: ", u_id);
     if (u_id && swift_session) {
       return await protectHomeRoute(u_id, swift_session, request);
     } else {
@@ -46,13 +46,13 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/api/workspace") &&
     method === "POST"
   ) {
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
-    );
+    // console.log(
+    //   "MIDDLEWARE INTERCEPT: ",
+    //   `${request.nextUrl.pathname} method: ${method}`
+    // );
     const u_id = request.nextUrl.searchParams.get("u_id");
     const w_id = request.nextUrl.searchParams.get("w_id");
-    console.log("authorization", swift_session);
+    // console.log("authorization", swift_session);
     if (swift_session && u_id && w_id) {
       return await protectUser(w_id, u_id, swift_session, request, method);
     } else {
@@ -62,7 +62,7 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/api/workspace") &&
     method === "GET"
   ) {
-    console.log("authorization", swift_session);
+    // console.log("authorization", swift_session);
     console.log(
       "MIDDLEWARE INTERCEPT: ",
       `${request.nextUrl.pathname} method: ${method} authorization: ${swift_session}`
@@ -79,10 +79,10 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/api/workspace") &&
     (method === "PUT" || method === "DELETE")
   ) {
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
-    );
+    // console.log(
+    //   "MIDDLEWARE INTERCEPT: ",
+    //   `${request.nextUrl.pathname} method: ${method}`
+    // );
     const u_id = request.nextUrl.searchParams.get("u_id");
     const w_id = request.nextUrl.searchParams.get("w_id");
     console.log("authorization", w_accs_tkn);
@@ -97,10 +97,10 @@ export async function middleware(request: NextRequest) {
   ) {
     const u_id = request.nextUrl.searchParams.get("u_id");
     const w_id = request.nextUrl.searchParams.get("w_id");
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
-    );
+    // console.log(
+    //   "MIDDLEWARE INTERCEPT: ",
+    //   `${request.nextUrl.pathname} method: ${method}`
+    // );
     if (w_accs_tkn && u_id && w_id) {
       return await protectWorkspace(w_id, u_id, w_accs_tkn, request, method);
     } else {
@@ -112,10 +112,10 @@ export async function middleware(request: NextRequest) {
   ) {
     const u_id = request.nextUrl.searchParams.get("u_id");
     const w_id = request.nextUrl.searchParams.get("w_id");
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
-    );
+    // console.log(
+    //   "MIDDLEWARE INTERCEPT: ",
+    //   `${request.nextUrl.pathname} method: ${method}`
+    // );
     if (w_accs_tkn && u_id && w_id) {
       return await protectWorkspace(w_id, u_id, w_accs_tkn, request, method);
     } else {
@@ -127,10 +127,10 @@ export async function middleware(request: NextRequest) {
   ) {
     const u_id = request.nextUrl.searchParams.get("u_id");
     const w_id = request.nextUrl.searchParams.get("w_id");
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
-    );
+    // console.log(
+    //   "MIDDLEWARE INTERCEPT: ",
+    //   `${request.nextUrl.pathname} method: ${method}`
+    // );
     if (swift_session && u_id && w_id) {
       return await protectUser(w_id, u_id, swift_session, request, method);
     } else {
@@ -142,10 +142,10 @@ export async function middleware(request: NextRequest) {
   ) {
     const u_id = request.nextUrl.searchParams.get("u_id");
     const t_id = request.nextUrl.searchParams.get("t_id");
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
-    );
+    // console.log(
+    //   "MIDDLEWARE INTERCEPT: ",
+    //   `${request.nextUrl.pathname} method: ${method}`
+    // );
     if (t_accs_tkn && u_id && t_id) {
       return await protectTasks(t_id, u_id, t_accs_tkn, request, method);
     } else {
@@ -157,10 +157,10 @@ export async function middleware(request: NextRequest) {
   ) {
     const u_id = request.nextUrl.searchParams.get("u_id");
     const w_id = request.nextUrl.searchParams.get("w_id");
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method}`
-    );
+    // console.log(
+    //   "MIDDLEWARE INTERCEPT: ",
+    //   `${request.nextUrl.pathname} method: ${method}`
+    // );
     if (swift_session && u_id && w_id) {
       return await protectUser(w_id, u_id, swift_session, request, method);
     } else {

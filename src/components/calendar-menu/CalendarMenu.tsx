@@ -39,7 +39,7 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   const calendar_list = React.useMemo(() => {
-    const deadlines = user_task.slice(0).map((task, index) => {
+    const deadlines = user_task.slice(0).map((task) => {
       return task.deadline;
     });
 
@@ -49,7 +49,7 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
 
     const calendar_list =
       deadlines_set_arr &&
-      deadlines_set_arr.map((d, index) => {
+      deadlines_set_arr.map((d) => {
         return {
           date: DateFormater(new Date(d)),
           task_list: user_task.filter((task) => task.deadline === d),

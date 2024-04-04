@@ -51,7 +51,6 @@ const TaskControl: React.FC<TaskControlInterface> = (props) => {
             highlightOnActive
             icon="/icons/next_black.svg"
             opacity={1}
-            onClick={closeHandler}
             scale={1}
           />
           <span className={[s.w_name].join(" ")}>

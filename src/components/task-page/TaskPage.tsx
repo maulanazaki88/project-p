@@ -513,7 +513,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 Description
               </h3>
               <textarea
-                className={[s.task_description_text, "md", "regular"].join(" ")}
+                className={[s.task_description_text, "sm", "regular"].join(" ")}
                 onChange={changeHandler}
                 aria-label="Task Description"
                 name="description"
