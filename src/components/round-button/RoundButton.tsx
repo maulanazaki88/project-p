@@ -8,13 +8,14 @@ interface RoundButtonProps {
   opacity: number;
   icon: string;
   rotate?: number;
-  scale?: number;
+  icon_scale?: number;
+  button_scale?: number;
   notification?: number;
   onClick?: (e: any | null) => void;
   type?: "button" | "reset" | "submit" | undefined;
   style?: React.CSSProperties;
   isLoading?: boolean;
-  highlightOnActive?: boolean; 
+  highlightOnActive?: boolean;
 }
 
 const RoundButton: React.FC<RoundButtonProps> = (props) => {
@@ -24,7 +25,8 @@ const RoundButton: React.FC<RoundButtonProps> = (props) => {
       style={{
         backgroundColor: props.color,
         rotate: props.rotate ? `${props.rotate}deg` : `0deg`,
-        ...props.style,
+        scale: props.button_scale ? props.button_scale : 1,
+        ...props.style
       }}
       onClick={props.onClick}
       type={props.type ? props.type : "button"}
@@ -41,7 +43,7 @@ const RoundButton: React.FC<RoundButtonProps> = (props) => {
             className={s.icon}
             style={{
               opacity: props.opacity,
-              scale: props.scale ? props.scale : 1,
+              scale: props.icon_scale ? props.icon_scale : 1,
             }}
           />
         )}

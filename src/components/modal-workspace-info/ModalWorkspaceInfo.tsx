@@ -21,7 +21,7 @@ const ModalWorkspaceInfo: React.FC<WorkspaceInfoModalProps> = (props) => {
         icon={"/icons/close_black.svg"}
         opacity={1}
         onClick={props.closeHandler}
-        scale={1.2}
+        icon_scale={1.2}
         style={{
           position: "absolute",
           top: "2%",

@@ -34,7 +34,6 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const [display_width, setDisplayWidth] = React.useState<number | null>(null);
 
   React.useEffect(() => {
-    
     function getNavbarWidth() {
       const width = window.innerWidth;
       setDisplayWidth(width);
@@ -106,16 +105,29 @@ const Navbar: React.FC<NavbarProps> = (props) => {
             Search workspace or task
           </button>
         ) : (
-          <RoundButton
-            color="rgba(255, 255, 255, 0.2)"
-            icon="/icons/search_white.svg"
-            opacity={0.5}
-            scale={1}
-            onClick={() => {
-              props.showSearchModalHandler(true);
-            }}
-            highlightOnActive
-          />
+          <>
+            <RoundButton
+              color="transparent"
+              icon="/icons/dot_menu_white.svg"
+              rotate={90}
+              opacity={0.5}
+              icon_scale={1}
+              onClick={() => {
+                props.toggleSidebar();
+              }}
+              highlightOnActive
+            />
+            <RoundButton
+              color="rgba(255, 255, 255, 0.2)"
+              icon="/icons/search_white.svg"
+              opacity={0.5}
+              icon_scale={1}
+              onClick={() => {
+                props.showSearchModalHandler(true);
+              }}
+              highlightOnActive
+            />
+          </>
         )}
 
         <RoundButton

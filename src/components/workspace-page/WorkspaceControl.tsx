@@ -34,7 +34,7 @@ const WorkspaceControl: React.FC<Props> = (props) => {
             onClick={() => {
               props.showWorkspaceInfoHandler(true);
             }}
-            scale={0.9}
+            icon_scale={0.9}
           />
         </div>
 

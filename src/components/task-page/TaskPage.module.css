@@ -52,6 +52,7 @@
   background-color: transparent;
   color: #000;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  outline: none;
 }
 
 .radio {
@@ -289,8 +290,6 @@
   .task::-webkit-scrollbar-track {
     height: auto;
     background-color: transparent;
-    
-
   }
 
   .task::-webkit-scrollbar-thumb {

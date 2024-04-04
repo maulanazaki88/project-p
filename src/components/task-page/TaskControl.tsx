@@ -51,7 +51,7 @@ const TaskControl: React.FC<TaskControlInterface> = (props) => {
             highlightOnActive
             icon="/icons/next_black.svg"
             opacity={1}
-            scale={1}
+            icon_scale={1}
           />
           <span className={[s.w_name].join(" ")}>
             {props.workspace_name.toLocaleUpperCase()}
@@ -73,7 +73,9 @@ const TaskControl: React.FC<TaskControlInterface> = (props) => {
             icon="/icons/delete_white.svg"
             opacity={1}
             highlightOnActive
-            scale={0.8}
+            icon_scale={0.8}
+            button_scale={0.8}
+            
           />
         </div>
       </div>

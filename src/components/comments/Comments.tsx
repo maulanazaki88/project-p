@@ -80,14 +80,14 @@ const Comments: React.FC<CommentsProps> = (props) => {
           onChange={(e) => {
             set_comment_val(e.target.value);
           }}
-          placeholder={"Ketik komentar"}
+          placeholder={"Type here"}
         />
         <RoundButton
           color="#1C062D"
           icon="/icons/plane_white.svg"
           opacity={0.7}
           onClick={() => {}}
-          scale={0.7}
+          icon_scale={0.7}
           type="submit"
         />
       </form>

@@ -1,11 +1,11 @@
 .comment_screen {
-    position: relative;
+    position: absolute;
     display: block;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
     width: 100%;
-    height: 68vh;
+    height: 67vh;
     /* border: 2px solid red; */
     overflow-x: hidden;
     overflow-y: scroll;
@@ -44,12 +44,14 @@
     position: relative;
     display: flex;
     width: 100%;
+    min-height: 66vh;
     height: auto;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
     padding: 0px 20px 0px 20px;
     margin-bottom: 0px;
+    
     /* background-color: cornflowerblue; */
 }
 

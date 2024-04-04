@@ -72,7 +72,7 @@ const SearchModal: React.FC<Props> = (props) => {
         onClick={() => {
           props.closeHandler();
         }}
-        scale={1.2}
+        icon_scale={1.2}
         style={{
           position: "absolute",
           top: "2%",

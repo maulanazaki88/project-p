@@ -26,7 +26,7 @@ const MenuNavbar: React.FC<MenuNavbarProps> = (props) => {
           icon="/icons/next_dongker.svg"
           rotate={180}
           opacity={1}
-          scale={0.9}
+          icon_scale={0.9}
           onClick={props.closeHandler}
         />
       </div>

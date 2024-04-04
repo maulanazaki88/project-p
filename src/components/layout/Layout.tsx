@@ -57,6 +57,12 @@ const Layout = (props: any) => {
 
   const [show_sidebar, setShowSidebar] = React.useState<boolean>(false);
 
+  React.useEffect(() => {
+    if (display_width && display_width > 640) {
+      setShowSidebar(false);
+    }
+  }, [display_width]);
+
   const [prompt_modal, setPromptModal] =
     React.useState<PromptModalProps | null>(null);
   const [form_modal, setFormModal] = React.useState<FormModalProps | null>(
@@ -76,6 +82,7 @@ const Layout = (props: any) => {
     setPromptModal(null);
     setFormModal(null);
     setShowSearchModal(false);
+    setShowSidebar(false);
   }, []);
 
   React.useEffect(() => {
@@ -86,7 +93,8 @@ const Layout = (props: any) => {
       show_invitation_menu ||
       prompt_modal ||
       form_modal ||
-      show_search_modal
+      show_search_modal ||
+      show_sidebar
     ) {
       setActiveBackdrop(true);
     }
@@ -98,6 +106,7 @@ const Layout = (props: any) => {
     prompt_modal,
     form_modal,
     show_search_modal,
+    show_sidebar,
   ]);
 
   const logoutHandler = async () => {
@@ -106,7 +115,7 @@ const Layout = (props: any) => {
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/user/logout`
       );
       if (response.ok) {
-        location.reload()
+        location.reload();
       } else {
         alert("Logout error");
       }

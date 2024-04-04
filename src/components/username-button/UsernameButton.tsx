@@ -40,7 +40,7 @@ const UsernameButton: React.FC<UsernameButtonProps> = (props) => {
             icon="/icons/plus_white.svg"
             opacity={0.7}
             rotate={45}
-            scale={1}
+            icon_scale={1}
             onClick={() => {
               if (props.deleteHandler) props.deleteHandler(props.username);
             }}

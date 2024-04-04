@@ -26,7 +26,7 @@ const WaitingItem: React.FC<WaitingItemProps> = (props) => {
             opacity={1}
             highlightOnActive
             onClick={props.accHandler}
-            scale={0.5}
+            icon_scale={0.5}
             style={{scale: 0.8}}
           />
           <RoundButton
@@ -35,7 +35,7 @@ const WaitingItem: React.FC<WaitingItemProps> = (props) => {
             opacity={1}
             highlightOnActive
             onClick={props.rejHandler}
-            scale={1}
+            icon_scale={1}
             style={{scale: 0.8}}
           />
         </div>

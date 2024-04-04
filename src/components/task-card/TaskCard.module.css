@@ -1,242 +1,236 @@
 .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 280px;
+  height: calc(230 / 360 * 280px);
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  padding: 16px 11px;
+  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.16);
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  border: 2px solid transparent;
+}
+
+.skeleton {
+  animation-name: breathing;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out;
+}
+
+@keyframes breathing {
+  0% {
+    transform: scale(1);
+    background-color: #f2f2f2; /* Light gray */
+  }
+  50% {
+    transform: scale(1);
+    background-color: #d0d0d0; /* Slightly darker gray */
+  }
+  100% {
+    transform: scale(1);
+    background-color: #f2f2f2; /* Light gray */
+  }
+}
+
+.card:hover {
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.card:hover > .icon {
+  scale: 1.5;
+}
+
+.card:active {
+  transform: scale(0.94);
+  opacity: 0.8;
+}
+
+.top,
+.bottom {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.workspaceName {
+  position: relative;
+  color: #000;
+}
+
+.priority {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 15px;
+  border-radius: 8px;
+}
+
+.priority > .text {
+  position: relative;
+  color: #fff;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.title {
+  position: relative;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.desc {
+  position: relative;
+  color: #000;
+}
+
+.assigned_member {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  list-style-type: none;
+}
+
+.member {
+  position: relative;
+}
+
+.info {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.subInfo {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: 13px;
+}
+
+.subInfo > .text {
+  position: relative;
+  margin-left: 8px;
+  color: #1c062d;
+}
+
+@media screen and (max-width: 640px) {
+  .card {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    width: 280px;
-    height: calc(230/360 * 280px);
+    width: 100%;
+    min-width: 280px;
+    height: 164px;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 12px;
     padding: 16px 11px;
-    box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.16);
-    cursor: pointer;
-    transition: all 0.2s ease-out;
-    border: 2px solid transparent;
-}
-
-.skeleton {
-    animation-name: breathing;
-    animation-duration: 1.5s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-out;
-}
-
-@keyframes breathing {
-    0% {
-      transform: scale(1);
-      background-color: #f2f2f2; /* Light gray */
-    }
-    50% {
-      transform: scale(1);
-      background-color: #d0d0d0; /* Slightly darker gray */
-    }
-    100% {
-      transform: scale(1);
-      background-color: #f2f2f2; /* Light gray */
-    }
+    box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.2);
   }
 
-.card:hover {
-    border: 2px solid rgba(0, 0, 0, 0.2);
-}
-
-.card:hover > .icon {
-    scale: 1.5;
-    
-}
-
-.card:active{
-    transform: scale(0.94);
-    opacity: 0.8;
-}
-
-.top, .bottom {
+  .top,
+  .bottom {
     position: relative;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-}
+  }
 
-.workspaceName {
+  .workspaceName {
     position: relative;
     color: #000;
-}
+  }
 
-.priority {
+  .priority {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 7px 15px;
     border-radius: 8px;
-}
+  }
 
-.priority>.text {
+  .priority > .text {
     position: relative;
     color: #fff;
-}
+  }
 
-.content {
+  .content {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+  }
 
-}
-
-.title {
+  .title {
     position: relative;
     color: #000;
     margin-bottom: 10px;
-}
+  }
 
-.desc {
+  .desc {
     position: relative;
     color: #000;
-}
+  }
 
-.assigned_member {
+  .assigned_member {
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     list-style-type: none;
+  }
 
-}
-
-.member {
+  .member {
     position: relative;
-}
+  }
 
-.info {
+  .info {
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-}
+  }
 
-.subInfo {
+  .subInfo {
     position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
     margin-left: 13px;
-}
+  }
 
-.subInfo>.text {
+  .subInfo > .text {
     position: relative;
     margin-left: 8px;
-    color: #1C062D;
-}
-
-
-@media screen and (max-width: 640px) {
-    .card {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: space-between;
-        width: 100%;
-        min-width: 280px;
-        height: 164px;
-        background-color: rgba(255, 255, 255, 0.7);
-        border-radius: 12px;
-        padding: 16px 11px;
-        box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.25);
-    }
-
-    .top, .bottom {
-        position: relative;
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .workspaceName {
-        position: relative;
-        color: #000;
-    }
-
-    .priority {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 7px 15px;
-        border-radius: 8px;
-    }
-
-    .priority>.text {
-        position: relative;
-        color: #fff;
-    }
-
-    .content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-
-    }
-
-    .title {
-        position: relative;
-        color: #000;
-        margin-bottom: 10px;
-    }
-
-    .desc {
-        position: relative;
-        color: #000;
-    }
-
-    .assigned_member {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        list-style-type: none;
-
-    }
-
-    .member {
-        position: relative;
-    }
-
-    .info {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .subInfo {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-end;
-        margin-left: 13px;
-    }
-
-    .subInfo>.text {
-        position: relative;
-        margin-left: 8px;
-        color: #1C062D;
-    }
-
-
+    color: #1c062d;
+  }
 }

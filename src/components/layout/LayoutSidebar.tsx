@@ -54,7 +54,7 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
       <div
         className={s.sidebar}
         style={{
-          left: props.alwaysShow || props.show ? "0" : "-100%",
+          bottom: props.show ? "60px" : "-100%"
         }}
       >
         <div className={s.segment}>
