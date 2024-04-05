@@ -33,7 +33,7 @@ export default function Home() {
           className={s.ilust}
           width={430}
           height={262}
-          src={"/ilustration/team_1.svg"}
+          src={"/ilustration/landing_2.svg"}
           alt="ilustration"
         />
       </figure>
