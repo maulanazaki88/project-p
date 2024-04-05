@@ -59,12 +59,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70px;
+    width: 85px;
     height: auto;
     bottom: 87px;
     right: 20px;
     scale: 2;
-    translate: -60px -40px;
+    translate: -20px -20px;
 }
 
 .ilust {

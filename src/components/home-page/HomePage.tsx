@@ -25,10 +25,9 @@ const poppins = Poppins({
 });
 
 const HomePage: React.FC<HomePageProps> = (props) => {
-  const {
-    user_data_ctx,
-    logout_ctx,
-  } = React.useContext(Context) as ContextType;
+  const { user_data_ctx, logout_ctx } = React.useContext(
+    Context
+  ) as ContextType;
 
   const actual_user_data: UserType = user_data_ctx ? user_data_ctx : props.data;
 
@@ -38,10 +37,6 @@ const HomePage: React.FC<HomePageProps> = (props) => {
   const u_id = pathname.split("/")[2];
 
   const [searchInput, setSearchInput] = React.useState<string>("");
-  const [calendarMenuActive, setCalendarMenuActive] =
-    React.useState<boolean>(false);
-  const [notificationMenuActive, setNotificationMenuActive] =
-    React.useState<boolean>(false);
 
   const workspace_list = props.data.workspace_list as WorkspaceType[];
 
@@ -145,22 +140,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
           setShowLogoutPopup(!showLogoutPopup);
         }}
       /> */}
-      <CardMenu
-        isActive={calendarMenuActive && !notificationMenuActive}
-        calendar_list={calendar_list}
-        title={"Calendar"}
-        closeHandler={() => {
-          setCalendarMenuActive(false);
-        }}
-      />
-      <CardMenu
-        isActive={notificationMenuActive && !calendarMenuActive}
-        notification_list={notification_list}
-        title={"Notification"}
-        closeHandler={() => {
-          setNotificationMenuActive(false);
-        }}
-      />
+
       <main className={s.main}>
         <h2
           className={[s.main_title, "big", "medium", poppins.className].join(

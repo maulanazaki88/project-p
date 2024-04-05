@@ -10,7 +10,25 @@ interface WorkspaceListProps {
   searchInput: string;
 }
 
-const color_list = ["#BAE0EE", "#E2D3FE", "rgba(28, 6, 45, 0.2)"];
+const color_list = [
+  "#BAE0EE",
+  "#E2D3FE",
+  "#F9F5E7",
+  "#E3FEF7",
+  "#FEC7B4",
+  "#FFE6E6",
+  "#A5DD9B",
+];
+
+const ilust_list = [
+  "/ilustration/workspace_1.svg",
+  "/ilustration/workspace_2.svg",
+  "/ilustration/workspace_3.svg",
+  "/ilustration/workspace_4.svg",
+  "/ilustration/workspace_5.svg",
+  "/ilustration/workspace_6.svg",
+  "/ilustration/workspace_7.svg",
+];
 
 const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
   const [hide_workspace_list_scroll, setHideWorkspaceListScroll] =
@@ -53,7 +71,7 @@ const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
               >
                 <WorkspaceCard
                   description={workspace.description}
-                  img={"/ilust/team_1.svg"}
+                  img={ilust_list[index % ilust_list.length]}
                   members={workspace.member_list}
                   name={workspace.name}
                   key={`workspace-${index}`}

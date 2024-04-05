@@ -157,7 +157,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
       w_id: props.task_data.w_id,
     });
 
-    console.log('delete response',response)
+    console.log("delete response", response);
 
     const deleted_count = await response.deleted_count;
 
@@ -328,7 +328,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                         color={
                           props.task_data.priority === "LOW"
                             ? "#fff"
-                            : "#87A922"
+                            : "#242424"
                         }
                         opacity={props.task_data.priority === "LOW" ? 1 : 0.5}
                         text="Low"
@@ -339,7 +339,11 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                             w_id: props.task_data.w_id,
                           });
                         }}
-                        border="2px solid #87A922 "
+                        border={
+                          props.task_data.priority === "LOW"
+                            ? "2px solid #87A922"
+                            : "2px solid rgba(0, 0, 0, 0.1)"
+                        }
                         key={"low-priority-btn"}
                       />
                     </li>
@@ -353,7 +357,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                         color={
                           props.task_data.priority === "MED"
                             ? "#fff"
-                            : "#f5dd61"
+                            : "#242424"
                         }
                         opacity={1}
                         text="Med"
@@ -365,7 +369,11 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                             w_id: props.task_data.w_id,
                           });
                         }}
-                        border="2px solid #f5dd61"
+                        border={
+                          props.task_data.priority === "MED"
+                            ? "2px solid #f5dd61"
+                            : "2px solid rgba(0, 0, 0, 0.1)"
+                        }
                       />
                     </li>
                     <li className={s.item}>
@@ -378,7 +386,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                         color={
                           props.task_data.priority === "HIGH"
                             ? "#fff"
-                            : "#B80000"
+                            : "#242424"
                         }
                         opacity={1}
                         text="High"
@@ -390,7 +398,11 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                           });
                         }}
                         key={"high-priority-btn"}
-                        border={"2px solid #B80000"}
+                        border={
+                          props.task_data.priority === "HIGH"
+                            ? "2px solid #B80000"
+                            : "2px solid rgba(0, 0, 0, 0.1)"
+                        }
                       />
                     </li>
                   </ul>

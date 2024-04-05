@@ -33,7 +33,7 @@ const InvitationLandingPage: React.FC<{ data: WorkspaceType }> = (props) => {
       <div className={s.content}>
         <figure className={s.figure}>
           <Image
-            src={"/ilustration/team_1.svg"}
+            src={"/ilustration/invitation_landing.svg"}
             alt="invitation ilustartion"
             width={430}
             height={262}

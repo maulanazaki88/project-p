@@ -1,8 +1,7 @@
 import s from "./InvitationMenu.module.css";
 import React from "react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import MenuNavbar from "../menu-navbar/MenuNavbar";
+import { usePathname } from "next/navigation";import MenuNavbar from "../menu-navbar/MenuNavbar";
 import Context, { ContextType } from "@/context/Store";
 import RoundButton from "../round-button/RoundButton";
 
@@ -64,10 +63,10 @@ const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
       </div>
       <figure className={s.figure}>
         <Image
-          src={"/ilustration/team_1.svg"}
+          src={"/ilustration/invitation.svg"}
           alt="ilutrasi keren"
-          width={350}
-          height={213}
+          width={80}
+          height={100}
           className={s.ilust}
         />
       </figure>

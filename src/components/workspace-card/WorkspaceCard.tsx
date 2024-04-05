@@ -46,7 +46,10 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
     <WorkspaceCardSkeleton />;
   } else {
     return (
-      <Link prefetch={true} href={`${pathname}/workspace/${encodeURIComponent(props.id)}`}>
+      <Link
+        prefetch={true}
+        href={`${pathname}/workspace/${encodeURIComponent(props.id)}`}
+      >
         <div
           className={s.card}
           style={{ backgroundColor: props.bg_color }}
@@ -61,7 +64,7 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
           {!props.isEmpty ? (
             <figure className={s.figure}>
               <Image
-                src={"/ilustration/team_1.svg"}
+                src={props.img}
                 width={98}
                 height={60}
                 alt={props.name}
@@ -114,7 +117,7 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
             <div className={s.bottom}>
               <ButtonMedium
                 color="#1C062D"
-                text="Buka Space"
+                text="Open Space"
                 accent_color="rgba(255, 255, 255, 0.15)"
                 icon={"/icons/arrow_white.svg"}
                 onClick={() => {}}

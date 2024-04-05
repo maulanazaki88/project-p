@@ -67,7 +67,7 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 640px) {
   .list_screen {
     position: relative;
     display: flex;
@@ -76,7 +76,7 @@
     justify-content: flex-start;
     width: 100%;
     height: 370px;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 
   .list {
@@ -98,6 +98,26 @@
     right: 0;
     translate: 10px 0;
   }
+
+  /* .list_screen::-webkit-scrollbar {
+    all: initial;
+  }
+
+  .list_screen::-webkit-scrollbar-track {
+    all: initial;
+  }
+
+  .list_screen::-webkit-scrollbar-thumb {
+    all: initial;
+  }
+
+  .hide_scroll::-webkit-scrollbar-thumb {
+    all: initial;
+  }
+
+  .hide_scroll::-webkit-scrollbar-track {
+    all: initial;
+  } */
 
   /* .list_screen::-webkit-scrollbar,
   .list_screen::-webkit-scrollbar-track,

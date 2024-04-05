@@ -53,8 +53,7 @@
 .hide_scroll::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0);
 }
-
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 640px) {
   .task_list {
     position: relative;
     display: flex;
@@ -71,5 +70,4 @@
     margin-bottom: 15px;
     width: 100%;
   }
-
 }
