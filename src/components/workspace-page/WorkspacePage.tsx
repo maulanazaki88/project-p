@@ -80,56 +80,22 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     }
   }, [display_width]);
 
-  const {
-    user_data_ctx,
-    workspace_create_announcement_ctx,
-    user_task_ctx,
-    workspace_delete_ctx,
-    user_exit_workspace,
-  } = React.useContext(Context) as ContextType;
+  const { user_data_ctx, user_task_ctx } = React.useContext(
+    Context
+  ) as ContextType;
 
-  const [isMenuActive, setIsMenuActive] = React.useState<boolean>(false);
-  const [isNotificationMenuActive, setIsNotificationMenuActive] =
-    React.useState<boolean>(false);
-  const [showNotificationForm, setShowNotificationForm] =
-    React.useState<boolean>(false);
-  const [verifyId, setVerifyId] = React.useState<string | null>(null);
   const [show_backdrop, setShowBackdrop] = React.useState<boolean>(false);
-  const [deletePromptActive, setDeletePromptActive] =
-    React.useState<boolean>(false);
-  const [deletePromptWarning, setDeletePromptWarning] =
-    React.useState<string>("-");
-
-  const [showWaitingList, setShowWaitingList] = React.useState<boolean>(false);
-  const [showMemberList, setShowMemberList] = React.useState<boolean>(false);
-  const [showInvitationMenu, setShowInvitationMenu] =
-    React.useState<boolean>(false);
 
   const [show_workspace_info, setShowWorkspaceInfo] =
     React.useState<boolean>(false);
 
   const [search_value, setSearchValue] = React.useState<string>("");
 
-  React.useEffect(() => {}, []);
-
   React.useEffect(() => {
-    if (deletePromptActive) {
+    if (show_workspace_info) {
       setShowBackdrop(true);
-    } else {
-      setShowBackdrop(false);
     }
-  }, [deletePromptActive]);
-
-  const exitWorkspaceHandler = async (u_id: string, w_id: string) => {
-    const data = await user_exit_workspace(u_id, w_id);
-
-    const updated_one = await data.updated_one;
-
-    if (updated_one && updated_one > 0) {
-      console.log("Yeyyyy");
-      router.replace(`/home/${u_id}`);
-    }
-  };
+  }, [show_workspace_info]);
 
   const filtered_user_task = React.useMemo(() => {
     const lower_case_value = search_value.toLowerCase();
@@ -202,93 +168,9 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
       (task) => task.status === "COMPLETED" && task.w_id === w_id
     );
 
-    const menu_list: ButtonLargeProps[] = [
-      {
-        bg_color: "",
-        color: "",
-        text: "Edit Workspace",
-        icon: "/icons/edit_black.svg",
-        onClick: () => {
-          router.push(`/home/${u_id}/workspace-setup/${props.data?.w_id}`);
-        },
-      },
-      {
-        bg_color: "",
-        color: "",
-        text: "Daftar Anggota",
-        icon: "/icons/team_black.svg",
-        onClick: () => {
-          setShowMemberList(true);
-        },
-        icon_scale: 1.5,
-      },
-      {
-        bg_color: "",
-        color: "",
-        text: "Antrian Bergabung",
-        icon: "/icons/queue_black.svg",
-        notification: 2,
-        onClick: () => {
-          setShowWaitingList(true);
-        },
-      },
-      // {
-      //   bg_color: "",
-      //   color: "",
-      //   text: "Salin Link",
-      //   icon: "/icons/copy_black.svg",
-      //   onClick: () => {
-      //     if (navigator.clipboard) {
-      //       navigator.clipboard.writeText(pathname);
-      //     }
-      //   },
-      // },
-      {
-        bg_color: "",
-        color: "",
-        text: "Pengumuman",
-        icon: "/icons/announcement_black.svg",
-        onClick: () => {
-          setIsNotificationMenuActive(true);
-          console.log("SUMMONED NOTIFICATION MENU");
-        },
-        icon_scale: 1.5,
-      },
-      {
-        bg_color: "",
-        color: "",
-        text: "Keluar Workspace",
-        icon: "/icons/exit_black.svg",
-
-        onClick: () => {
-          exitWorkspaceHandler(u_id, w_id);
-        },
-        icon_scale: 1,
-      },
-    ];
-
-    const deleteHandler = async (value: string) => {
-      if (value === props.data.name) {
-        const response = await workspace_delete_ctx(props.data.w_id, {
-          author_id: u_id,
-        });
-
-        const deleted_count = await response.deleted_count;
-
-        if (deleted_count > 0) {
-          router.back();
-        }
-      } else {
-        setDeletePromptWarning("Nama yang dimasukan tidak sama!");
-        setTimeout(() => {
-          setDeletePromptWarning("-");
-        }, 3000);
-      }
-    };
-
     const backdropAction = () => {
-      setDeletePromptActive(false);
       setShowWorkspaceInfo(false);
+      setShowBackdrop(false)
     };
 
     return (
@@ -303,81 +185,6 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           {...props.data}
           show={show_workspace_info}
           closeHandler={backdropAction}
-        />
-        <FormMenu
-          closeHandler={() => setDeletePromptActive(false)}
-          label={`Ketik: "${props.data.name}"`}
-          name="name"
-          show={deletePromptActive}
-          submitHandler={({ key, value }) => {
-            deleteHandler(value);
-          }}
-          title="Hapus Workspace"
-          type="SMALL"
-          hideInputInfo
-          placeholder={`Ketik nama untuk menghapus`}
-          key={"workspace-delete-prompt"}
-          button_color="red"
-          button_text="Hapus"
-          warning={deletePromptWarning}
-        />
-        <FormMenu
-          closeHandler={() => setShowNotificationForm(false)}
-          label="Notification"
-          name="notification"
-          show={showNotificationForm}
-          submitHandler={(d) => {
-            workspace_create_announcement_ctx(w_id, {
-              notification: {
-                message: d.value,
-                created_at: new Date(),
-                username: user_data_ctx?.username
-                  ? user_data_ctx?.username
-                  : "",
-                w_id: w_id,
-              },
-              u_id: user_data_ctx?.username ? user_data_ctx?.username : "",
-            });
-            setShowNotificationForm(false);
-          }}
-          title="New notification"
-          type="LARGE"
-          key={"workspace-notification-form"}
-          button_color="#1c062d"
-          button_text="Submit"
-        />
-        <CardMenu
-          closeHandler={() => {
-            setIsNotificationMenuActive(false);
-          }}
-          isActive={isNotificationMenuActive}
-          title="Notification"
-          notification_list={props.data.notification_list}
-          newNotificationHandler={() => {
-            setShowNotificationForm(true);
-          }}
-        />
-        <InvitationMenu
-          closeHandler={() => {
-            setShowInvitationMenu(false);
-          }}
-          show={showInvitationMenu}
-          showHandler={() => {
-            setShowInvitationMenu(true);
-          }}
-        />
-        <BasicMenu
-          button_list={menu_list}
-          isActive={isMenuActive}
-          title="Workspace Menu"
-          delete_text="Delete Workspace"
-          log_list={props.data.activity_list}
-          closeHandler={() => {
-            setIsMenuActive(false);
-          }}
-          deleteHandler={() => {
-            setDeletePromptActive(true);
-          }}
         />
 
         <main className={s.main}>

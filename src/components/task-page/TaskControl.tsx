@@ -75,7 +75,7 @@ const TaskControl: React.FC<TaskControlInterface> = (props) => {
             highlightOnActive
             icon_scale={0.8}
             button_scale={0.8}
-            
+            onClick={props.showDeleteModalHandler}
           />
         </div>
       </div>

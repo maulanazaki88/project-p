@@ -1800,7 +1800,7 @@ export function ContextProvider(props: any) {
       if (json && response.status == 200) {
         console.log(json);
         const workspace_response = await fetch(
-          `/api/workspace/update/add-task/${payload.w_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`,
+          `/api/workspace/update/delete-task/${payload.w_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`,
           {
             method: "PUT",
             headers: {

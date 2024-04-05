@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import { DateFormater } from "@/utils/DateFormater";
 import TaskControl from "./TaskControl";
 import ParticipantList from "./ParticipantList";
+import PromptModal from "../modal-prompt/PromptModal";
 
 interface TaskPageProps {
   task_data: TaskType;
@@ -156,6 +157,8 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
       w_id: props.task_data.w_id,
     });
 
+    console.log('delete response',response)
+
     const deleted_count = await response.deleted_count;
 
     if (deleted_count > 0) {
@@ -195,6 +198,18 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
         }}
         onClick={overlayAction}
       />
+      {deletePromptActive && (
+        <PromptModal
+          confirm_act={deleteHandler}
+          confirm_text="Delete"
+          decline_act={() => {
+            setDeletePromptActive(false);
+          }}
+          decline_text="Cancel"
+          text_prompt="Are you sure want to delete this task?"
+          title="Delete Task"
+        />
+      )}
       <BasicMenu
         button_list={menu_list}
         log_list={props.task_data.activity_list}
@@ -250,7 +265,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
           created_on={new Date(props.task_data.created_at)}
           workspace_name={props.task_data.workspace_name}
           showDeleteModalHandler={() => {
-            deleteHandler();
+            setDeletePromptActive(true);
           }}
           showShareModalHandler={() => {}}
         />

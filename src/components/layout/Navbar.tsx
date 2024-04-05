@@ -106,17 +106,19 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           </button>
         ) : (
           <>
-            <RoundButton
-              color="transparent"
-              icon="/icons/dot_menu_white.svg"
-              rotate={90}
-              opacity={0.5}
-              icon_scale={1}
-              onClick={() => {
-                props.toggleSidebar();
-              }}
-              highlightOnActive
-            />
+            {pathname.includes("/workspace/") && (
+              <RoundButton
+                color="transparent"
+                icon="/icons/dot_menu_white.svg"
+                rotate={90}
+                opacity={0.5}
+                icon_scale={1}
+                onClick={() => {
+                  props.toggleSidebar();
+                }}
+                highlightOnActive
+              />
+            )}
             <RoundButton
               color="rgba(255, 255, 255, 0.2)"
               icon="/icons/search_white.svg"

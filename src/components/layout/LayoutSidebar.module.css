@@ -11,7 +11,7 @@
     align-items: center;
     border-right: 2px solid rgba(0, 0, 0, 0.2);
     padding-top: 50px;
-    z-index: 9999;
+    z-index: 89;
     transition: all 0.2s ease-out;
 }
 
@@ -63,7 +63,6 @@
         align-items: center;
         border-radius: 12px;
         /* border: 2px solid black; */
-
         padding-top: 0px;
         z-index: 9999;
         transition: all 0.2s ease-out;

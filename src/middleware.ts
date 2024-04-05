@@ -58,23 +58,24 @@ export async function middleware(request: NextRequest) {
     } else {
       return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
-  } else if (
-    request.nextUrl.pathname.startsWith("/api/workspace") &&
-    method === "GET"
-  ) {
-    // console.log("authorization", swift_session);
-    console.log(
-      "MIDDLEWARE INTERCEPT: ",
-      `${request.nextUrl.pathname} method: ${method} authorization: ${swift_session}`
-    );
-    const u_id = request.nextUrl.searchParams.get("u_id");
-    const w_id = request.nextUrl.searchParams.get("w_id");
+    // } else if (
+    //   request.nextUrl.pathname.startsWith("/api/workspace") &&
+    //   method === "GET" &&
+    //   !request.nextUrl.pathname.includes("/member-list/")
+    // ) {
+    //   // console.log("authorization", swift_session);
+    //   console.log(
+    //     "MIDDLEWARE INTERCEPT: ",
+    //     `${request.nextUrl.pathname} method: ${method} authorization: ${swift_session}`
+    //   );
+    //   const u_id = request.nextUrl.searchParams.get("u_id");
+    //   const w_id = request.nextUrl.searchParams.get("w_id");
 
-    if (swift_session && u_id && w_id) {
-      return await protectUser(w_id, u_id, swift_session, request, method);
-    } else {
-      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
-    }
+    //   if (swift_session && u_id && w_id) {
+    //     return await protectUser(w_id, u_id, swift_session, request, method);
+    //   } else {
+    //     return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
+    //   }
   } else if (
     request.nextUrl.pathname.startsWith("/api/workspace") &&
     (method === "PUT" || method === "DELETE")
