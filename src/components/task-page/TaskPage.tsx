@@ -4,15 +4,13 @@ import React from "react";
 import { TaskType } from "@/type";
 import RoundButton from "@/components/round-button/RoundButton";
 import SquareButton from "@/components/square-button/SquareButton";
-import ButtonLarge, {
+import {
   ButtonLargeProps,
 } from "@/components/button-large/ButtonLarge";
-import BasicMenu from "@/components/basic-menu/BasicMenu";
 import Context, { ContextType } from "@/context/Store";
 import { useRouter } from "next/navigation";
 import Comments from "@/components/comments/Comments";
 import CalendarInput from "../calender-input/CalendarInput";
-import { useDateNow } from "@/hook/useDateNow";
 import { MemberListMenuMemo } from "../member-list-menu/MemberListMenu";
 import { usePathname } from "next/navigation";
 import { DateFormater } from "@/utils/DateFormater";
@@ -210,20 +208,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
           title="Delete Task"
         />
       )}
-      <BasicMenu
-        button_list={menu_list}
-        log_list={props.task_data.activity_list}
-        isActive={isMenuActive && !isCommentsActive}
-        title="Task Menu"
-        delete_text="Delete Task"
-        closeHandler={() => {
-          setIsMenuActive(false);
-        }}
-        deleteHandler={() => {
-          setDeletePromptActive(true);
-        }}
-      />
-      <Comments
+      {/* <Comments
         chat_list={props.task_data.comments}
         closeHandler={() => {
           setIsCommentsActive(false);
@@ -242,7 +227,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
             w_id: props.task_data.w_id,
           });
         }}
-      />
+      /> */}
       <MemberListMenuMemo
         member_list={getWorkspaceMember(props.task_data.w_id)}
         assigned_member={props.task_data.assigned_member}
@@ -553,7 +538,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                     w_id: props.task_data.w_id,
                   });
                 }}
-                maxLength={200}
+                // maxLength={200}
               />
             </div>
           </div>

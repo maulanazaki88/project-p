@@ -138,21 +138,6 @@ export async function middleware(request: NextRequest) {
       return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
     }
   } else if (
-    request.nextUrl.pathname.startsWith("/api/task") &&
-    method === "DELETE"
-  ) {
-    const u_id = request.nextUrl.searchParams.get("u_id");
-    const t_id = request.nextUrl.searchParams.get("t_id");
-    // console.log(
-    //   "MIDDLEWARE INTERCEPT: ",
-    //   `${request.nextUrl.pathname} method: ${method}`
-    // );
-    if (t_accs_tkn && u_id && t_id) {
-      return await protectTasks(t_id, u_id, t_accs_tkn, request, method);
-    } else {
-      return NextResponse.json({ message: "Not Authorized" }, { status: 401 });
-    }
-  } else if (
     request.nextUrl.pathname.startsWith("/api/user") &&
     method === "PUT"
   ) {

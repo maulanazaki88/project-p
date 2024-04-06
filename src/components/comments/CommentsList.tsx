@@ -11,7 +11,7 @@ interface CommentsScreenProps {
 const CommentsList: React.FC<CommentsScreenProps> = (props) => {
   const [hide_scroll, setHideScroll] = React.useState<boolean>(true);
 
-  const screenRef = React.useRef<HTMLDivElement>(null);
+  const screenRef = React.useRef<HTMLUListElement>(null);
 
   const {user_data_ctx} = React.useContext(Context) as ContextType;
 
@@ -24,7 +24,7 @@ const CommentsList: React.FC<CommentsScreenProps> = (props) => {
   }, [props]);
 
   return (
-    <div
+    <ul
       onMouseOver={() => setHideScroll(false)}
       onMouseLeave={() => setHideScroll(true)}
       onScroll={() => setHideScroll(false)}
@@ -33,8 +33,7 @@ const CommentsList: React.FC<CommentsScreenProps> = (props) => {
       className={[s.comment_screen, hide_scroll && s.hide_scroll].join(" ")}
       ref={screenRef}
     >
-       <ul className={s.list}>
-          {props.chat_list.map((chat, index) => {
+       {props.chat_list.map((chat, index) => {
             return (
               <li
                 className={s.item}
@@ -50,8 +49,8 @@ const CommentsList: React.FC<CommentsScreenProps> = (props) => {
               </li>
             );
           })}
-        </ul>
-    </div>
+       
+    </ul>
   );
 };
 
