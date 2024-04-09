@@ -1,80 +1,110 @@
 .btn {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    /* height: 43px; */
-    width: min-content;
-    min-width: 110px;
-    min-height: 35px;
-    height: 80%;
-    padding: 8px 4px 8px 20px;
-    border-radius: 100vw;
-    /* background-color: rgba(255, 255, 255, 1); */
-    background: linear-gradient(45deg, rgb(108, 159, 201) 20%, steelblue 40%, rgb(32, 100, 155));
-    border: none;
-    font-family: inherit;
-    margin-left: 8px;
-    cursor: pointer;
-
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  /* height: 43px; */
+  width: min-content;
+  min-width: 110px;
+  min-height: 35px;
+  height: 80%;
+  padding: 8px 4px 8px 20px;
+  border-radius: 100vw;
+  /* background-color: rgba(255, 255, 255, 1); */
+  background: linear-gradient(
+    45deg,
+    rgb(108, 159, 201) 20%,
+    steelblue 40%,
+    rgb(32, 100, 155)
+  );
+  border: none;
+  font-family: inherit;
+  margin-left: 8px;
+  cursor: pointer;
 }
 
-.skeleton{
-    animation-name: breathing;
-    animation-duration: 1.5s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-out;
+.skeleton {
+  animation-name: breathing;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out;
 }
 
-.account{
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    
-    border: 1.5px solid #fff;
+.account {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+
+  border: 1.5px solid #fff;
 }
 
-.icon{
-    position: relative;
-    width: auto !important;
-    height: 10px;
+.icon {
+  position: relative;
+  width: auto !important;
+  height: 10px;
 }
 
 @keyframes breathing {
-    0% {
-      transform: scale(1);
-      background-color: #f2f2f2; /* Light gray */
-    }
-    50% {
-      transform: scale(1);
-      background-color: #d0d0d0; /* Slightly darker gray */
-    }
-    100% {
-      transform: scale(1);
-      background-color: #f2f2f2; /* Light gray */
-    }
+  0% {
+    transform: scale(1);
+    background-color: #f2f2f2; /* Light gray */
   }
+  50% {
+    transform: scale(1);
+    background-color: #d0d0d0; /* Slightly darker gray */
+  }
+  100% {
+    transform: scale(1);
+    background-color: #f2f2f2; /* Light gray */
+  }
+}
 
 .username {
-    color: #fff;
-    margin-right: 10px;
-    font-family: inherit;
+  color: #fff;
+  margin-right: 10px;
+  font-family: inherit;
 }
 
 .deleteBtn {
-    position: absolute;
-    scale: 0.7;
-    top: calc(0.7 * (-50%));
-    right: calc(0.7 * (-50%));
-    translate: -60% 15%;
+  position: absolute;
+  scale: 0.7;
+  top: calc(0.7 * (-50%));
+  right: calc(0.7 * (-50%));
+  translate: -60% 15%;
 }
 
 .pop_up {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 198px;
+  height: 101px;
+  background-color: #fff;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 15px;
+  top: 0;
+  right: 0;
+  translate: 0 50%;
+  z-index: 99;
+}
+
+.pop_up_text {
+  position: relative;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+@media screen and (max-width: 640px) {
+  .pop_up {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -88,15 +118,9 @@
     padding: 15px;
     top: 0;
     right: 0;
-    translate: 0 50%;
+    translate: 0 -120%;
     z-index: 99;
-}
-
-.pop_up_text {
-    position: relative;
-    text-align: left;
-    width: 100%;
-    margin-bottom: 6px;
+  }
 }
 
 /* @media screen and (max-width: 500px) {
