@@ -20,7 +20,9 @@ interface LayoutSidebarProps {
 }
 
 const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
-  const { user_workspaces_ctx } = React.useContext(Context) as ContextType;
+  const { user_workspaces_ctx, theme_ctx } = React.useContext(
+    Context
+  ) as ContextType;
 
   // console.log('alwaysShow', props.alwaysShow)
 
@@ -52,50 +54,71 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
   if (pathname.includes("/workspace/")) {
     return (
       <div
-        className={s.sidebar}
+        className={[s.sidebar, theme_ctx === "dark" && s.dark].join(" ")}
         style={{
-          bottom: props.show ? "60px" : "-100%"
+          bottom: props.show ? "60px" : "-100%",
         }}
       >
-        <div className={s.segment}>
+        <div className={[s.segment, theme_ctx === "dark" && s.dark].join(" ")}>
           <ul className={s.list}>
             <li className={s.item}>
               <LayoutButton
                 name={workspace_name}
                 onClick={() => {}}
                 bg_color="blue"
+                is_dark={theme_ctx === "dark"}
               />
             </li>
           </ul>
         </div>
-        <div className={s.segment}>
+        <div className={[s.segment, theme_ctx === "dark" && s.dark].join(" ")}>
           <ul className={s.list}>
             <li className={s.item}>
               <LayoutButton
                 name={"Home"}
                 onClick={props.clickHandler}
-                icon="/icons/home_black.svg"
+                icon={
+                  theme_ctx === "light"
+                    ? "/icons/home_black.svg"
+                    : "/icons/home_white.svg"
+                }
+                is_dark={theme_ctx === "dark"}
               />
             </li>
             <li className={s.item}>
               <LayoutButton
                 name={"Edit Space"}
                 onClick={props.clickHandler}
-                icon="/icons/edit_black.svg"
+                icon={
+                  theme_ctx === "light"
+                    ? "/icons/edit_black.svg"
+                    : "/icons/edit_white.svg"
+                }
+                is_dark={theme_ctx === "dark"}
               />
             </li>
             <li className={s.item}>
               <LayoutButton
                 name={"Members"}
                 onClick={props.clickHandler}
-                icon="/icons/members_black.svg"
+                icon={
+                  theme_ctx === "light"
+                    ? "/icons/members_black.svg"
+                    : "/icons/members_white.svg"
+                }
+                is_dark={theme_ctx === "dark"}
               />
             </li>
             <li className={s.item}>
               <LayoutButton
                 name={"Join Queue"}
                 onClick={props.clickHandler}
-                icon="/icons/queue_black.svg"
+                icon={
+                  theme_ctx === "light"
+                    ? "/icons/queue_black.svg"
+                    : "/icons/queue_white.svg"
+                }
+                is_dark={theme_ctx === "dark"}
               />
             </li>
             {/* <li className={s.item}>
@@ -105,19 +128,29 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
               <LayoutButton
                 name={"Share"}
                 onClick={props.clickHandler}
-                icon="/icons/plane_black.svg"
+                icon={
+                  theme_ctx === "light"
+                    ? "/icons/plane_black.svg"
+                    : "/icons/plane_white.svg"
+                }
+                is_dark={theme_ctx === "dark"}
               />
             </li>
           </ul>
         </div>
-        <div className={s.segment}>
+        <div className={[s.segment, theme_ctx === "dark" && s.dark].join(" ")}>
           <ul className={s.list}>
             {workspace && !isOwner && (
               <li className={s.item}>
                 <LayoutButton
                   name={"Exit Space"}
                   onClick={props.clickHandler}
-                  icon="/icons/exit_black.svg"
+                  icon={
+                    theme_ctx === "light"
+                      ? "/icons/exit_black.svg"
+                      : "/icons/exit_white.svg"
+                  }
+                  is_dark={theme_ctx === "dark"}
                 />
               </li>
             )}
@@ -126,7 +159,12 @@ const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
                 <LayoutButton
                   name={"Delete Space"}
                   onClick={props.clickHandler}
-                  icon="/icons/delete.svg"
+                  icon={
+                    theme_ctx === "light"
+                      ? "/icons/delete_black.svg"
+                      : "/icons/delete_white.svg"
+                  }
+                  is_dark={theme_ctx === "dark"}
                 />
               </li>
             )}

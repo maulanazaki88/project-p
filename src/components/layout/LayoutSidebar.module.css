@@ -15,6 +15,10 @@
     transition: all 0.2s ease-out;
 }
 
+.sidebar.dark{
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+}
+
 .sidebar> div:nth-child(3) {
     position: absolute;
     bottom: 0;
@@ -28,6 +32,10 @@
     border-bottom: 2px solid rgba(0, 0, 0, 0.2);
     width: 100%;
     padding: 10px 0;
+}
+
+.segment.dark{
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 
@@ -93,4 +101,8 @@
         position: relative;
         bottom: unset;
     }
+}
+
+.dark {
+    background-color: rgb( 48, 53, 60 );
 }

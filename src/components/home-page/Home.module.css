@@ -190,23 +190,23 @@
 }
 
 @media screen and (max-width: 1124px) {
-  /* .dashboard {
-    scale: 0.8;
-  } */
-
-  .main {
+  .dashboard {
     scale: 0.8;
   }
+
+  /* .main {
+    scale: 0.8;
+  } */
 }
 
 @media screen and (max-width: 920px) {
-  /* .dashboard {
-    scale: 0.5;
-  } */
-
-  .main {
+  .dashboard {
     scale: 0.5;
   }
+
+  /* .main {
+    scale: 0.5;
+  } */
 }
 
 @media screen and (max-width: 640px) {
@@ -373,4 +373,15 @@
 
 .hide_scroll::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0);
+}
+
+
+.light {
+  background-color: #fff;
+  color: #000;
+}
+
+.dark {
+  background-color: #2a2e34;
+  color: #fff;
 }

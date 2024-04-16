@@ -5,9 +5,11 @@ import WorkspaceCard from "../workspace-card/WorkspaceCard";
 import WorkspaceCardPlaceHolder from "../workspace-card/WorkspaceCardPlaceHolder";
 import { usePathname } from "next/navigation";
 
+
 interface WorkspaceListProps {
   workspace_list: WorkspaceType[];
   searchInput: string;
+  is_dark: boolean;
 }
 
 const color_list = [
@@ -88,7 +90,7 @@ const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
             <WorkspaceCardPlaceHolder />
           </li>
         )}
-        <div className={s.white_blur}></div>
+        <div className={[s.white_blur, props.is_dark && s.dark].join(' ')}></div>
       </ul>
     </div>
   );

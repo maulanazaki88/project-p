@@ -59,6 +59,15 @@
   translate: 10px 0;
 }
 
+.white_blur,
+.dark {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    #2a2e34 100%
+  );
+}
+
 .hide_scroll::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0);
 }

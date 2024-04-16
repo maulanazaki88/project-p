@@ -244,3 +244,7 @@
         box-shadow: 0px 4px 7px 1px rgba(0, 0, 0, 0);
     }
 }
+
+.placeholder, .dark {
+    border: 4px dashed #535C91;
+}

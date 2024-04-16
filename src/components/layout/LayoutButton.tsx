@@ -9,6 +9,7 @@ interface LayoutButtonProps {
   onClick: (e: MenuType) => void;
   name: MenuType;
   bg_color?: string
+  is_dark: boolean;
 }
 
 const LayoutButton: React.FC<LayoutButtonProps> = (props) => {
@@ -26,7 +27,7 @@ const LayoutButton: React.FC<LayoutButtonProps> = (props) => {
       onMouseLeave={() => {
         setShowModal(false);
       }}
-      style={{backgroundColor: props.bg_color ? props.bg_color : "#fff"}}
+      style={{backgroundColor: props.bg_color ? props.bg_color : "transparent"}}
     >
       {props.icon ? (
         <Image

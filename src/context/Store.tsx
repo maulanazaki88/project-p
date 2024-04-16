@@ -10,7 +10,9 @@ import {
 } from "@/type";
 import { NotificationCardProps } from "@/components/notification-card/NotificationCard";
 import { ChatBubbleProps } from "@/components/chat-bubble/ChatBubble";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 
+export type ThemeType = "dark" | "light" | "system";
 export interface ContextType {
   user_data_ctx: UserType | null;
   user_data_handler_ctx: React.Dispatch<UserType>;
@@ -99,6 +101,8 @@ export interface ContextType {
   task_comments_handler_ctx: React.Dispatch<CommentType[]>;
   task_refresh_ctx: (t_id: string, payload: TaskRefresh_Act) => void;
   logout_ctx: () => void;
+  theme_ctx: ThemeType;
+  theme_handler_ctx: (theme: ThemeType) => void;
 }
 
 // Workspace Interface ===========================================================
@@ -1413,14 +1417,17 @@ export function ContextProvider(props: any) {
       }
     });
     const data: WorkspaceType = payload.workspace;
-    const response = await fetch(`/api/workspace/create?w_id=${w_id}&u_id=${payload.u_id}`, {
-      headers: {
-        "Content-type": "application/json",
-      },
-      method: "POST",
-      cache: "no-store",
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `/api/workspace/create?w_id=${w_id}&u_id=${payload.u_id}`,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+        method: "POST",
+        cache: "no-store",
+        body: JSON.stringify(data),
+      }
+    );
     const json = await response.json();
     // console.log(json);
     if (json && response.ok) {
@@ -1715,26 +1722,18 @@ export function ContextProvider(props: any) {
         type: "CREATE",
       });
 
-      dispatchWorkspace({
-        payload: {
-          action: "ADD",
-          t_id: t_id,
-          task: payload.task,
-          u_id: payload.u_id,
-        } as WorkspaceChangeTasks_Act,
-        type: "CHANGE_TASKS",
-        w_id: payload.w_id,
-      });
-
       const data = payload.task;
 
-      const response = await fetch(`/api/task/create?u_id=${payload.u_id}&w_id=${payload.w_id}`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `/api/task/create?u_id=${payload.u_id}&w_id=${payload.w_id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const json = await response.json();
 
@@ -1756,6 +1755,16 @@ export function ContextProvider(props: any) {
 
         if (workspace_json && workspace_response.status == 200) {
           console.log(workspace_json);
+          dispatchWorkspace({
+            payload: {
+              action: "ADD",
+              t_id: t_id,
+              task: payload.task,
+              u_id: payload.u_id,
+            } as WorkspaceChangeTasks_Act,
+            type: "CHANGE_TASKS",
+            w_id: payload.w_id,
+          });
           return {
             ...json,
             ...workspace_json,
@@ -1788,12 +1797,15 @@ export function ContextProvider(props: any) {
         type: "CHANGE_TASKS",
         w_id: payload.w_id,
       });
-      const response = await fetch(`/api/task/delete/${t_id}?u_id=${payload.u_id}&t_id=${t_id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `/api/task/delete/${t_id}?u_id=${payload.u_id}&t_id=${t_id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      );
 
       const json = await response.json();
 
@@ -1834,13 +1846,16 @@ export function ContextProvider(props: any) {
     dispatchTask({ payload: payload, t_id: t_id, type: "CHANGE_TITLE" });
     if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       const data = { title: payload.title };
-      const response = await fetch(`/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const json = await response.json();
 
@@ -1861,13 +1876,16 @@ export function ContextProvider(props: any) {
     });
     if (task_verify_access(payload.u_id, t_id, payload.w_id)) {
       const data = { description: payload.description };
-      const response = await fetch(`/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const json = await response.json();
 
@@ -1888,14 +1906,17 @@ export function ContextProvider(props: any) {
         type: "CHANGE_DEADLINE",
       });
       const data = { deadline: payload.deadline.toString() };
-      const response = await fetch(`/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-        cache: "no-cache",
-      });
+      const response = await fetch(
+        `/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+          cache: "no-cache",
+        }
+      );
 
       const json = await response.json();
 
@@ -1917,13 +1938,16 @@ export function ContextProvider(props: any) {
       });
       const data = { priority: payload.priority };
 
-      const response = await fetch(`/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const json = await response.json();
 
@@ -2004,13 +2028,16 @@ export function ContextProvider(props: any) {
         type: "CHANGE_STATUS",
       });
       const data = { status: payload.status };
-      const response = await fetch(`/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `/api/task/update/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const json = await response.json();
 
@@ -2029,13 +2056,16 @@ export function ContextProvider(props: any) {
       });
       const data = payload.chat;
 
-      const response = await fetch(`/api/task/update/add-comment/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `/api/task/update/add-comment/${t_id}?u_id=${payload.u_id}&w_id=${payload.w_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const json = await response.json();
 
@@ -2075,11 +2105,37 @@ export function ContextProvider(props: any) {
     }
   }, [user_data]);
 
-
   const logout = () => {
     set_user_data(null);
     workspaceInit({ workspace_list: [] });
     taskInit({ task_list: [] });
+  };
+
+  //theme
+
+  const [theme, setTheme] = React.useState<ThemeType>("system");
+
+  React.useEffect(() => {
+    const preferdarkmode = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    const preferenceCookie = getCookie("theme-preference") as ThemeType;
+
+    if (!hasCookie("theme-preference") || preferenceCookie === "system") {
+      if (preferdarkmode) {
+        setTheme("dark");
+      } else {
+        setTheme("light");
+      }
+    } else {
+      setTheme(preferenceCookie);
+    }
+  }, []);
+
+  const toggleTheme = (theme: ThemeType) => {
+    setTheme(theme);
+    setCookie("theme-preference", theme);
   };
 
   const context: ContextType = {
@@ -2117,6 +2173,8 @@ export function ContextProvider(props: any) {
     workspace_refresh_waiting_list: workspaceRefreshWaitingList,
     task_refresh_ctx: taskRefresh,
     workspace_refresh_ctx: workspaceRefresh,
+    theme_ctx: theme,
+    theme_handler_ctx: toggleTheme,
   };
   // console.log("WORKING CONTEXT")
   return <Context.Provider value={context}>{props.children}</Context.Provider>;

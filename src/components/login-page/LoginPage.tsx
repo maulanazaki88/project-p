@@ -7,6 +7,7 @@ import ButtonLarge from "@/components/button-large/ButtonLarge";
 import { useRouter } from "next/navigation";
 import { useVerifyEmail } from "@/hook/useVerifyEmail";
 import Link from "next/link";
+import Context, { ContextType } from "@/context/Store";
 
 interface LoginPageProps {
   signupLink: string;
@@ -15,6 +16,8 @@ interface LoginPageProps {
 }
 
 const LoginPage: React.FC<LoginPageProps> = (props) => {
+  const { theme_ctx } = React.useContext(Context) as ContextType;
+
   const verifyEmail = useVerifyEmail();
   const router = useRouter();
 
@@ -126,13 +129,19 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
   };
 
   return (
-    <main className={s.main}>
+    <main
+      className={[s.main, theme_ctx === "light" ? s.light : s.dark].join(" ")}
+    >
       <div className={s.heading}>
         <h1 className={[s.title, "medium", "big"].join(" ")}>Login</h1>
       </div>
       <form className={s.form} onSubmit={submitHandler}>
         <InputSmall
-          icon={"/icons/email_black.svg"}
+          icon={
+            theme_ctx === "light"
+              ? "/icons/email_black.svg"
+              : "/icons/email_white.svg"
+          }
           onChange={changeHandler}
           name="email"
           placeholder="Enter your Email"
@@ -145,7 +154,11 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
           required
         />
         <InputSmall
-          icon={"/icons/lock_black.svg"}
+          icon={
+            theme_ctx === "light"
+              ? "/icons/lock_black.svg"
+              : "/icons/lock_white.svg"
+          }
           onChange={changeHandler}
           name="password"
           placeholder="Enter password"
@@ -158,7 +171,7 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
           required
         />
         <ButtonLarge
-          bg_color="#080726"
+          bg_color={theme_ctx === "light" ? "#1c062d" : "#535C91"}
           color="#fff"
           text="Login"
           icon="/icons/next_white.svg"
@@ -169,7 +182,14 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
         <p className={[s.suggestion_txt, "sm", "soft"].join(" ")}>
           Not have an account yet?
         </p>
-        <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
+        <span
+          className={[
+            s.suggestion_btn,
+            "sm",
+            "medium",
+            theme_ctx === "dark" ? s.dark : null,
+          ].join(" ")}
+        >
           <Link href={props.signupLink}>Sign for free!</Link>
         </span>
       </div>

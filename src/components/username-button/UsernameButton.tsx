@@ -51,7 +51,7 @@ const UsernameButton: React.FC<UsernameButtonProps> = (props) => {
         className={s.pop_up}
         style={{ display: props.showPopup ? "flex" : "none" }}
       >
-        <p className={[s.pop_up_text, "medium", "sm"].join(" ")}>Akun</p>
+        <p className={[s.pop_up_text, "medium", "sm"].join(" ")}>Account</p>
         <ButtonMedium
           color="red"
           text="Logout"

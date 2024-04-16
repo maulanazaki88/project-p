@@ -5,7 +5,7 @@ import Image from "next/image";
 import Avatar from "../avatar/Avatar";
 import { useRenderDate } from "@/hook/useRenderDate";
 import { usePathname } from "next/navigation";
-import Context from "@/context/Store";
+import Context, { ContextType } from "@/context/Store";
 import TaskCardSkeleton from "./TaskCardSkeleton";
 import Link from "next/link";
 
@@ -25,17 +25,18 @@ export interface TaskCardProps {
 const color_list = ["#F99370", "#F4D4BE", "#A523A2"];
 
 const TaskCard: React.FC<TaskCardProps> = (props) => {
-  const ctx = React.useContext(Context);
+  const { user_workspaces_ctx, theme_ctx } = React.useContext(
+    Context
+  ) as ContextType;
 
   const calendar = useRenderDate();
-
-  const user_workspaces = ctx?.user_workspaces_ctx;
 
   const cardRef = React.useRef<HTMLDivElement>(null);
 
   const workspace_name =
-    user_workspaces &&
-    user_workspaces.find((workspace) => workspace.w_id === props.w_id)?.name;
+    user_workspaces_ctx &&
+    user_workspaces_ctx.find((workspace) => workspace.w_id === props.w_id)
+      ?.name;
   const pathname = usePathname();
 
   // menjaga agar deskripsi tidak offset dari kartu
@@ -58,14 +59,17 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
       onDrag={() => {
         console.log("Card dragged");
       }}
-      className={s.card}
+      className={[s.card, theme_ctx === "dark" && s.dark].join(" ")}
       onClick={() => {}}
       ref={cardRef}
       onMouseOver={(e) => {}}
-      style={props.isShadow ? {
-        height: props.isAppear ? 'calc(230/360 * 280px)' : 0
-      } : {}}
-
+      style={
+        props.isShadow
+          ? {
+              height: props.isAppear ? "calc(230/360 * 280px)" : 0,
+            }
+          : {}
+      }
     >
       <div className={s.top}>
         <div className={[s.workspaceName, "bold", "sm", "soft"].join(" ")}>
@@ -115,9 +119,13 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
           })}
         </ul>
         <div className={s.info}>
-          <div className={s.subInfo}>
+          <div className={[s.subInfo, theme_ctx && s.dark].join(" ")}>
             <Image
-              src={"/icons/comment.svg"}
+              src={
+                theme_ctx === "light"
+                  ? "/icons/comment.svg"
+                  : "/icons/comment_white.svg"
+              }
               alt="comment"
               width={16}
               height={16}
@@ -127,9 +135,13 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
               {props.comments_count}
             </span>
           </div>
-          <div className={s.subInfo}>
+          <div className={[s.subInfo, theme_ctx && s.dark].join(" ")}>
             <Image
-              src={"/icons/calendar.svg"}
+              src={
+                theme_ctx === "light"
+                  ? "/icons/calendar.svg"
+                  : "/icons/calendar_white.svg"
+              }
               alt="calendar"
               width={16}
               height={16}
@@ -237,15 +249,15 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
 
   return (
     <Link
-    className={s.card_link}
-    href={
-      pathname.includes("workspace")
-        ? `${pathname}/task/${props.id}`
-        : `${pathname}/workspace/${props.w_id}/task/${props.id}`
-    }
-  >
-    {CardView}
-  </Link>
+      className={s.card_link}
+      href={
+        pathname.includes("workspace")
+          ? `${pathname}/task/${props.id}`
+          : `${pathname}/workspace/${props.w_id}/task/${props.id}`
+      }
+    >
+      {CardView}
+    </Link>
   );
 };
 

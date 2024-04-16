@@ -2,7 +2,6 @@
 import s from "./Home.module.css";
 import React from "react";
 import SquareButton from "@/components/square-button/SquareButton";
-import CardMenu from "@/components/card-menu/CardMenu";
 import { CalendarCardProps } from "@/components/calender-card/CalendarCard";
 import { NotificationCardProps } from "@/components/notification-card/NotificationCard";
 import { TaskType, UserType, WorkspaceType } from "@/type";
@@ -25,7 +24,7 @@ const poppins = Poppins({
 });
 
 const HomePage: React.FC<HomePageProps> = (props) => {
-  const { user_data_ctx, logout_ctx } = React.useContext(
+  const { user_data_ctx, logout_ctx, theme_ctx } = React.useContext(
     Context
   ) as ContextType;
 
@@ -141,7 +140,9 @@ const HomePage: React.FC<HomePageProps> = (props) => {
         }}
       /> */}
 
-      <main className={s.main}>
+      <main
+        className={[s.main, theme_ctx === "light" ? s.light : s.dark].join(" ")}
+      >
         <h2
           className={[s.main_title, "big", "medium", poppins.className].join(
             " "
@@ -162,7 +163,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
               </div>
               <div className={s.action}>
                 <SquareButton
-                  bg_color="#1C062D"
+                  bg_color={theme_ctx === "light" ? " #1C062D" : "#535C91"}
                   color="#fff"
                   opacity={1}
                   text="Add"
@@ -175,6 +176,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
             <WorkspaceList
               searchInput={searchInput}
               workspace_list={workspace_list}
+              is_dark={theme_ctx === "dark"}
             />
           </div>
           <div className={s.todo}>

@@ -16,6 +16,10 @@
     left: 0px;
 }
 
+.navbar.dark {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
 .home {
     border-bottom: 2px solid rgba(0, 0, 0, 0.0);
 }
@@ -92,4 +96,8 @@
         top: unset;
         bottom: 0;
     }
+}
+
+.dark {
+    background-color: rgb(36, 36, 36);
 }

@@ -158,3 +158,13 @@
   }
 
 }
+
+.light {
+  background-color: #fff;
+  color: #000;
+}
+
+.dark {
+  background-color: #2a2e34;
+  color: #fff;
+}

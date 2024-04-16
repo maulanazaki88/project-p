@@ -23,7 +23,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const pathname = usePathname();
   const u_id = pathname.split("/")[2];
   const isWorkspace = pathname.includes("/workspace/");
-  const { user_data_ctx } = React.useContext(Context) as ContextType;
+  const { user_data_ctx, theme_ctx } = React.useContext(Context) as ContextType;
 
   const username = React.useMemo(() => {
     return user_data_ctx && user_data_ctx.username
@@ -47,7 +47,13 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   }, []);
 
   return (
-    <header className={[s.navbar, !isWorkspace && s.home].join(" ")}>
+    <header
+      className={[
+        s.navbar,
+        !isWorkspace && s.home,
+        theme_ctx === "dark" ? s.dark : null,
+      ].join(" ")}
+    >
       <div className={s.left}>
         <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}`}>
           <svg

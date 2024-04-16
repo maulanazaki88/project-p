@@ -7,6 +7,7 @@ import localFont from "next/font/local";
 import { useRouter } from "next/navigation";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
+import Context, { ContextType } from "@/context/Store";
 
 const inter = localFont({
   src: "../components/fonts/Inter-VariableFont_slnt,wght.ttf",
@@ -21,13 +22,17 @@ const poppins = Poppins({
 export default function Home() {
   const router = useRouter();
 
+  const { theme_ctx } = React.useContext(Context) as ContextType;
+
   const toSignUp = () => {
     router.push("/sign-up");
     console.log("huhu");
   };
 
   return (
-    <main className={s.main}>
+    <main
+      className={[s.main, theme_ctx === "light" ? s.light : s.dark].join(" ")}
+    >
       <figure className={s.figure}>
         <Image
           className={s.ilust}
@@ -53,7 +58,7 @@ export default function Home() {
         </div>
         <Link href="/signup">
           <ButtonLarge
-            bg_color="#080726"
+            bg_color={theme_ctx === "light" ? "#080726" : "#535C91"}
             color="#fff"
             text="Start Free!"
             onClick={() => {}}
@@ -63,7 +68,14 @@ export default function Home() {
           <p className={[s.suggestion_txt, "sm", "soft"].join(" ")}>
             Already have an account?
           </p>
-          <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
+          <span
+            className={[
+              s.suggestion_btn,
+              "sm",
+              "medium",
+              theme_ctx === "dark" ? s.dark : null,
+            ].join(" ")}
+          >
             <Link href="/login">Login</Link>
           </span>
         </div>

@@ -2,17 +2,11 @@
 import s from "./Workspace.module.css";
 import React from "react";
 import Context, { ContextType } from "@/context/Store";
-import TaskCard from "@/components/task-card/TaskCard";
-import BasicMenu from "@/components/basic-menu/BasicMenu";
-import { ButtonLargeProps } from "@/components/button-large/ButtonLarge";
 import { ProgressStatusType, TaskType, WorkspaceType } from "@/type";
 import { useRouter } from "next/navigation";
 import { useDateNow } from "@/hook/useDateNow";
-import CardMenu from "../card-menu/CardMenu";
 import { usePathname } from "next/navigation";
-import FormMenu from "../form-menu/FormMenu";
 import { useIdGenerator } from "@/hook/useIdGenerator";
-import InvitationMenu from "../invitation-menu/InvitationMenu";
 import TaskStageSection from "../task-stage-section/TaskStageSection";
 import WorkspaceControl from "./WorkspaceControl";
 import ModalWorkspaceInfo from "../modal-workspace-info/ModalWorkspaceInfo";
@@ -24,7 +18,9 @@ interface WorkspacePageProps {
 }
 
 const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
-  const { task_create_ctx } = React.useContext(Context) as ContextType;
+  const { task_create_ctx, theme_ctx } = React.useContext(
+    Context
+  ) as ContextType;
 
   const router = useRouter();
   const pathname = usePathname();
@@ -170,7 +166,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
 
     const backdropAction = () => {
       setShowWorkspaceInfo(false);
-      setShowBackdrop(false)
+      setShowBackdrop(false);
     };
 
     return (
@@ -187,7 +183,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           closeHandler={backdropAction}
         />
 
-        <main className={s.main}>
+        <main className={[s.main, theme_ctx && s.dark].join(" ")}>
           <WorkspaceControl
             created_on={props.data.created_at}
             searchInputHandler={(e): void => {

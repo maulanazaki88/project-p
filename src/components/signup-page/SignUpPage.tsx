@@ -1,14 +1,14 @@
 "use client";
-import s from './SignUpPage.module.css'
+import s from "./SignUpPage.module.css";
 import React, { FormEventHandler } from "react";
 import InputSmall from "@/components/input-small/InputSmall";
 import ButtonLarge from "@/components/button-large/ButtonLarge";
 import { UserType } from "@/type";
-import { createUser } from "@/server/actions";
 import { useRouter } from "next/navigation";
 import { useDateNow } from "@/hook/useDateNow";
 import { useIdGenerator } from "@/hook/useIdGenerator";
 import Link from "next/link";
+import Context, { ContextType } from "@/context/Store";
 
 interface SignUpProps {
   loginLink: string;
@@ -19,7 +19,7 @@ interface SignUpProps {
 const SignUpPage: React.FC<SignUpProps> = (props) => {
   const router = useRouter();
   const id_generator = useIdGenerator();
-  const date_now = useDateNow();
+  const { theme_ctx } = React.useContext(Context) as ContextType;
 
   const [user_data, set_user_data] = React.useState<UserType>({
     created_at: new Date(),
@@ -64,7 +64,6 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           username: "-",
         });
       }, 5000);
-    
     } else if (user_data.username.length < 4) {
       setWarning((prev) => {
         return {
@@ -104,7 +103,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           created_at: date_time,
           updated_at: date_time,
           u_id: id_generator.user(),
-          w_id: props.w_id
+          w_id: props.w_id,
         }),
         method: "POST",
       });
@@ -162,15 +161,19 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
   };
 
   return (
-    <main className={s.main}>
+    <main
+      className={[s.main, theme_ctx === "light" ? s.light : s.dark].join(" ")}
+    >
       <div className={s.heading}>
-        <h1 className={[s.title, "medium", "md"].join(" ")}>
-          Signup
-        </h1>
+        <h1 className={[s.title, "medium", "md"].join(" ")}>Signup</h1>
       </div>
       <form className={s.form} onSubmit={submitData}>
         <InputSmall
-          icon={"/icons/person_black.svg"}
+          icon={
+            theme_ctx === "light"
+              ? "/icons/person_black.svg"
+              : "/icons/person_white.svg"
+          }
           onChange={changeHandler}
           name="username"
           placeholder="Enter Username"
@@ -183,7 +186,11 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           required
         />
         <InputSmall
-          icon={"/icons/email_black.svg"}
+          icon={
+            theme_ctx === "light"
+              ? "/icons/email_black.svg"
+              : "/icons/email_white.svg"
+          }
           onChange={changeHandler}
           name="email"
           placeholder="Enter Email"
@@ -196,7 +203,11 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           required
         />
         <InputSmall
-          icon={"/icons/lock_black.svg"}
+          icon={
+            theme_ctx === "light"
+              ? "/icons/lock_black.svg"
+              : "/icons/lock_white.svg"
+          }
           onChange={changeHandler}
           name="password"
           placeholder="Enter Password"
@@ -209,7 +220,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           required
         />
         <ButtonLarge
-          bg_color="#080726"
+          bg_color={theme_ctx === "light" ? "#1c062d" : "#535C91"}
           color="#fff"
           text="Signup"
           icon="/icons/next_white.svg"
@@ -221,7 +232,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
         <p className={[s.suggestion_txt, "sm", "soft"].join(" ")}>
           Already have an account?
         </p>
-        <span className={[s.suggestion_btn, "sm", "medium"].join(" ")}>
+        <span className={[s.suggestion_btn, "sm", "medium", theme_ctx === 'dark' ? s.dark : null].join(" ")}>
           <Link href={props.loginLink}>Login</Link>
         </span>
       </div>

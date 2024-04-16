@@ -12,7 +12,7 @@
 .label{
     position: relative;
     margin-bottom: 15px;
-    color: #000;
+    color: inherit;
 }
 
 .field{
@@ -49,7 +49,7 @@
     background-color: transparent;
     border: none;
     outline: none;
-    color: rgba(0, 0, 0, 0.7);
+    color: inherit;
     
 
 }
