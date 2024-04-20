@@ -163,7 +163,7 @@
 
   .workspaceName {
     position: relative;
-    color: #000;
+    color: inherit;
   }
 
   .priority {
@@ -190,13 +190,13 @@
 
   .title {
     position: relative;
-    color: #000;
+    color: inherit;
     margin-bottom: 10px;
   }
 
   .desc {
     position: relative;
-    color: #000;
+    color: inherit;
   }
 
   .assigned_member {

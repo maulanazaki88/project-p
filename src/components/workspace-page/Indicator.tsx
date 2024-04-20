@@ -1,6 +1,7 @@
 import s from "./Indicator.module.css";
 import React from "react";
 
+
 interface IndicatorProps {
   stage: number;
 }

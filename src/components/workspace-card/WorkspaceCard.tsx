@@ -6,7 +6,7 @@ import ButtonMedium from "../button-medium/ButtonMedium";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import WorkspaceCardSkeleton from "./WorkspaceCardSkeleton";
-import Link from "next/link";
+import Link from "next/link";;
 
 interface WorkspaceCardProps {
   name: string;
@@ -116,7 +116,7 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
           {!props.isEmpty && (
             <div className={s.bottom}>
               <ButtonMedium
-                color="#1C062D"
+                color={"#1C062D"}
                 text="Open Space"
                 accent_color="rgba(255, 255, 255, 0.15)"
                 icon={"/icons/arrow_white.svg"}

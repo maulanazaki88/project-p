@@ -59,8 +59,7 @@
   translate: 10px 0;
 }
 
-.white_blur,
-.dark {
+.white_blur.dark {
   background: linear-gradient(
     to right,
     rgba(255, 255, 255, 0) 0%,
@@ -97,11 +96,6 @@
 
   .white_blur {
     position: sticky;
-    background: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 1) 100%
-    );
     width: 50px;
     height: 500px;
     right: 0;
