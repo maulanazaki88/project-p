@@ -1,6 +1,6 @@
 import s from "./ChatBubble.module.css";
 import React from "react";
-import Context from "@/context/Store";
+import Context, { ContextType } from "@/context/Store";
 import { formatSentTime } from "@/utils/SentTimeFormater";
 
 export interface ChatBubbleProps {
@@ -11,15 +11,15 @@ export interface ChatBubbleProps {
 }
 
 const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
-  const ctx = React.useContext(Context);
+  const { user_data_ctx, theme_ctx } = React.useContext(Context) as ContextType;
 
-  const user_data = ctx?.user_data_ctx;
+  const is_dark = theme_ctx === "dark";
 
   return (
-    <div className={s.bubble}>
+    <div className={[s.bubble, is_dark && s.dark].join(" ")}>
       <div className={s.username_box}>
         <span className={[s.username, "medium", "sm"].join(" ")}>
-          {props.username === user_data?.username ? "You" : props.username}
+          {props.username === user_data_ctx?.username ? "You" : props.username}
         </span>
       </div>
       <p className={[s.message, "sm", "medium"].join(" ")}>{props.message}</p>
@@ -27,12 +27,12 @@ const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
         className={s.stamp}
         style={{
           justifyContent:
-            props.username === user_data?.username ? "flex-start" : "flex-end",
+            props.username === user_data_ctx?.username
+              ? "flex-start"
+              : "flex-end",
         }}
       >
-        <span className={[s.time, "sm", "medium", "soft"].join(" ")}>
-          {formatSentTime(props.time)}
-        </span>
+        <span className={[s.time].join(" ")}>{formatSentTime(props.time)}</span>
       </div>
     </div>
   );

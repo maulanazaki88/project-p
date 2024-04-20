@@ -4,9 +4,7 @@ import React from "react";
 import { TaskType } from "@/type";
 import RoundButton from "@/components/round-button/RoundButton";
 import SquareButton from "@/components/square-button/SquareButton";
-import {
-  ButtonLargeProps,
-} from "@/components/button-large/ButtonLarge";
+import { ButtonLargeProps } from "@/components/button-large/ButtonLarge";
 import Context, { ContextType } from "@/context/Store";
 import { useRouter } from "next/navigation";
 import Comments from "@/components/comments/Comments";
@@ -39,7 +37,10 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
     task_change_priority_ctx,
     task_delete_ctx,
     task_change_description_ctx,
+    theme_ctx,
   } = React.useContext(Context) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
 
   const getWorkspaceMember = (id: string) => {
     if (user_workspaces_ctx) {
@@ -245,7 +246,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
           });
         }}
       />
-      <main className={s.main}>
+      <main className={[s.main, is_dark && s.dark].join(" ")}>
         <TaskControl
           created_on={new Date(props.task_data.created_at)}
           workspace_name={props.task_data.workspace_name}
@@ -279,8 +280,12 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 <div className={s.content}>
                   <RoundButton
                     color="rgba(0, 0, 0, 0.08)"
-                    icon="/icons/calendar.svg"
-                    opacity={1}
+                    icon={
+                      is_dark
+                        ? "/icons/calendar_white.svg"
+                        : "/icons/calendar.svg"
+                    }
+                    opacity={0.7}
                     onClick={() => {}}
                   />
                   <CalendarInput
@@ -313,6 +318,8 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                         color={
                           props.task_data.priority === "LOW"
                             ? "#fff"
+                            : is_dark
+                            ? "#fff"
                             : "#242424"
                         }
                         opacity={props.task_data.priority === "LOW" ? 1 : 0.5}
@@ -327,6 +334,8 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                         border={
                           props.task_data.priority === "LOW"
                             ? "2px solid #87A922"
+                            : is_dark
+                            ? "2px solid rgba(255, 255, 255, 0.1)"
                             : "2px solid rgba(0, 0, 0, 0.1)"
                         }
                         key={"low-priority-btn"}
@@ -336,11 +345,13 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                       <SquareButton
                         bg_color={
                           props.task_data.priority === "MED"
-                            ? "#f5dd61"
+                            ? "#FAA300"
                             : "transparent"
                         }
                         color={
                           props.task_data.priority === "MED"
+                            ? "#fff"
+                            : is_dark
                             ? "#fff"
                             : "#242424"
                         }
@@ -356,7 +367,9 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                         }}
                         border={
                           props.task_data.priority === "MED"
-                            ? "2px solid #f5dd61"
+                            ? "2px solid #FAA300"
+                            : is_dark
+                            ? "2px solid rgba(255, 255, 255, 0.1)"
                             : "2px solid rgba(0, 0, 0, 0.1)"
                         }
                       />
@@ -370,6 +383,8 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                         }
                         color={
                           props.task_data.priority === "HIGH"
+                            ? "#fff"
+                            : is_dark
                             ? "#fff"
                             : "#242424"
                         }
@@ -386,6 +401,8 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                         border={
                           props.task_data.priority === "HIGH"
                             ? "2px solid #B80000"
+                            : is_dark
+                            ? "2px solid rgba(255, 255, 255, 0.1)"
                             : "2px solid rgba(0, 0, 0, 0.1)"
                         }
                       />
@@ -404,7 +421,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                     color="#1C062D"
                     opacity={0.5}
                     text=""
-                    icon="/icons/plus.svg"
+                    icon={is_dark ? "/icons/plus_white.svg" : "/icons/plus.svg"}
                     key={"plus-btn"}
                     onClick={() => {
                       setIsMemberListMenuActive(true);
@@ -424,11 +441,15 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                       <SquareButton
                         bg_color={
                           props.task_data.status === "NEXT-UP"
-                            ? "#1C062D"
+                            ? is_dark
+                              ? "#535C91"
+                              : "#1C062D"
                             : "rgba(0, 0, 0, 0.08)"
                         }
                         color={
                           props.task_data.status === "NEXT-UP"
+                            ? "#fff"
+                            : is_dark
                             ? "#fff"
                             : "#1C062D"
                         }
@@ -448,11 +469,15 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                       <SquareButton
                         bg_color={
                           props.task_data.status === "IN-PROGRESS"
-                            ? "#1C062D"
+                            ? is_dark
+                              ? "#535C91"
+                              : "#1C062D"
                             : "rgba(0, 0, 0, 0.08)"
                         }
                         color={
                           props.task_data.status === "IN-PROGRESS"
+                            ? "#fff"
+                            : is_dark
                             ? "#fff"
                             : "#1C062D"
                         }
@@ -472,11 +497,15 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                       <SquareButton
                         bg_color={
                           props.task_data.status === "REVISED"
-                            ? "#1C062D"
+                            ? is_dark
+                              ? "#535C91"
+                              : "#1C062D"
                             : "rgba(0, 0, 0, 0.08)"
                         }
                         color={
                           props.task_data.status === "REVISED"
+                            ? "#fff"
+                            : is_dark
                             ? "#fff"
                             : "#1C062D"
                         }
@@ -496,11 +525,15 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                       <SquareButton
                         bg_color={
                           props.task_data.status === "COMPLETED"
-                            ? "#1C062D"
+                            ? is_dark
+                              ? "#535C91"
+                              : "#1C062D"
                             : "rgba(0, 0, 0, 0.08)"
                         }
                         color={
                           props.task_data.status === "COMPLETED"
+                            ? "#fff"
+                            : is_dark
                             ? "#fff"
                             : "#1C062D"
                         }
@@ -525,7 +558,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 Description
               </h3>
               <textarea
-                className={[s.task_description_text, "sm", "regular"].join(" ")}
+                className={[s.task_description_text, "sm", "regular", is_dark && s.dark].join(" ")}
                 onChange={changeHandler}
                 aria-label="Task Description"
                 name="description"

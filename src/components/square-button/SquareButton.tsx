@@ -24,7 +24,7 @@ const SquareButton: React.FC<SquareButtonProps> = (props) => {
   ) : (
     <span
       style={{ color: props.color }}
-      className={[s.text, "medium", "sm", "blend"].join(" ")}
+      className={[s.text, "medium", "sm"].join(" ")}
     >
       {props.text}
     </span>

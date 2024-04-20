@@ -1,5 +1,6 @@
 import s from "./CalendarInput.module.css";
 import React from "react";
+import Context, {ContextType} from "@/context/Store";
 
 interface CalendarInputProps {
   show: boolean;
@@ -10,6 +11,10 @@ interface CalendarInputProps {
 }
 
 const CalendarInput: React.FC<CalendarInputProps> = (props) => {
+
+  const {theme_ctx} = React.useContext(Context) as ContextType; 
+  const is_dark = theme_ctx === 'dark' 
+
   return (
     <div
       className={s.calendar}
@@ -19,7 +24,7 @@ const CalendarInput: React.FC<CalendarInputProps> = (props) => {
         value={props.value}
         name={props.name}
         type="date"
-        className={s.input}
+        className={[s.input, is_dark && s.dark].join(' ')}
         onChange={props.onChange}
         id="calendar-input"
       />

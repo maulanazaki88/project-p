@@ -17,6 +17,11 @@
 
 }
 
+.bubble.dark{
+    background-color: #2a2e34;
+    color: #fff;
+}
+
 .username_box {
     position: relative;
     display: flex;
@@ -36,7 +41,7 @@
 
 .message {
     position: relative;
-    color: #000;
+    color: inherit;
     text-align: left;
     margin-bottom: 10px;
 }
@@ -52,7 +57,10 @@
 
 .time {
     position: relative;
-    color: #000;
+    color: inherit;
+    font-size: 9px;
+    opacity: 0.7;
+
 }
 
 

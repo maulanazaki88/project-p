@@ -22,14 +22,13 @@ interface CommentsProps {
 }
 
 const Comments: React.FC<CommentsProps> = (props) => {
-  const ctx = React.useContext(Context) as ContextType;
-  const date_now = useDateNow();
+  const { user_data_ctx, task_add_comment_ctx, theme_ctx } = React.useContext(
+    Context
+  ) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
 
   const screenRef = React.useRef<HTMLDivElement>(null);
-
-  const user_data = ctx.user_data_ctx;
-
-  const task_add_comment_ctx = ctx.task_add_comment_ctx;
 
   const [comment_val, set_comment_val] = React.useState<string>("");
 
@@ -41,7 +40,7 @@ const Comments: React.FC<CommentsProps> = (props) => {
     if (screen) {
       screen.scrollTop = screen.scrollHeight * 3;
     }
-  }, [props]);
+  }, [props.chat_list]);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,14 +48,16 @@ const Comments: React.FC<CommentsProps> = (props) => {
 
     props.sendComment({
       message: comment_val,
-      username: user_data?.username ? user_data.username : "-",
+      username: user_data_ctx?.username ? user_data_ctx.username : "-",
       time: new Date(),
     });
   };
 
   return (
     <div
-      className={[s.comments, props.isEmbed && s.embed].join(" ")}
+      className={[s.comments, props.isEmbed && s.embed, is_dark && s.dark].join(
+        " "
+      )}
       style={{
         translate: props.isActive ? "0 0" : "100% 0",
       }}
@@ -72,10 +73,13 @@ const Comments: React.FC<CommentsProps> = (props) => {
       </div>
       <MemoizedCommentsList chat_list={props.chat_list} />
 
-      <form className={s.fields} onSubmit={submitHandler}>
+      <form
+        className={[s.fields, is_dark && s.dark].join(" ")}
+        onSubmit={submitHandler}
+      >
         <input
           type="text"
-          className={s.comment_inp}
+          className={[s.comment_inp, is_dark && s.dark].join(" ")}
           value={comment_val}
           onChange={(e) => {
             set_comment_val(e.target.value);
@@ -83,7 +87,7 @@ const Comments: React.FC<CommentsProps> = (props) => {
           placeholder={"Type here"}
         />
         <RoundButton
-          color="#1C062D"
+          color={is_dark ? "#535c91" : "#1C062D"}
           icon="/icons/plane_white.svg"
           opacity={0.7}
           onClick={() => {}}

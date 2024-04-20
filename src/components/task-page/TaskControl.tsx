@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRenderDate } from "@/hook/useRenderDate";
 import RoundButton from "../round-button/RoundButton";
 import { usePathname } from "next/navigation";
+import Context, {ContextType} from "@/context/Store";
 
 interface TaskControlInterface {
   workspace_name: string;
@@ -17,6 +18,10 @@ const TaskControl: React.FC<TaskControlInterface> = (props) => {
   const router = useRouter();
   const calendar = useRenderDate();
   const pathname = usePathname();
+
+  const {theme_ctx} = React.useContext(Context) as ContextType
+
+  const is_dark = theme_ctx === 'dark'
 
   const u_id = pathname.split("/")[2];
   const t_id = pathname.split("/")[6];
@@ -43,13 +48,13 @@ const TaskControl: React.FC<TaskControlInterface> = (props) => {
   }, []);
 
   return (
-    <div className={s.control}>
+    <div className={[s.control, is_dark && s.dark].join(' ')}>
       <div className={s.first}>
         <div className={s.left} onClick={closeHandler}>
           <RoundButton
             color="transparent"
             highlightOnActive
-            icon="/icons/next_black.svg"
+            icon={ is_dark ? "/icons/next_white.svg" : "/icons/next_black.svg"}
             opacity={1}
             icon_scale={1}
           />
@@ -58,7 +63,7 @@ const TaskControl: React.FC<TaskControlInterface> = (props) => {
           </span>
         </div>
         <div className={s.right}>
-          <span className={[s.created_date, "sm", "medium", "soft"].join(" ")}>
+          <span className={[s.created_date, "sm", "medium", "soft", is_dark && s.dark].join(" ")}>
             Created on {calendar.calendar(props.created_on, ["d", "m"])}
           </span>
           {/* <button
