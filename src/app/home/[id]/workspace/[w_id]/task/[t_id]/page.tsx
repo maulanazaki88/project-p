@@ -3,7 +3,6 @@ import React from "react";
 import TaskPage from "@/components/task-page/TaskPage";
 import Context, { ContextType } from "@/context/Store";
 import { TaskType } from "@/type";
-import { useDateNow } from "@/hook/useDateNow";
 import Loading from "@/components/loading/LoadingLight";
 
 const Task: React.FC<{
@@ -13,12 +12,14 @@ const Task: React.FC<{
     user_task_ctx,
     user_data_handler_ctx,
     user_data_ctx,
-    workspace_refresh_ctx,
     task_refresh_ctx,
     user_workspaces_ctx,
+    theme_ctx,
   } = React.useContext(Context) as ContextType;
 
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+  const is_dark = theme_ctx === "dark";
 
   React.useEffect(() => {
     if (user_data_ctx) {
@@ -100,17 +101,8 @@ const Task: React.FC<{
     return <TaskPage task_data={task} />;
   } else {
     return (
-      <div
-        style={{
-          position: "relative",
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Loading color="#1a1a2e" size={100} />
+      <div className={["loading_screen", is_dark && "dark"].join(" ")}>
+        <Loading color={is_dark ? "#fff" : "#1a1a2e"} size={100} />
       </div>
     );
   }

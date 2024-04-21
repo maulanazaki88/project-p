@@ -1,0 +1,14 @@
+<svg id="SvgjsSvg1036" width="256" height="256" xmlns="http://www.w3.org/2000/svg" version="1.1"
+    xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
+    <defs id="SvgjsDefs1037"></defs>
+    <g id="SvgjsG1038">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8.467 8.467" width="256" height="256">
+            <path fill-rule="evenodd"
+                d="M4.002 2.996A3.026 3.026 0 0 0 .996 6.002v15.996a3.024 3.024 0 0 0 3.006 3.004h6.379l-1.272 2.555a1 1 0 0 0 .893 1.447h11.996a1 1 0 0 0 .893-1.447l-1.278-2.555H28c1.645 0 2.996-1.36 2.996-3.004V6.002c0-1.645-1.351-3.006-2.996-3.006Zm0 2H28a.985.985 0 0 1 1.004 1.006V19h-15a.993.993 0 0 0-.104 0c-1.334.069-1.23 2.071.104 2.002h15v.996A.983.983 0 0 1 28 23.002H4.002a.985.985 0 0 1-1.006-1.004v-.996h3.006c1.335 0 1.335-2.002 0-2.002H2.996V6.002a.986.986 0 0 1 1.006-1.006zM10 19a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm2.615 6.002h6.77l.996 2h-8.762z"
+                color="#000" font-family="sans-serif" font-weight="400" overflow="visible"
+                paint-order="stroke fill markers" transform="scale(.26458)"
+                style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal"
+                fill="#000000" class="color000 svgShape"></path>
+        </svg>
+    </g>
+</svg>

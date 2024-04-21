@@ -8,9 +8,17 @@
     height: 50px;
     padding: 10px;
     border-radius: 12px;
-    background-color: #fff;
+    background-color: transparent;
     /* box-shadow: 0 0 7px 1px rgba(0, 0, 0, 0.16); */
     border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.item.dark {
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.username {
+    color: inherit;
 }
 
 .info {
@@ -19,11 +27,13 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    color: inherit;
 }
 
 .status {
     position: relative;
     margin-left: 10px;
+    color: inherit;
 }
 
 .status::before {
@@ -33,6 +43,10 @@
     padding: 0px 1px;
     background-color: rgba(0, 0, 0, 0.5);
     margin-right: 10px;
+}
+
+.status.dark::before{
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .action {

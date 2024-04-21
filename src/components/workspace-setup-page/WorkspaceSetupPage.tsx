@@ -3,7 +3,6 @@ import s from "./WorkspaceSetupPage.module.css";
 import React, { FormEventHandler } from "react";
 import InputSmall from "../input-small/InputSmall";
 import InputLarge from "../input-large/InputLarge";
-import MenuNavbar from "../menu-navbar/MenuNavbar";
 import { WorkspaceType } from "@/type";
 import Context, { ContextType } from "@/context/Store";
 import ButtonLarge from "../button-large/ButtonLarge";
@@ -26,8 +25,14 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
 
   const u_id = pathname.split("/")[2];
 
-  const { user_data_ctx, workspace_replace_ctx, workspace_create_ctx } =
-    React.useContext(Context) as ContextType;
+  const {
+    user_data_ctx,
+    workspace_replace_ctx,
+    workspace_create_ctx,
+    theme_ctx,
+  } = React.useContext(Context) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
 
   const [workspace_data, set_workspace_data] = React.useState<WorkspaceType>({
     activity_list: props.data ? props.data.activity_list : [],
@@ -161,7 +166,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
   // }, []);
 
   return (
-    <main className={s.main}>
+    <main className={[s.main, is_dark && s.dark].join(" ")}>
       <div className={s.header}>
         <h2 className={[s.title, "big", "medium"].join(" ")}>
           Workspace Setup
@@ -170,7 +175,9 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
       <form className={s.form} onSubmit={submitData}>
         <div className={s.input}>
           <InputSmall
-            icon="/icons/clipboard.svg"
+            icon={
+              is_dark ? "/icons/clipboard_white.svg" : "/icons/clipboard.svg"
+            }
             label="Workspace Name"
             name="name"
             onChange={changeHandler}
@@ -200,6 +207,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
             icon="/icons/next_white.svg"
             onClick={() => {}}
             isLoading={isLoading}
+            icon_rotate={180}
           />
         </div>
       </form>

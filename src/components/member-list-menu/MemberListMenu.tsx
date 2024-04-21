@@ -1,8 +1,10 @@
 import s from "./MemberListMenu.module.css";
 import React from "react";
-import UsernameButton from "../username-button/UsernameButton";
 import Image from "next/image";
 import UsernameItem from "../username-button/UsernameItem";
+import Context, { ContextType } from "@/context/Store";
+import { usePathname } from "next/navigation";
+import RoundButton from "../round-button/RoundButton";
 
 interface MemberListMenuProps {
   member_list: { username: string; u_id: string }[];
@@ -17,17 +19,40 @@ interface MemberListMenuProps {
 }
 
 const MemberListMenu: React.FC<MemberListMenuProps> = (props) => {
+  const { theme_ctx, user_workspaces_ctx } = React.useContext(
+    Context
+  ) as ContextType;
+
+  const pathname = usePathname();
+
+  const w_id = pathname.split("/")[4];
+
+  const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
+
+  const admin_list = workspace ? workspace.admin_list : [];
+
+  const is_dark = theme_ctx === "dark";
+
   return (
-    <div className={s.menu} style={{ top: props.show ? "50vh" : "150vh" }}>
-      <button type="button" className={s.closeBtn} onClick={props.closeHandler}>
-        <Image
-          src={"/icons/plus.svg"}
-          alt="close button"
-          width={18}
-          height={18}
-          className={s.close_svg}
-        />
-      </button>
+    <div
+      className={[s.menu, is_dark && s.dark].join(" ")}
+      style={{ top: props.show ? "50vh" : "150vh" }}
+    >
+      <RoundButton
+        color="transparent"
+        icon={is_dark ? "/icons/close_white.svg" : "/icons/close_black.svg"}
+        opacity={1}
+        onClick={() => {
+          props.closeHandler();
+        }}
+        icon_scale={1.2}
+        style={{
+          position: "absolute",
+          top: "2%",
+          right: "2%",
+          zIndex: 99,
+        }}
+      />
       <p className={[s.title, "medium", "md"].join(" ")}>Workspace Member</p>
       <ul className={s.list}>
         {props.member_list.map((member, index) => {
@@ -46,10 +71,11 @@ const MemberListMenu: React.FC<MemberListMenuProps> = (props) => {
               }}
             >
               <UsernameItem
-                isOwner={false}
+                isOwner={admin_list.some((m) => m.u_id === member.u_id)}
                 kickHandler={() => {}}
                 u_id={member.u_id}
                 username={member.username}
+                is_dark={is_dark}
               />
               <div className={s.circle}>
                 <div

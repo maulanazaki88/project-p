@@ -6,6 +6,7 @@ import UsernameButton from "../username-button/UsernameButton";
 import Context, { ContextType } from "@/context/Store";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import ThemeSelector from "./ThemeSelector";
 
 interface NavbarProps {
   // notificationHandler: () => void;
@@ -23,7 +24,11 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const pathname = usePathname();
   const u_id = pathname.split("/")[2];
   const isWorkspace = pathname.includes("/workspace/");
-  const { user_data_ctx, theme_ctx } = React.useContext(Context) as ContextType;
+  const { user_data_ctx, theme_ctx, theme_handler_ctx } = React.useContext(
+    Context
+  ) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
 
   const username = React.useMemo(() => {
     return user_data_ctx && user_data_ctx.username
@@ -32,6 +37,8 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   }, [user_data_ctx]);
 
   const [display_width, setDisplayWidth] = React.useState<number | null>(null);
+  const [show_theme_selector, setShowSelectorHandler] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     function getNavbarWidth() {
@@ -48,11 +55,9 @@ const Navbar: React.FC<NavbarProps> = (props) => {
 
   return (
     <header
-      className={[
-        s.navbar,
-        !isWorkspace && s.home,
-        theme_ctx === "dark" ? s.dark : null,
-      ].join(" ")}
+      className={[s.navbar, !isWorkspace && s.home, is_dark && s.dark].join(
+        " "
+      )}
     >
       <div className={s.left}>
         <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/home/${u_id}`}>
@@ -84,24 +89,6 @@ const Navbar: React.FC<NavbarProps> = (props) => {
       </div>
       <div className={s.mid}></div>
       <div className={s.right}>
-        {/* <RoundButton
-          color="rgba(0, 0, 0, 0.08)"
-          icon="/icons/notification.svg"
-          opacity={1}
-          onClick={props.notificationHandler}
-        /> */}
-        {/* <div className={s.search_field}>
-          <input
-            type="text"
-            name="search"
-            value={props.search_value}
-            onChange={(e) => {
-              props.searchInputHandler(e.target.value);
-            }}
-            placeholder={"Search workspace or task"}
-            className={[s.search_inp, "sm", "medium", "blend"].join(" ")}
-          />
-        </div> */}
         {display_width && display_width > 640 ? (
           <button
             className={[s.search_btn, "sm", "medium", "blend"].join(" ")}
@@ -144,6 +131,14 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           opacity={0.5}
           onClick={props.calendarHandler}
         />
+        <RoundButton
+          color="rgba(255, 255, 255, 0.2)"
+          icon={is_dark ? "/icons/moon_white.svg" : "/icons/sun_white.svg"}
+          opacity={0.5}
+          onClick={() => {
+            setShowSelectorHandler(true);
+          }}
+        />
         <UsernameButton
           username={username}
           logoutHandler={props.logoutHandler}
@@ -151,6 +146,15 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           onClick={props.showLogoutPopupHandler}
         />
       </div>
+      {show_theme_selector && (
+        <ThemeSelector
+          is_dark={is_dark}
+          show={show_theme_selector}
+          closeHandler={() => {
+            setShowSelectorHandler(false);
+          }}
+        />
+      )}
     </header>
   );
 };

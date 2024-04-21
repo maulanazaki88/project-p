@@ -1,5 +1,6 @@
 import s from "./LoadingLight.module.css";
 import React from "react";
+import Context, { ContextType } from "@/context/Store";
 
 interface LoadingProps {
   color?: string;
@@ -9,6 +10,7 @@ interface LoadingProps {
 }
 
 const Loading: React.FC<LoadingProps> = (props) => {
+
   return (
     <div className={s.loading} style={props.style}>
       <svg

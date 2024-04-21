@@ -2131,7 +2131,7 @@ export function ContextProvider(props: any) {
     } else {
       setTheme(preferenceCookie);
     }
-  }, []);
+  }, [theme]);
 
   const toggleTheme = (theme: ThemeType) => {
     setTheme(theme);

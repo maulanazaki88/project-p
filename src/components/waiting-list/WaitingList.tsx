@@ -42,7 +42,10 @@ const WaitingList: React.FC<WaitingListProps> = (props) => {
     workspace_refresh_waiting_list,
     owner_acc_user_add_workspace_ctx,
     owner_reject_user_add_workspace_ctx,
+    theme_ctx,
   } = React.useContext(Context) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
 
   const waiting_list = React.useMemo(() => {
     const workspace = user_workspaces_ctx.find((w) => w.w_id === w_id);
@@ -89,7 +92,7 @@ const WaitingList: React.FC<WaitingListProps> = (props) => {
 
   return (
     <div
-      className={s.menu}
+      className={[s.menu, is_dark && s.dark].join(" ")}
       style={{ translate: props.show ? "-50% -50%" : "-50% 100%" }}
     >
       {/* <MenuNavbar
@@ -97,8 +100,8 @@ const WaitingList: React.FC<WaitingListProps> = (props) => {
         closeHandler={props.closeHandler}
       /> */}
       <RoundButton
-        color="#fff"
-        icon={"/icons/close_black.svg"}
+        color="transparent"
+        icon={is_dark ? "/icons/close_white.svg" : "/icons/close_black.svg"}
         opacity={1}
         onClick={() => {
           props.closeHandler();

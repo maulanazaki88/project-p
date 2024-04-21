@@ -30,7 +30,10 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
     workspace_refresh_ctx,
     user_data_ctx,
     user_data_handler_ctx,
+    theme_ctx,
   } = React.useContext(Context) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
 
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
@@ -86,17 +89,8 @@ const Workspace: React.FC<{ params: { id: string; w_id: string } }> = (
     return <WorkspacePage data={workspace} />;
   } else {
     return (
-      <div
-        style={{
-          position: "relative",
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Loading color="#1a1a2e" size={100} />
+      <div className={["loading_screen", is_dark && "dark"].join(" ")}>
+        <Loading color={is_dark ? "#fff" : "#1a1a2e"} size={100} />
       </div>
     );
   }

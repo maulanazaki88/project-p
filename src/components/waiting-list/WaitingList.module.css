@@ -18,6 +18,11 @@
   padding: 20px 0px;
 }
 
+.menu.dark {
+  background-color: #2a2e34;
+  color: #fff;
+}
+
 .ctn_screen {
   position: relative;
   display: flex;

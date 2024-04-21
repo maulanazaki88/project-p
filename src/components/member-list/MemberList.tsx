@@ -19,7 +19,10 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     user_workspaces_ctx,
     workspace_refresh_member,
     owner_kick_user_workspace,
+    theme_ctx,
   } = React.useContext(Context) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
 
   const pathname = usePathname();
 
@@ -90,13 +93,13 @@ const MemberList: React.FC<MemberListProps> = (props) => {
 
   return (
     <div
-      className={s.menu}
+      className={[s.menu, is_dark && s.dark].join(" ")}
       style={{ translate: props.show ? "-50% -50%" : "-50% 100%" }}
     >
       {/* <MenuNavbar title={workspace_nam  e} closeHandler={props.closeHandler} /> */}
       <RoundButton
-        color="#fff"
-        icon={"/icons/close_black.svg"}
+        color="transparent"
+        icon={is_dark ? "/icons/close_white.svg" : "/icons/close_black.svg"}
         opacity={1}
         onClick={() => {
           props.closeHandler();
@@ -127,6 +130,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
                   : false
               }
               isSelf
+              is_dark={is_dark}
             />
           </li>
           {workspace?.member_list.map((member, index) => {
@@ -142,6 +146,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
                         ? true
                         : false
                     }
+                    is_dark={is_dark}
                   />
                 </li>
               );
@@ -153,7 +158,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
       </div>
       <div className={s.action}>
         <ButtonLarge
-          bg_color="#080726"
+          bg_color={is_dark ? "#535c91" : "#080726"}
           color="#fff"
           text="Waiting List"
           icon="/icons/queue_white.svg"
@@ -161,7 +166,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
           rowReverse
         />
         <ButtonLarge
-          bg_color="#080726"
+          bg_color={is_dark ? "#535c91" : "#080726"}
           color="#fff"
           text="Invite friends"
           icon="/icons/plus_white.svg"

@@ -17,6 +17,7 @@ export interface ButtonLargeProps {
   disabled?: boolean;
   icon_scale?: number;
   isLoading?: boolean;
+  icon_rotate?: number;
 }
 
 const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
@@ -27,7 +28,10 @@ const ButtonLarge: React.FC<ButtonLargeProps> = (props) => {
       width={12}
       height={12}
       className={s.icon}
-      style={{ scale: props.icon_scale ? props.icon_scale : 1 }}
+      style={{
+        scale: props.icon_scale ? props.icon_scale : 1,
+        rotate: props.icon_rotate ? `${props.icon_rotate}deg` : "0deg",
+      }}
     />
   );
   const notifViews = props.notification && (

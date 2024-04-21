@@ -22,6 +22,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     Context
   ) as ContextType;
 
+  const is_dark = theme_ctx === "dark";
+
   const router = useRouter();
   const pathname = usePathname();
   const id_generator = useIdGenerator();
@@ -183,7 +185,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           closeHandler={backdropAction}
         />
 
-        <main className={[s.main, theme_ctx && s.dark].join(" ")}>
+        <main className={[s.main, is_dark && s.dark].join(" ")}>
           <WorkspaceControl
             created_on={props.data.created_at}
             searchInputHandler={(e): void => {

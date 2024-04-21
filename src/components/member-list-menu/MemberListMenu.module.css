@@ -17,6 +17,11 @@
     transition: all 0.2s ease-out;
 }
 
+.menu.dark {
+    background-color: #2a2e34;
+    color: #fff;
+}
+
 .list{
     position: relative;
     display: flex;

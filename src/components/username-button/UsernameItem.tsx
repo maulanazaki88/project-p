@@ -8,22 +8,25 @@ interface UsernameItemProps {
   kickHandler: (kick_id: string) => void;
   isOwner: boolean;
   isSelf?: boolean;
+  is_dark: boolean;
 }
 
 const UsernameItem: React.FC<UsernameItemProps> = (props) => {
   return (
-    <div className={s.item}>
+    <div className={[s.item, props.is_dark && s.dark].join(" ")}>
       <div className={s.info}>
         <span className={[s.username, "md", "medium"].join(" ")}>
           {props.username}
         </span>
-        <span className={[s.status, "sm", "light", 'soft'].join(" ")} >{props.isOwner ? "Admin" : "Member"}</span>
+        <span className={[s.status, "sm", "light", "soft", props.is_dark && s.dark].join(" ")}>
+          {props.isOwner ? "Admin" : "Member"}
+        </span>
       </div>
 
       <div className={s.action}>
-        {(!props.isOwner && props.isSelf) && (
+        {!props.isOwner && props.isSelf && (
           <RoundButton
-            color="#c9c9c9"
+            color="red"
             icon="/icons/close_white.svg"
             opacity={1}
             highlightOnActive

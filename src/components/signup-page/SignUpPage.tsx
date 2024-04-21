@@ -21,6 +21,8 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
   const id_generator = useIdGenerator();
   const { theme_ctx } = React.useContext(Context) as ContextType;
 
+  const is_dark = theme_ctx === "dark";
+
   const [user_data, set_user_data] = React.useState<UserType>({
     created_at: new Date(),
     email: "",
@@ -161,19 +163,13 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
   };
 
   return (
-    <main
-      className={[s.main, theme_ctx === "light" ? s.light : s.dark].join(" ")}
-    >
+    <main className={[s.main, is_dark && s.dark].join(" ")}>
       <div className={s.heading}>
         <h1 className={[s.title, "medium", "md"].join(" ")}>Signup</h1>
       </div>
       <form className={s.form} onSubmit={submitData}>
         <InputSmall
-          icon={
-            theme_ctx === "light"
-              ? "/icons/person_black.svg"
-              : "/icons/person_white.svg"
-          }
+          icon={is_dark ? "/icons/person_white.svg" : "/icons/person_black.svg"}
           onChange={changeHandler}
           name="username"
           placeholder="Enter Username"
@@ -186,11 +182,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           required
         />
         <InputSmall
-          icon={
-            theme_ctx === "light"
-              ? "/icons/email_black.svg"
-              : "/icons/email_white.svg"
-          }
+          icon={is_dark ? "/icons/email_white.svg" : "/icons/email_black.svg"}
           onChange={changeHandler}
           name="email"
           placeholder="Enter Email"
@@ -203,11 +195,7 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           required
         />
         <InputSmall
-          icon={
-            theme_ctx === "light"
-              ? "/icons/lock_black.svg"
-              : "/icons/lock_white.svg"
-          }
+          icon={is_dark ? "/icons/lock_white.svg" : "/icons/lock_black.svg"}
           onChange={changeHandler}
           name="password"
           placeholder="Enter Password"
@@ -220,19 +208,24 @@ const SignUpPage: React.FC<SignUpProps> = (props) => {
           required
         />
         <ButtonLarge
-          bg_color={theme_ctx === "light" ? "#1c062d" : "#535C91"}
+          bg_color={is_dark ? "#535C91" : "#1c062d"}
           color="#fff"
           text="Signup"
           icon="/icons/next_white.svg"
           onClick={() => {}}
           isLoading={isLoading}
+          icon_rotate={180}
         />
       </form>
       <div className={s.suggestion}>
         <p className={[s.suggestion_txt, "sm", "soft"].join(" ")}>
           Already have an account?
         </p>
-        <span className={[s.suggestion_btn, "sm", "medium", theme_ctx === 'dark' ? s.dark : null].join(" ")}>
+        <span
+          className={[s.suggestion_btn, "sm", "medium", is_dark && s.dark].join(
+            " "
+          )}
+        >
           <Link href={props.loginLink}>Login</Link>
         </span>
       </div>

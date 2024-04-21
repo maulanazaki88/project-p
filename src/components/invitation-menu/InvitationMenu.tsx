@@ -1,7 +1,8 @@
 import s from "./InvitationMenu.module.css";
 import React from "react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";import MenuNavbar from "../menu-navbar/MenuNavbar";
+import { usePathname } from "next/navigation";
+import MenuNavbar from "../menu-navbar/MenuNavbar";
 import Context, { ContextType } from "@/context/Store";
 import RoundButton from "../round-button/RoundButton";
 
@@ -12,7 +13,11 @@ interface InvitationMenuProps {
 }
 
 const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
-  const { user_workspaces_ctx } = React.useContext(Context) as ContextType;
+  const { user_workspaces_ctx, theme_ctx } = React.useContext(
+    Context
+  ) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
 
   const pathname = usePathname();
   const w_id = pathname.split("/")[4];
@@ -29,17 +34,17 @@ const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
   const urlencoded = encodeURI(invitation_link);
 
   React.useEffect(() => {
-    setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/invitation/${w_id}`)
-  }, [props.show])
+    setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/invitation/${w_id}`);
+  }, [props.show]);
 
   return (
     <div
-      className={s.menu}
+      className={[s.menu, is_dark && s.dark].join(" ")}
       style={{ translate: props.show ? "0 0" : "0 100vh" }}
     >
       <RoundButton
-        color="#fff"
-        icon={"/icons/close_black.svg"}
+        color="transparent"
+        icon={is_dark ? "/icons/close_white.svg" : "/icons/close_black.svg"}
         opacity={1}
         onClick={() => {
           props.closeHandler();
@@ -91,13 +96,15 @@ const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
         >
           <input
             type="text"
-            className={[s.static_input, "sm", "medium"].join(" ")}
+            className={[s.static_input, "sm", "medium", is_dark && s.dark].join(
+              " "
+            )}
             value={invitation_link}
             readOnly
           />
           <button className={s.copyBtn}>
             <Image
-              src={"/icons/link.svg"}
+              src={is_dark ? "/icons/link_white.svg" : "/icons/link.svg"}
               alt="link icon to copy link"
               width={18}
               height={18}

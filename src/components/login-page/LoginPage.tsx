@@ -176,6 +176,7 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
           text="Login"
           icon="/icons/next_white.svg"
           isLoading={isLoading}
+          icon_rotate={180}
         />
       </form>
       <div className={s.suggestion}>
