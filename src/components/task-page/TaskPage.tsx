@@ -255,7 +255,7 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
           }}
           showShareModalHandler={() => {}}
         />
-        <section className={s.task}>
+        <section className={[s.task, is_dark && s.dark].join(" ")}>
           <div className={s.control}>
             <input
               type="text"
@@ -558,7 +558,12 @@ const TaskPage: React.FC<TaskPageProps> = (props) => {
                 Description
               </h3>
               <textarea
-                className={[s.task_description_text, "sm", "regular", is_dark && s.dark].join(" ")}
+                className={[
+                  s.task_description_text,
+                  "sm",
+                  "regular",
+                  is_dark && s.dark,
+                ].join(" ")}
                 onChange={changeHandler}
                 aria-label="Task Description"
                 name="description"

@@ -4,11 +4,12 @@ import React from "react";
 
 interface IndicatorProps {
   stage: number;
+  is_dark: boolean;
 }
 
 const Indicator: React.FC<IndicatorProps> = (props) => {
   return (
-    <div className={s.indicator}>
+    <div className={[s.indicator, props.is_dark && s.dark].join(' ')}>
       <div
         className={s.circle}
         style={{

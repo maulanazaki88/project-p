@@ -1,25 +1,30 @@
 .indicator {
-    position: fixed;
-    width: auto;
-    padding: 5px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    border-radius: 100vw;
-    background-color: #fff;
-    /* box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.2); */
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    z-index: 89;
-    bottom: 70px;
-    left: 50%;
-    transform: translate(-50%);
+  position: fixed;
+  width: auto;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 100vw;
+  background-color: #fff;
+  /* box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.2); */
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  z-index: 89;
+  bottom: 70px;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.indicator.dark {
+  background-color: #30353c;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .circle {
-    position: relative;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin: 0 2.5px;
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin: 0 2.5px;
 }

@@ -57,7 +57,7 @@
   outline: none;
 }
 
-.task_description_text {
+.task_description_text.dark {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -272,7 +272,6 @@
     padding-bottom: 30px;
     padding-left: 0px;
     padding-bottom: 50px;
-    
   }
 
   .task {
@@ -303,6 +302,16 @@
     background-color: #1c062d;
   }
 
+  .task::-webkit-scrollbar-track {
+    height: auto;
+    background-color: transparent;
+  }
+
+  .task::-webkit-scrollbar-thumb {
+    height: auto;
+    background-color: #fff;
+  }
+
   .control {
     width: 100vw;
     height: 100%;
@@ -311,7 +320,6 @@
     padding-top: 20px;
     scroll-snap-align: center;
     transform: rotateX(180deg);
-    
   }
 
   .comment {
@@ -343,8 +351,6 @@
     padding: 0 0px;
   }
 
- 
-
   .name {
     position: relative;
     width: 100%;
@@ -361,7 +367,6 @@
     background-color: transparent;
     outline: none;
     border: none;
-    color: #000;
     font-family: inherit;
   }
 
@@ -398,7 +403,7 @@
 
   .label {
     position: relative;
-    color: #000;
+    
     margin-bottom: 10px;
   }
 

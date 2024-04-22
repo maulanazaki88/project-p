@@ -95,6 +95,13 @@
     .navbar {
         top: unset;
         bottom: 0;
+        border-bottom: unset;
+        border-top: 2px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar.dark {
+        border-bottom: unset;
+        border-top: 2px solid rgba(255, 255, 255, 0.2);
     }
 }
 

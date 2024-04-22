@@ -245,6 +245,6 @@
     }
 }
 
-.placeholder, .dark {
+.placeholder.dark {
     border: 4px dashed #535C91;
 }

@@ -24,15 +24,10 @@ export default function Home() {
 
   const { theme_ctx } = React.useContext(Context) as ContextType;
 
-  const toSignUp = () => {
-    router.push("/sign-up");
-    console.log("huhu");
-  };
+  const is_dark = theme_ctx === "dark";
 
   return (
-    <main
-      className={[s.main, theme_ctx === "light" ? s.light : s.dark].join(" ")}
-    >
+    <main className={[s.main, !is_dark ? s.light : s.dark].join(" ")}>
       <figure className={s.figure}>
         <Image
           className={s.ilust}
@@ -73,7 +68,7 @@ export default function Home() {
               s.suggestion_btn,
               "sm",
               "medium",
-              theme_ctx === "dark" ? s.dark : null,
+              is_dark && s.dark,
             ].join(" ")}
           >
             <Link href="/login">Login</Link>

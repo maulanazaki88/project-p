@@ -5,10 +5,9 @@ import WorkspaceCard from "../workspace-card/WorkspaceCard";
 import WorkspaceCardPlaceHolder from "../workspace-card/WorkspaceCardPlaceHolder";
 import { usePathname } from "next/navigation";
 
-
 interface WorkspaceListProps {
   workspace_list: WorkspaceType[];
-  searchInput: string;
+
   is_dark: boolean;
 }
 
@@ -39,58 +38,37 @@ const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
   const pathname = usePathname();
 
   const ExpectedViews = (
-    <div
-      className={[
-        s.list_screen,
-        hide_workspace_list_scroll && s.hide_scroll,
-      ].join(" ")}
-      onMouseLeave={() => {
-        setHideWorkspaceListScroll(true);
-      }}
-      onMouseOver={() => {
-        setHideWorkspaceListScroll(false);
-      }}
-      onTouchMove={() => {
-        setHideWorkspaceListScroll(false);
-      }}
-      onTouchEnd={() => {
-        setHideWorkspaceListScroll(true);
-      }}
-    >
+    <div className={s.list_screen}>
       <ul className={s.list}>
-        {props.workspace_list
-          .filter(
-            (workspace) =>
-              workspace.name.toLowerCase().includes(props.searchInput) ||
-              workspace.description.toLowerCase().includes(props.searchInput)
-          )
-          .map((workspace, index) => {
-            return (
-              <li
-                className={s.item}
-                key={`workspace-item-${index}`}
-                // style={{ marginLeft: index > 0 ? "16px" : "0px" }}
-              >
-                <WorkspaceCard
-                  description={workspace.description}
-                  img={ilust_list[index % ilust_list.length]}
-                  members={workspace.member_list}
-                  name={workspace.name}
-                  key={`workspace-${index}`}
-                  bg_color={
-                    color_list[(index + color_list.length) % color_list.length]
-                  }
-                  id={workspace.w_id}
-                />
-              </li>
-            );
-          })}
+        {props.workspace_list.map((workspace, index) => {
+          return (
+            <li
+              className={s.item}
+              key={`workspace-item-${index}`}
+              // style={{ marginLeft: index > 0 ? "16px" : "0px" }}
+            >
+              <WorkspaceCard
+                description={workspace.description}
+                img={ilust_list[index % ilust_list.length]}
+                members={workspace.member_list}
+                name={workspace.name}
+                key={`workspace-${index}`}
+                bg_color={
+                  color_list[(index + color_list.length) % color_list.length]
+                }
+                id={workspace.w_id}
+              />
+            </li>
+          );
+        })}
         {props.workspace_list.length <= 3 && (
           <li className={s.item} key={`workspace-item-placeholder`}>
             <WorkspaceCardPlaceHolder />
           </li>
         )}
-        <div className={[s.white_blur, props.is_dark && s.dark].join(' ')}></div>
+        <div
+          className={[s.white_blur, props.is_dark && s.dark].join(" ")}
+        ></div>
       </ul>
     </div>
   );
@@ -104,4 +82,6 @@ const WorkspaceList: React.FC<WorkspaceListProps> = (props) => {
   }
 };
 
-export default WorkspaceList;
+const MemoizedWorkspaceList = React.memo(WorkspaceList);
+
+export default MemoizedWorkspaceList;

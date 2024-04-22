@@ -10,8 +10,9 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { Poppins } from "next/font/google";
 import { DateFormater } from "@/utils/DateFormater";
-import WorkspaceList from "./WorkspaceList";
+
 import TaskList from "./TaskList";
+import MemoizedWorkspaceList from "./WorkspaceList";
 
 interface HomePageProps {
   data: UserType;
@@ -34,8 +35,6 @@ const HomePage: React.FC<HomePageProps> = (props) => {
   const pathname = usePathname();
 
   const u_id = pathname.split("/")[2];
-
-  const [searchInput, setSearchInput] = React.useState<string>("");
 
   const workspace_list = props.data.workspace_list as WorkspaceType[];
 
@@ -114,9 +113,6 @@ const HomePage: React.FC<HomePageProps> = (props) => {
 
   const color_list = ["#BAE0EE", "#E2D3FE", "rgba(28, 6, 45, 0.2)"];
 
-  const searchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
-  };
 
   const logoutHandler = () => {
     logout_ctx();
@@ -173,8 +169,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                 />
               </div>
             </div>
-            <WorkspaceList
-              searchInput={searchInput}
+            <MemoizedWorkspaceList
               workspace_list={workspace_list}
               is_dark={theme_ctx === "dark"}
             />
@@ -190,7 +185,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
                 </p>
               </div>
             </div>
-            <TaskList searchInput={searchInput} task_list={task_list} />
+            <TaskList  task_list={task_list} />
           </div>
         </div>
       </main>

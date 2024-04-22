@@ -37,7 +37,8 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
   const calendar = useCalendar();
   const [user_task, setUserTask] = React.useState<TaskType[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-
+  const { theme_ctx } = React.useContext(Context) as ContextType;
+  const is_dark = theme_ctx === "dark";
   const calendar_list = React.useMemo(() => {
     const deadlines = user_task.slice(0).map((task) => {
       return task.deadline;
@@ -96,7 +97,7 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
 
   return (
     <div
-      className={s.menu}
+      className={[s.menu, is_dark && s.dark].join(" ")}
       style={{ translate: props.isActive ? "-50% -50%" : "-50% 100%" }}
     >
       {isLoading ? (
@@ -108,7 +109,7 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: 99
+            zIndex: 99,
           }}
         >
           <Loading color="1a1a2e" size={100} />
@@ -116,8 +117,8 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
       ) : (
         <>
           <RoundButton
-            color="#fff"
-            icon={"/icons/close_black.svg"}
+            color="transparent"
+            icon={is_dark ? "/icons/close_white.svg" : "/icons/close_black.svg"}
             opacity={1}
             onClick={() => {
               props.closeHandler();

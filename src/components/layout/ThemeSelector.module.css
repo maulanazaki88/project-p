@@ -10,7 +10,7 @@
   color: #000 ;
   border-radius: 12px;
   box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.2);
-  z-index: 99;
+  z-index: 101;
   right: 0;
   top: 100%;
   translate: -20% 0;
@@ -88,4 +88,12 @@
 
 .on {
   opacity: 1;
+}
+
+@media screen and (max-width: 640px) {
+  .selector {
+    
+    top: -10px;
+    translate: -20% -100%;
+  }
 }

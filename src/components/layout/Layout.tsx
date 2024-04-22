@@ -214,14 +214,6 @@ const Layout = (props: any) => {
           setShowCalendarMenu(true);
           setActiveBackdrop(true);
         }}
-        logoutHandler={logoutHandler}
-        // notificationHandler={() => {
-        //   setNotificationMenuActive(!notificationMenuActive);
-        // }}
-        showLogoutPopup={show_logout}
-        showLogoutPopupHandler={() => {
-          setShowLogout(!show_logout);
-        }}
         search_value={search_value}
         searchInputHandler={setSearchValue}
         showSearchModalHandler={setShowSearchModal}

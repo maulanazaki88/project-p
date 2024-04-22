@@ -51,22 +51,22 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     const screen = screenRef.current;
     if (screen && display_width && display_width < 640) {
       const indicatorInterval = setInterval(() => {
-        const scrollLeft = screen.scrollLeft;
-        if (scrollLeft < display_width) {
+        const mid = screen.scrollLeft + display_width/2;
+        if (mid < display_width) {
           setStage(0);
         } else if (
-          scrollLeft >= display_width &&
-          scrollLeft < display_width * 2
+          mid >= display_width &&
+          mid < display_width * 2
         ) {
           setStage(1);
         } else if (
-          scrollLeft >= display_width * 2 &&
-          scrollLeft < display_width * 3
+          mid >= display_width * 2 &&
+          mid < display_width * 3
         ) {
           setStage(2);
         } else if (
-          scrollLeft >= display_width * 3 &&
-          scrollLeft < display_width * 4
+          mid >= display_width * 3 &&
+          mid < display_width * 4
         ) {
           setStage(3);
         }
@@ -178,7 +178,9 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
           title={props.data.name}
           menuHandler={() => setIsMenuActive(true)}
         /> */}
-        {display_width && display_width < 640 && <Indicator stage={stage} />}
+        {display_width && display_width < 640 && (
+          <Indicator is_dark={is_dark} stage={stage} />
+        )}
         <ModalWorkspaceInfo
           {...props.data}
           show={show_workspace_info}
