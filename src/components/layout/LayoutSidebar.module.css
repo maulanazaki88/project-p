@@ -13,6 +13,7 @@
   padding-top: 50px;
   z-index: 89;
   transition: all 0.2s ease-out;
+  border-bottom: unset;
 }
 
 .sidebar.dark {

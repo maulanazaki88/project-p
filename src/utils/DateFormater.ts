@@ -1,9 +1,9 @@
 function padWithZero(num: number): string {
-  return num > 10 ? `${num}` : `0${num}`;
+  return num >= 10 ? `${num}` : `0${num}`;
 }
 
 export function DateFormater(date: Date): string {
-  const date_ = new Date(date)
+  const date_ = new Date(date);
   const year = date_.getFullYear();
   const month = padWithZero(date_.getMonth() + 1);
   const day = padWithZero(date_.getDate());

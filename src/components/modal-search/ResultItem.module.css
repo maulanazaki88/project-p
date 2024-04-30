@@ -3,11 +3,13 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   height: 90px;
   /* border-radius: 15px; */
   padding: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item:hover {
@@ -38,7 +40,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: inherit;
 }
 
 .content {
@@ -49,11 +51,24 @@
   justify-content: flex-start;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: inherit;
   border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.content.dark {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .name {
   position: relative;
   margin-bottom: 10px;
+}
+
+.desc {
+  position: relative;
+  overflow: hidden;
+  text-wrap: wrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 }

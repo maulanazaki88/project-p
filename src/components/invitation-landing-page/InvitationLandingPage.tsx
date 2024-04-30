@@ -9,18 +9,23 @@ import ButtonLarge from "../button-large/ButtonLarge";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Context, { ContextType } from "@/context/Store";
 
 const InvitationLandingPage: React.FC<{ data: WorkspaceType }> = (props) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const { theme_ctx } = React.useContext(Context) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
+
   const toSignUp = () => {
-    router.push(`${pathname}/sign-up`);
+    router.push(`${pathname}/signup`);
     console.log("huhu");
   };
 
   return (
-    <main className={s.main}>
+    <main className={[s.main, is_dark && s.dark].join(" ")}>
       <div className={s.header}>
         <h2 className={[s.title, "medium", "md"].join(" ")}>
           This is an invitation link to join workspace:

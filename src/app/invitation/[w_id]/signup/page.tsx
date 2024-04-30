@@ -8,7 +8,7 @@ const Signup = () => {
   const w_id = pathname.split("/")[2];
   return (
     <SignUpPage
-      loginLink={`${pathname}/login`}
+      loginLink={`${pathname.replaceAll("/signup", "/login")}`}
       signupAPI="/api/invitation/signup"
       w_id={w_id}
     />

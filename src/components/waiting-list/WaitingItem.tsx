@@ -8,11 +8,12 @@ interface WaitingItemProps {
   accHandler: () => void;
   rejHandler: () => void;
   currentUserOwner: boolean;
+  is_dark: boolean;
 }
 
 const WaitingItem: React.FC<WaitingItemProps> = (props) => {
   return (
-    <div className={s.item}>
+    <div className={[s.item, props.is_dark && s.dark].join(" ")}>
       <div className={s.info}>
         <span className={[s.username, "md", "medium"].join(" ")}>
           {props.username}
@@ -27,7 +28,7 @@ const WaitingItem: React.FC<WaitingItemProps> = (props) => {
             highlightOnActive
             onClick={props.accHandler}
             icon_scale={0.5}
-            style={{scale: 0.8}}
+            style={{ scale: 0.8 }}
           />
           <RoundButton
             color="#E72929"
@@ -36,7 +37,7 @@ const WaitingItem: React.FC<WaitingItemProps> = (props) => {
             highlightOnActive
             onClick={props.rejHandler}
             icon_scale={1}
-            style={{scale: 0.8}}
+            style={{ scale: 0.8 }}
           />
         </div>
       )}

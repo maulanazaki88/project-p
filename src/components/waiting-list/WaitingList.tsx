@@ -146,6 +146,7 @@ const WaitingList: React.FC<WaitingListProps> = (props) => {
                   }}
                   u_id={candidate.u_id}
                   username={candidate.username}
+                  is_dark={is_dark}
                 />
               </li>
             );

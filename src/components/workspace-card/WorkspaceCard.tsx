@@ -6,7 +6,7 @@ import ButtonMedium from "../button-medium/ButtonMedium";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import WorkspaceCardSkeleton from "./WorkspaceCardSkeleton";
-import Link from "next/link";;
+import Link from "next/link";
 
 interface WorkspaceCardProps {
   name: string;
@@ -96,7 +96,7 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
                   <li
                     className={s.assigned_item}
                     key={`assigned-${index}`}
-                    style={{ translate: `0px -${index * 15}px` }}
+                    style={{ top: `-${index * 15}px` }}
                   >
                     <Avatar
                       bg_color={
@@ -111,6 +111,9 @@ const WorkspaceCard: React.FC<WorkspaceCardProps> = (props) => {
                   </li>
                 );
               })}
+              {props.members.length > 3 && (
+                <div className={s.offset_num}>+{props.members.length - 3}</div>
+              )}
             </ul>
           </div>
           {!props.isEmpty && (

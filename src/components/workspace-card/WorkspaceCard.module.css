@@ -10,6 +10,25 @@
     border-radius: 15px;
     transition: all 0.2s ease-out;
     cursor: pointer;
+    overflow: hidden;
+}
+
+
+
+.offset_num {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 20px;
+    aspect-ratio: 1/1;
+    height: auto;
+    background-color: #fff;
+    color: #000;
+    bottom: 0;
+    translate: 0 -100%; 
+    font-size: 9px;
 }
 
 .skeleton{
@@ -101,6 +120,10 @@
     text-decoration: underline;
     text-align: left;
     margin-bottom: 5px;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 
 }
 
@@ -116,6 +139,7 @@
     align-items: center;
     justify-content: center;
     width: min-content;
+    height:fit-content;
     list-style: none;
     transform: scale(1);
     /* top: 50%; */

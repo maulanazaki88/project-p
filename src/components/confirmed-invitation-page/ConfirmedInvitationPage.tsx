@@ -5,7 +5,7 @@ import React from "react";
 import ButtonLarge from "../button-large/ButtonLarge";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-// import Context, { ContextType } from "@/context/Store";
+import Context, { ContextType } from "@/context/Store";
 // import { usePathname } from "next/navigation";
 
 const ConfirmedInvitationPage: React.FC<{ data: UserType }> = (props) => {
@@ -14,9 +14,9 @@ const ConfirmedInvitationPage: React.FC<{ data: UserType }> = (props) => {
 
   // const w_id = pathname.split("/")[2];
 
-  // const { user_verify_add_worskpace_ctx } = React.useContext(
-  //   Context
-  // ) as ContextType;
+  const { theme_ctx } = React.useContext(Context) as ContextType;
+
+  const is_dark = "dark";
 
   const goHome = () => {
     router.push(`/home/${props.data.u_id}`);
@@ -27,7 +27,7 @@ const ConfirmedInvitationPage: React.FC<{ data: UserType }> = (props) => {
   // }, []);
 
   return (
-    <main className={s.main}>
+    <main className={[s.main, s.dark].join(" ")}>
       <section className={s.header}>
         <h2 className={[s.title, "medium", "md"].join(" ")}>
           Hi{" "}
@@ -51,7 +51,8 @@ const ConfirmedInvitationPage: React.FC<{ data: UserType }> = (props) => {
       </figure>
       <section className={s.info}>
         <p className={[s.info_txt, "medium", "sm", "soft"].join(" ")}>
-          You will be join the workspace immediately after the owner of workspace accept your request!
+          You will be join the workspace immediately after the owner of
+          workspace accept your request!
         </p>
         <ButtonLarge
           bg_color="#080726"

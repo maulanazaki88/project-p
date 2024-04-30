@@ -186,7 +186,7 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
             value={workspace_data.name}
             warning={warning.username}
             key={"workspace-name-input"}
-            maxChar={15}
+            maxChar={50}
           />
           <InputLarge
             label="Workspace Description"
@@ -195,13 +195,13 @@ const WorkspaceSetupPage: React.FC<WorkspaceSetupPageProps> = (props) => {
             placeholder="Workspace Description"
             value={workspace_data.description}
             key={"workspace-description-input"}
-            maxChar={100}
+            
           />
         </div>
 
         <div className={s.action}>
           <ButtonLarge
-            bg_color="#080726"
+            bg_color={is_dark ? "#535c91" : "#080726"}
             color="#fff"
             text="Selanjutnya"
             icon="/icons/next_white.svg"

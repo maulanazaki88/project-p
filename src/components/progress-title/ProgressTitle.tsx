@@ -16,21 +16,18 @@ interface ProgressTitleProps {
 const ProgressTitle: React.FC<ProgressTitleProps> = (props) => {
   const { theme_ctx } = React.useContext(Context) as ContextType;
 
+  const is_dark = theme_ctx === "dark";
+
   return (
     <div className={s.controler}>
       <div
-        className={[s.bar, theme_ctx === "dark" && s.dark].join(" ")}
+        className={[s.bar, is_dark && s.dark].join(" ")}
         style={{
           borderTop: `4px solid ${props.bg_color_accent}`,
         }}
       >
         <h3 className={[s.title, "md", "medium"].join(" ")}>{props.title}</h3>
-        <div
-          className={s.count}
-          style={{
-            border: `2px solid rgba(0, 0, 0, 0.2)`,
-          }}
-        >
+        <div className={[s.count, is_dark && s.dark].join(" ")}>
           <span className={[s.text, "sm", "medium"].join(" ")}>
             {props.count}
           </span>
@@ -43,28 +40,20 @@ const ProgressTitle: React.FC<ProgressTitleProps> = (props) => {
           onClick={() => props.newTaskHandler(props.type)}
         >
           <Image
-            alt="filter"
-            src={
-              theme_ctx === "light"
-                ? "/icons/plus.svg"
-                : "/icons/plus_white.svg"
-            }
+            alt="plus"
+            src={!is_dark ? "/icons/plus.svg" : "/icons/plus_white.svg"}
             width={18}
             height={18}
           />
         </button>
-        <button type="button" className={s.btn}>
+        {/* <button type="button" className={s.btn}>
           <Image
             alt="plus"
-            src={
-              theme_ctx === "light"
-                ? "/icons/filter.svg"
-                : "/icons/filter_white.svg"
-            }
+            src={!is_dark ? "/icons/filter.svg" : "/icons/filter_white.svg"}
             width={18}
             height={18}
           />
-        </button>
+        </button> */}
       </div>
     </div>
   );

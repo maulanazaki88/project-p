@@ -13,9 +13,11 @@ interface Props {
 }
 
 const SearchModal: React.FC<Props> = (props) => {
-  const { user_task_ctx, user_workspaces_ctx } = React.useContext(
+  const { user_task_ctx, user_workspaces_ctx, theme_ctx } = React.useContext(
     Context
   ) as ContextType;
+
+  const is_dark = theme_ctx === "dark";
 
   const items = React.useMemo(() => {
     let value = props.value.toLowerCase();
@@ -62,12 +64,12 @@ const SearchModal: React.FC<Props> = (props) => {
 
   return (
     <div
-      className={s.modal}
+      className={[s.modal, is_dark && s.dark].join(" ")}
       style={{ translate: props.show ? "-50% -50%" : "-50% 100%" }}
     >
       <RoundButton
-        color="#fff"
-        icon={"/icons/close_black.svg"}
+        color="transparent"
+        icon={is_dark ? "/icons/close_white.svg" : "/icons/close_black.svg"}
         opacity={1}
         onClick={() => {
           props.closeHandler();
@@ -81,10 +83,12 @@ const SearchModal: React.FC<Props> = (props) => {
         }}
       />
       <div className={s.header}>
-        <span className={[s.txt, "md", "regular", 'soft'].join(" ")}>Search for:</span>
+        <span className={[s.txt, "md", "regular", "soft"].join(" ")}>
+          Search for:
+        </span>
         <input
           type="text"
-          className={[s.search_input, 'md', 'medium'].join(' ')}
+          className={[s.search_input, "md", "medium", is_dark && s.dark].join(" ")}
           placeholder="Type here"
           name="search"
           value={props.value}
@@ -98,7 +102,7 @@ const SearchModal: React.FC<Props> = (props) => {
             {items.map((item, index) => {
               return (
                 <li className={s.result_item} key={`result-item-${index}`}>
-                  <ResultItem {...item} />
+                  <ResultItem {...item} is_dark={is_dark} />
                 </li>
               );
             })}

@@ -15,12 +15,13 @@ interface ButtonProps {
   icon: string;
   text: string;
   on: boolean;
+  
 }
 
 const ThemeButton: React.FC<ButtonProps> = (props) => {
   return (
     <button
-      className={[s.button, props.on && s.on].join(" ")}
+      className={[s.button, props.on && s.on, ].join(" ")}
       onClick={props.onClick}
     >
       <Image
@@ -50,6 +51,7 @@ const ThemeSelector: React.FC<Props> = (props) => {
         },
         text: "Light",
         on: theme_ctx === "light",
+        
       } satisfies ButtonProps,
       {
         icon: props.is_dark ? "/icons/moon_white.svg" : "/icons/moon_black.svg",
@@ -59,16 +61,7 @@ const ThemeSelector: React.FC<Props> = (props) => {
         text: "Dark",
         on: theme_ctx === "dark",
       } satisfies ButtonProps,
-      {
-        icon: props.is_dark
-          ? "/icons/system_white.svg"
-          : "/icons/system_black.svg",
-        onClick: () => {
-          theme_handler_ctx("system");
-        },
-        text: "System",
-        on: theme_ctx === "system",
-      } satisfies ButtonProps,
+     
     ];
   }, [theme_ctx]);
 

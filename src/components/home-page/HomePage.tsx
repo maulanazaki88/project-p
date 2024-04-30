@@ -50,20 +50,6 @@ const HomePage: React.FC<HomePageProps> = (props) => {
       });
     })
     .flat(1);
-  // let m = 0;
-  // let n = 0;
-  // for (let workspace of workspace_list) {
-  //   let tasks: TaskType[] = [];
-  //   m++;
-  //   for (let task of workspace.task_list) {
-  //     n++;
-  //     tasks.push({ ...task, workspace_name: workspace.name });
-  //   }
-  //   console.log("tasks in loop: ", tasks);
-  //   task_list.push(...tasks);
-  // }
-
-  // console.log("count", { m: m, n: n });
   console.log("task_list", task_list);
 
   const calendar_list = React.useMemo(() => {
@@ -113,83 +99,61 @@ const HomePage: React.FC<HomePageProps> = (props) => {
 
   const color_list = ["#BAE0EE", "#E2D3FE", "rgba(28, 6, 45, 0.2)"];
 
-
   const logoutHandler = () => {
     logout_ctx();
     router.replace("/");
   };
 
   return (
-    <>
-      {/* <HomeNavbar
-        username={props.data.username}
-        calendarHandler={() => {
-          setCalendarMenuActive(true);
-        }}
-        notificationHandler={() => {
-          setNotificationMenuActive(true);
-        }}
-        showLogoutPopup={showLogoutPopup}
-        logoutHandler={logoutHandler}
-        showLogoutPopupHandler={() => {
-          setShowLogoutPopup(!showLogoutPopup);
-        }}
-      /> */}
-
-      <main
-        className={[s.main, theme_ctx === "light" ? s.light : s.dark].join(" ")}
+    <main
+      className={[s.main, theme_ctx === "light" ? s.light : s.dark].join(" ")}
+    >
+      <h2
+        className={[s.main_title, "big", "medium", poppins.className].join(" ")}
       >
-        <h2
-          className={[s.main_title, "big", "medium", poppins.className].join(
-            " "
-          )}
-        >
-          Welcome, {props.data.username}!
-        </h2>
-        <div className={s.dashboard}>
-          <div className={s.workspace}>
-            <div className={s.heading}>
-              <div className={s.header}>
-                <h3 className={[s.title, "md", "medium"].join(" ")}>
-                  Workspace
-                </h3>
-                <p className={[s.subtitle, "sm", "medium", "soft"].join(" ")}>
-                  You have {workspace_list.length} workspace
-                </p>
-              </div>
-              <div className={s.action}>
-                <SquareButton
-                  bg_color={theme_ctx === "light" ? " #1C062D" : "#535C91"}
-                  color="#fff"
-                  opacity={1}
-                  text="Add"
-                  onClick={() => {
-                    router.push(`${pathname}/workspace-setup`);
-                  }}
-                />
-              </div>
+        Welcome, {props.data.username}!
+      </h2>
+      <div className={s.dashboard}>
+        <div className={s.workspace}>
+          <div className={s.heading}>
+            <div className={s.header}>
+              <h3 className={[s.title, "md", "medium"].join(" ")}>Workspace</h3>
+              <p className={[s.subtitle, "sm", "medium", "soft"].join(" ")}>
+                You have {workspace_list.length} workspace
+              </p>
             </div>
-            <MemoizedWorkspaceList
-              workspace_list={workspace_list}
-              is_dark={theme_ctx === "dark"}
-            />
-          </div>
-          <div className={s.todo}>
-            <div className={s.heading}>
-              <div className={s.header}>
-                <h3 className={[s.title, "md", "medium"].join(" ")}>
-                  Task To Do
-                </h3>
-                <p className={[s.subtitle, "sm", "medium", "soft"].join(" ")}>
-                  List task to do today {":)"}
-                </p>
-              </div>
+            <div className={s.action}>
+              <SquareButton
+                bg_color={theme_ctx === "light" ? " #1C062D" : "#535C91"}
+                color="#fff"
+                opacity={1}
+                text="Add"
+                onClick={() => {
+                  router.push(`${pathname}/workspace-setup`);
+                }}
+              />
             </div>
-            <TaskList  task_list={task_list} />
           </div>
+          <MemoizedWorkspaceList
+            workspace_list={workspace_list}
+            is_dark={theme_ctx === "dark"}
+          />
         </div>
-      </main>
-    </>
+        <div className={s.todo}>
+          <div className={s.heading}>
+            <div className={s.header}>
+              <h3 className={[s.title, "md", "medium"].join(" ")}>
+                Task To Do
+              </h3>
+              <p className={[s.subtitle, "sm", "medium", "soft"].join(" ")}>
+                List task to do today {":)"}
+              </p>
+            </div>
+          </div>
+          <TaskList task_list={task_list} />
+        </div>
+      </div>
+    </main>
   );
 };
 

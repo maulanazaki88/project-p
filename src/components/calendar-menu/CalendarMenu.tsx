@@ -37,7 +37,9 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
   const calendar = useCalendar();
   const [user_task, setUserTask] = React.useState<TaskType[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const { theme_ctx } = React.useContext(Context) as ContextType;
+  const { theme_ctx, user_workspaces_ctx } = React.useContext(
+    Context
+  ) as ContextType;
   const is_dark = theme_ctx === "dark";
   const calendar_list = React.useMemo(() => {
     const deadlines = user_task.slice(0).map((task) => {
@@ -86,14 +88,39 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
       )
         .then((res) => res)
         .then((data) => data.json())
-        .then((data) => {
-          setUserTask(data);
+        .then((data: TaskType[]) => {
+          console.log(data);
+
+          let tasks: TaskType[] = [];
+
+          for (let d of data) {
+            const task_with_w = {
+              ...d,
+              workspace_name: user_workspaces_ctx.find((w) => w.w_id === d.w_id)
+                ?.name,
+            } as TaskType;
+            tasks.push(task_with_w);
+          }
+
+          return tasks;
+        })
+        .then((tasks) => {
+          setUserTask(tasks);
           setIsLoading(false);
           return;
         })
         .catch((e) => console.error(e.message));
     }
   }, [props.isActive]);
+
+  const firstItemRef = React.useRef<HTMLLIElement>(null);
+
+  React.useEffect(() => {
+    const firstItem = firstItemRef.current;
+    if (firstItem) {
+      firstItem.scrollTo({ behavior: "instant", top: 0 });
+    }
+  }, [user_task]);
 
   return (
     <div
@@ -177,6 +204,7 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
                               <CalendarCard
                                 date={item.date}
                                 task_list={item.task_list}
+                                firstItem={index == 0}
                               />
                             </li>
                           );

@@ -12,7 +12,7 @@ import { NotificationCardProps } from "@/components/notification-card/Notificati
 import { ChatBubbleProps } from "@/components/chat-bubble/ChatBubble";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 
-export type ThemeType = "dark" | "light" | "system";
+export type ThemeType = "dark" | "light";
 export interface ContextType {
   user_data_ctx: UserType | null;
   user_data_handler_ctx: React.Dispatch<UserType>;
@@ -2113,7 +2113,7 @@ export function ContextProvider(props: any) {
 
   //theme
 
-  const [theme, setTheme] = React.useState<ThemeType>("system");
+  const [theme, setTheme] = React.useState<ThemeType>("dark");
 
   React.useEffect(() => {
     const preferdarkmode = window.matchMedia(
@@ -2122,7 +2122,7 @@ export function ContextProvider(props: any) {
 
     const preferenceCookie = getCookie("theme-preference") as ThemeType;
 
-    if (!hasCookie("theme-preference") || preferenceCookie === "system") {
+    if (!hasCookie("theme-preference")) {
       if (preferdarkmode) {
         setTheme("dark");
       } else {

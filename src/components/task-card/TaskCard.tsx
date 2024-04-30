@@ -40,13 +40,8 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
   const pathname = usePathname();
 
   // menjaga agar deskripsi tidak offset dari kartu
-  const description_render = (desc: string) => {
-    if (desc.length > 38) {
-      return `${desc.slice(0, 38)}...`;
-    } else {
-      return desc;
-    }
-  };
+
+  const is_dark = theme_ctx === "dark";
 
   const mouseMoveHandler = (e: React.MouseEvent<HTMLDivElement>) => {};
 
@@ -59,7 +54,7 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
       onDrag={() => {
         console.log("Card dragged");
       }}
-      className={[s.card, theme_ctx === "dark" && s.dark].join(" ")}
+      className={[s.card, is_dark && s.dark].join(" ")}
       onClick={() => {}}
       ref={cardRef}
       onMouseOver={(e) => {}}
@@ -94,12 +89,12 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
       <div className={s.content}>
         <h4 className={[s.title, "bold", "sm"].join(" ")}>{props.name}</h4>
         <p className={[s.desc, "sm", "medium"].join(" ")}>
-          {description_render(props.description)}
+          {props.description}
         </p>
       </div>
       <div className={s.bottom}>
         <ul className={s.assigned_member}>
-          {props.assigned_member.slice(0, 6).map((member, index) => {
+          {props.assigned_member.slice(0, 3).map((member, index) => {
             return (
               <li
                 key={`member-${index}`}
@@ -117,15 +112,14 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
               </li>
             );
           })}
+          {props.assigned_member.length > 3 && (
+                <div className={s.offset_num}>+{props.assigned_member.length - 3}</div>
+              )}
         </ul>
         <div className={s.info}>
-          <div className={[s.subInfo, theme_ctx && s.dark].join(" ")}>
+          <div className={[s.subInfo, is_dark && s.dark].join(" ")}>
             <Image
-              src={
-                theme_ctx === "light"
-                  ? "/icons/comment.svg"
-                  : "/icons/comment_white.svg"
-              }
+              src={!is_dark ? "/icons/comment.svg" : "/icons/comment_white.svg"}
               alt="comment"
               width={16}
               height={16}
@@ -135,12 +129,10 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
               {props.comments_count}
             </span>
           </div>
-          <div className={[s.subInfo, theme_ctx && s.dark].join(" ")}>
+          <div className={[s.subInfo, is_dark && s.dark].join(" ")}>
             <Image
               src={
-                theme_ctx === "light"
-                  ? "/icons/calendar.svg"
-                  : "/icons/calendar_white.svg"
+                !is_dark ? "/icons/calendar.svg" : "/icons/calendar_white.svg"
               }
               alt="calendar"
               width={16}
@@ -193,12 +185,12 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
       <div className={s.content}>
         <h4 className={[s.title, "bold", "sm"].join(" ")}>{props.name}</h4>
         <p className={[s.desc, "sm", "medium"].join(" ")}>
-          {description_render(props.description)}
+          {props.description}
         </p>
       </div>
       <div className={s.bottom}>
         <ul className={s.assigned_member}>
-          {props.assigned_member.slice(0, 6).map((member, index) => {
+          {props.assigned_member.slice(0, 2).map((member, index) => {
             return (
               <li
                 key={`member-${index}`}
@@ -216,6 +208,11 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
               </li>
             );
           })}
+          {props.assigned_member.length > 2 && (
+            <div className={s.offset_num}>
+              +{props.assigned_member.length - 2}
+            </div>
+          )}
         </ul>
         <div className={s.info}>
           <div className={s.subInfo}>
