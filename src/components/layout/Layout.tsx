@@ -199,15 +199,17 @@ const Layout = (props: any) => {
           backdropAction();
         }}
       />
-      <SearchModal
-        closeHandler={() => {
-          backdropAction();
-        }}
-        show={show_search_modal}
-        value={search_value}
-        u_id={u_id}
-        searchChangeHandler={setSearchValue}
-      />
+      {show_search_modal && (
+        <SearchModal
+          closeHandler={() => {
+            backdropAction();
+          }}
+          show={show_search_modal}
+          value={search_value}
+          u_id={u_id}
+          searchChangeHandler={setSearchValue}
+        />
+      )}
       <Navbar
         toggleSidebar={() => setShowSidebar(!show_sidebar)}
         calendarHandler={() => {
@@ -223,35 +225,44 @@ const Layout = (props: any) => {
         alwaysShow={display_width && display_width > 640 ? true : false}
         show={show_sidebar}
       />
-      <CalendarMenu
-        closeHandler={() => {
-          backdropAction();
-        }}
-        isActive={show_calendar_menu}
-        title="Calendar"
-        u_id={u_id}
-      />
-      <MemoizedMemberList
-        closeHandler={backdropAction}
-        show={show_member_list}
-        showWaitingListHandler={() => {
-          setShowWaitingList(true);
-        }}
-        showInvitationMenuHandler={() => {
-          setShowInvitationMenu(true);
-        }}
-      />
-      <MemoizedWaitingList
-        closeHandler={backdropAction}
-        show={show_waiting_list}
-      />
-      <InvitationMenu
-        closeHandler={backdropAction}
-        show={show_invitation_menu}
-        showHandler={() => {
-          setShowInvitationMenu(true);
-        }}
-      />
+      {show_calendar_menu && (
+        <CalendarMenu
+          closeHandler={() => {
+            backdropAction();
+          }}
+          isActive={show_calendar_menu}
+          title="Calendar"
+          u_id={u_id}
+        />
+      )}
+
+      {show_member_list && (
+        <MemoizedMemberList
+          closeHandler={backdropAction}
+          show={show_member_list}
+          showWaitingListHandler={() => {
+            setShowWaitingList(true);
+          }}
+          showInvitationMenuHandler={() => {
+            setShowInvitationMenu(true);
+          }}
+        />
+      )}
+      {show_waiting_list && (
+        <MemoizedWaitingList
+          closeHandler={backdropAction}
+          show={show_waiting_list}
+        />
+      )}
+      {show_invitation_menu && (
+        <InvitationMenu
+          closeHandler={backdropAction}
+          show={show_invitation_menu}
+          showHandler={() => {
+            setShowInvitationMenu(true);
+          }}
+        />
+      )}
       {prompt_modal && <PromptModal {...prompt_modal} />}
       {form_modal && <FormModal {...form_modal} />}
       {/* <NotificationMenu

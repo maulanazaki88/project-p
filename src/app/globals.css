@@ -119,19 +119,19 @@ a {
 
 @media screen and (max-width: 640px) {
   .x-big {
-    font-size: 30px;
-  }
-
-  .big {
     font-size: 24px;
   }
 
+  .big {
+    font-size: 20px;
+  }
+
   .md {
-    font-size: 18px;
+    font-size: 14px;
   }
 
   .sm {
-    font-size: 12px;
+    font-size: 11px;
   }
 }
 

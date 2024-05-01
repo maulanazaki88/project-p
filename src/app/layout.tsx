@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <link rel="icon" href="/vercel.svg" sizes="any" />
+        <link rel="icon" href="/icons/sewu.svg" sizes="any" />
       </head>
       <body className={inter.className}>
         <ContextProvider>{children}</ContextProvider>

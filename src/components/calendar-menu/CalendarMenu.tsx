@@ -113,19 +113,21 @@ const CalendarMenu: React.FC<CalendarMenuProps> = (props) => {
     }
   }, [props.isActive]);
 
-  const firstItemRef = React.useRef<HTMLLIElement>(null);
+
+  const [animationIn, setAnimationIn] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const firstItem = firstItemRef.current;
-    if (firstItem) {
-      firstItem.scrollTo({ behavior: "instant", top: 0 });
+    if (props.isActive) {
+      setAnimationIn(true);
+    } else {
+      setAnimationIn(false)
     }
-  }, [user_task]);
+  }, [props.isActive]);
 
   return (
     <div
       className={[s.menu, is_dark && s.dark].join(" ")}
-      style={{ translate: props.isActive ? "-50% -50%" : "-50% 100%" }}
+      style={{ translate: animationIn ? "-50% -50%" : "-50% 100%" }}
     >
       {isLoading ? (
         <div

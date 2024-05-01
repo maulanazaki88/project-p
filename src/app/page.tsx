@@ -3,21 +3,16 @@ import s from "./page.module.css";
 import React from "react";
 import Image from "next/image";
 import ButtonLarge from "@/components/button-large/ButtonLarge";
-import localFont from "next/font/local";
 import { useRouter } from "next/navigation";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
 import Context, { ContextType } from "@/context/Store";
+import local from "next/font/local";
 
-const inter = localFont({
-  src: "../components/fonts/Inter-VariableFont_slnt,wght.ttf",
+const poppins = local({
+  src: "../components/fonts/POPPINS-SEMIBOLD.ttf",
 });
 
-const poppins = Poppins({
-  display: "swap",
-  subsets: ["latin"],
-  weight: "600",
-});
 
 export default function Home() {
   const router = useRouter();
@@ -28,7 +23,7 @@ export default function Home() {
 
   return (
     <main className={[s.main, !is_dark ? s.light : s.dark].join(" ")}>
-      <figure className={s.figure}>
+      <figure className={[s.figure, is_dark && s.dark].join(" ")}>
         <Image
           className={s.ilust}
           width={430}
@@ -38,6 +33,16 @@ export default function Home() {
         />
       </figure>
       <div className={s.content}>
+        <div className={s.brand}>
+          <Image
+            src={"/icons/sewu.svg"}
+            alt="sewu-logo"
+            width={50}
+            height={50}
+            className={s.brand_icon}
+          />
+          <p className={[s.brand_txt].join(" ")}>Sewu Project</p>
+        </div>
         <div className={s.heading}>
           <h1
             className={[s.title, "x-big", "medium", poppins.className].join(
@@ -53,7 +58,7 @@ export default function Home() {
         </div>
         <Link href="/signup">
           <ButtonLarge
-            bg_color={theme_ctx === "light" ? "#080726" : "#535C91"}
+            bg_color={!is_dark ? "#080726" : "#535C91"}
             color="#fff"
             text="Start Free!"
             onClick={() => {}}

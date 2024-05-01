@@ -10,11 +10,16 @@ export interface WorkspaceInfoModalProps extends WorkspaceType {
 }
 
 const ModalWorkspaceInfo: React.FC<WorkspaceInfoModalProps> = (props) => {
+  const [animationIn, setAnimationIn] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    setAnimationIn(true);
+  }, [props.show]);
   const renderdate = useRenderDate();
   return (
     <div
       className={s.modal}
-      style={{ translate: props.show ? "-50% -50%" : "-50% 100%" }}
+      style={{ translate: animationIn ? "-50% -50%" : "-50% 100%" }}
     >
       <RoundButton
         color="#fff"
@@ -30,7 +35,9 @@ const ModalWorkspaceInfo: React.FC<WorkspaceInfoModalProps> = (props) => {
         }}
       />
       <div className={s.header}>
-        <div className={[s.title, 'md', 'medium'].join(' ')}>Workspace Detail</div>
+        <div className={[s.title, "md", "medium"].join(" ")}>
+          Workspace Detail
+        </div>
       </div>
       <ul className={s.content}>
         <li className={s.item}>

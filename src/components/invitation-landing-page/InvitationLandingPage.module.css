@@ -1,149 +1,221 @@
 .main {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    font-family: inherit;
-    padding: 0 20px 0 20px;
-    background-color: #fff;
-    color: #000;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-family: inherit;
+
+  background-color: #fff;
+  color: #000;
 }
 
 .main.dark {
-    background-color: #2a2e34;
-    color: #fff;
+  background-color: #2a2e34;
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+}
+
+.brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 10;
+  margin-bottom: 30px;
+  user-select: none;
+}
+
+.brand_icon {
+  position: relative;
+  width: 180px;
+  height: auto;
+}
+
+.brand_txt {
+  position: relative;
+  color: inherit;
+  font-size: 20px;
+  margin-top: -30px;
+  font-family: inherit;
+  text-align: center;
 }
 
 .header {
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 60px;
-    font-family: inherit;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0px;
+  font-family: inherit;
 }
 
-.title, .workspace_name {
-    text-align: center;
-    width: 70%;
-    font-family: inherit;
+.title,
+.workspace_name {
+  text-align: center;
+  width: 70%;
+}
+
+.workspace_name {
+  margin-bottom: 20px;
 }
 
 .content {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1000px;
 }
 
-.figure{
-    position: relative;
-    display: fixed;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
-    height: auto;
-    margin-bottom: 30px;
+.figure {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 100vh;
+
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-.ilust{
-    position: relative;
-    display: block;
-    width: 100%;
-    height: auto !important;
-    object-fit: cover;
-    scale: 1.5;
+.figure.dark {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.member_title{
-    position: relative;
-    margin-bottom: 20px;
+.ilust {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto !important;
+  object-fit: cover;
+  scale: 1;
+}
+
+.member_title {
+  position: relative;
+  margin-bottom: 20px;
 }
 
 .member_list {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    list-style: none;
-    width: 100%;
-    margin-bottom: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+
+  margin-bottom: 30px;
 }
 
-.item{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0 10px;
+.username {
+  position: relative;
+  margin-top: 10px;
 }
 
-.action{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: 50%;
+.item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+}
+
+.action {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 50%;
 }
 
 .guide {
-    width: 80%;
-    text-align: center;
-    position: relative;
-    margin-bottom: 30px;
+  width: 80%;
+  text-align: center;
+  position: relative;
+  margin-bottom: 30px;
 }
 
 .suggestion {
-    margin-top: 20px;
-    position: relative;
-    display: inline-flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  margin-top: 20px;
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.suggestion_btn{
-    position: relative;
-    margin-left: 5px;
+.suggestion_btn {
+  position: relative;
+  margin-left: 5px;
 }
 
-.suggestion_btn:active{
-    text-decoration: underline;
+.suggestion_btn:active {
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 640px) {
-    .content{
-        flex-direction: column;
-    }
+  .main {
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100vh;
+    min-height: 740px;
+  }
 
-    .ilust{
-        position: relative;
-        display: block;
-        width: auto;
-        height: 300px !important;
-        object-fit: cover;
-        scale: 1.5;
-    }
+  .ilust {
+    position: relative;
+    display: block;
+    width: auto;
+    height: 300px !important;
+    object-fit: cover;
+    scale: 1;
+  }
 
-    .figure, .action{
-        width: 100%;
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        
-    }
+  .figure,
+  .action {
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
 
-    .action {
-        width: 100%;
-    }
+  .action {
+    width: 90%;
+    padding-bottom: 30px;
+    height: auto;
+  }
+
+  .brand {
+    margin-bottom: 20px;
+  }
+
+  .brand_icon {
+    position: relative;
+    width: 80px;
+    height: auto;
+  }
+
+  .brand_txt {
+    position: relative;
+    color: inherit;
+    font-size: 13px;
+    margin-top: -10px;
+    font-family: inherit;
+    text-align: center;
+  }
 }

@@ -33,6 +33,13 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
 
   const cardRef = React.useRef<HTMLDivElement>(null);
 
+  React.useEffect(() => {
+    const card = cardRef.current;
+    if (props.name == "Untitled" && card) {
+      card.scrollIntoView({ block: "end" });
+    }
+  }, []);
+
   const workspace_name =
     user_workspaces_ctx &&
     user_workspaces_ctx.find((workspace) => workspace.w_id === props.w_id)
@@ -113,8 +120,10 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
             );
           })}
           {props.assigned_member.length > 3 && (
-                <div className={s.offset_num}>+{props.assigned_member.length - 3}</div>
-              )}
+            <div className={s.offset_num}>
+              +{props.assigned_member.length - 3}
+            </div>
+          )}
         </ul>
         <div className={s.info}>
           <div className={[s.subInfo, is_dark && s.dark].join(" ")}>

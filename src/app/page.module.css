@@ -8,6 +8,32 @@
   color: #000;
 }
 
+.brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 10;
+  margin-bottom: 60px;
+  user-select: none;
+}
+
+.brand_icon {
+  position: relative;
+  width: 180px;
+  height: auto;
+}
+
+.brand_txt {
+  position: relative;
+  color: inherit;
+  font-size: 20px;
+  margin-top: -30px;
+  font-family: inherit;
+  text-align: center;
+}
+
 .figure {
   position: relative;
   width: 50%;
@@ -16,11 +42,15 @@
   justify-content: center;
   flex-direction: column;
   height: 100vh;
-  background-color: #BAE5F5;
-  
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.figure.dark {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .ilust {
+  position: absolute;
   display: block;
   width: 100%;
   height: auto;
@@ -45,7 +75,8 @@
   margin-bottom: 40px;
 }
 
-.title, .subtitle {
+.title,
+.subtitle {
   text-align: center;
 }
 
@@ -53,7 +84,7 @@
   line-height: 150%;
 }
 
-.subtitle{
+.subtitle {
   line-height: 180%;
 }
 
@@ -69,7 +100,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-
 }
 
 .suggestion_btn {
@@ -83,16 +113,14 @@
   text-decoration: underline;
 }
 
-
-
-@media screen and (max-width: 500px) {
-
+@media screen and (max-width: 640px) {
   .main {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     width: 100vw;
-    height: 100vh;
+    height:  100vh;
+    min-height: 740px;
   }
 
   .figure {
@@ -102,25 +130,27 @@
     align-items: center;
     justify-content: flex-end;
     flex-direction: column;
-    height: 50vh;
-    background-color: #BAE5F5;
-    margin-bottom: 60px;
+    height: 40vh;
+    background-color: #bae5f5;
   }
 
   .ilust {
     display: block;
     width: 100%;
+    max-width: 317px;
     height: auto;
   }
 
   .content {
     position: relative;
     display: flex;
+    margin: auto;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 80%;
-
+    width: 90%;
+    height: auto;
+    padding-bottom: 30px ;
   }
 
   .heading {
@@ -132,7 +162,8 @@
     margin-bottom: 40px;
   }
 
-  .title, .subtitle {
+  .title,
+  .subtitle {
     text-align: center;
   }
 
@@ -147,7 +178,6 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-
   }
 
   .suggestion_btn {
@@ -157,6 +187,24 @@
     color: #080726;
   }
 
+  .brand {
+    margin-bottom: 20px;
+  }
+
+  .brand_icon {
+    position: relative;
+    width: 80px;
+    height: auto;
+  }
+  
+  .brand_txt {
+    position: relative;
+    color: inherit;
+    font-size: 13px;
+    margin-top: -10px;
+    font-family: inherit;
+    text-align: center;
+  }
 }
 
 .light {

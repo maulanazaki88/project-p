@@ -91,10 +91,18 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     }
   };
 
+  const [animationIn, setAnimationIn] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    if(props.show) {
+      setAnimationIn(true)
+    }
+  }, [props.show])
+
   return (
     <div
       className={[s.menu, is_dark && s.dark].join(" ")}
-      style={{ translate: props.show ? "-50% -50%" : "-50% 100%" }}
+      style={{ translate: animationIn ? "-50% -50%" : "-50% 100%" }}
     >
       {/* <MenuNavbar title={workspace_nam  e} closeHandler={props.closeHandler} /> */}
       <RoundButton

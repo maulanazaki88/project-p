@@ -37,6 +37,8 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
   const [display_width, setDisplayWidth] = React.useState<number | null>(null);
   const [stage, setStage] = React.useState<number>(0);
 
+  const [isDragging, setIsDragging] = React.useState<boolean>();
+
   React.useEffect(() => {
     function getDisplayWidth() {
       const width = window.innerWidth;
@@ -51,23 +53,14 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
     const screen = screenRef.current;
     if (screen && display_width && display_width < 640) {
       const indicatorInterval = setInterval(() => {
-        const mid = screen.scrollLeft + display_width/2;
+        const mid = screen.scrollLeft + display_width / 2;
         if (mid < display_width) {
           setStage(0);
-        } else if (
-          mid >= display_width &&
-          mid < display_width * 2
-        ) {
+        } else if (mid >= display_width && mid < display_width * 2) {
           setStage(1);
-        } else if (
-          mid >= display_width * 2 &&
-          mid < display_width * 3
-        ) {
+        } else if (mid >= display_width * 2 && mid < display_width * 3) {
           setStage(2);
-        } else if (
-          mid >= display_width * 3 &&
-          mid < display_width * 4
-        ) {
+        } else if (mid >= display_width * 3 && mid < display_width * 4) {
           setStage(3);
         }
       }, 250);
@@ -181,11 +174,13 @@ const WorkspacePage: React.FC<WorkspacePageProps> = (props) => {
         {display_width && display_width < 640 && (
           <Indicator is_dark={is_dark} stage={stage} />
         )}
-        <ModalWorkspaceInfo
-          {...props.data}
-          show={show_workspace_info}
-          closeHandler={backdropAction}
-        />
+        {show_workspace_info && (
+          <ModalWorkspaceInfo
+            {...props.data}
+            show={show_workspace_info}
+            closeHandler={backdropAction}
+          />
+        )}
 
         <main className={[s.main, is_dark && s.dark].join(" ")}>
           <WorkspaceControl

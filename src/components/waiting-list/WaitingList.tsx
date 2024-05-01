@@ -62,8 +62,11 @@ const WaitingList: React.FC<WaitingListProps> = (props) => {
     }
   }, [user_workspaces_ctx]);
 
+  const [animationIn, setAnimationIn] = React.useState<boolean>(false);
+
   React.useEffect(() => {
     if (props.show) {
+      setAnimationIn(true);
       fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/workspace/get/waiting-list/${w_id}?w_id=${w_id}&u_id=${u_id}`,
         {
@@ -93,7 +96,7 @@ const WaitingList: React.FC<WaitingListProps> = (props) => {
   return (
     <div
       className={[s.menu, is_dark && s.dark].join(" ")}
-      style={{ translate: props.show ? "-50% -50%" : "-50% 100%" }}
+      style={{ translate: animationIn ? "-50% -50%" : "-50% 100%" }}
     >
       {/* <MenuNavbar
         title={props.workspace_name}

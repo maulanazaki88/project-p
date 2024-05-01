@@ -33,14 +33,19 @@ const InvitationMenu: React.FC<InvitationMenuProps> = (props) => {
 
   const urlencoded = encodeURI(invitation_link);
 
+  const [animationIn, setAnimationIn] = React.useState<boolean>(false);
+
   React.useEffect(() => {
     setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/invitation/${w_id}`);
+    if (props.show) {
+      setAnimationIn(true);
+    }
   }, [props.show]);
 
   return (
     <div
       className={[s.menu, is_dark && s.dark].join(" ")}
-      style={{ translate: props.show ? "0 0" : "0 100vh" }}
+      style={{ translate: animationIn ? "0 0" : "0 100vh" }}
     >
       <RoundButton
         color="transparent"

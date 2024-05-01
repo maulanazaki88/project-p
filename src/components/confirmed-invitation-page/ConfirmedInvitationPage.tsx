@@ -55,7 +55,7 @@ const ConfirmedInvitationPage: React.FC<{ data: UserType }> = (props) => {
           workspace accept your request!
         </p>
         <ButtonLarge
-          bg_color="#080726"
+          bg_color={is_dark ? "#535c91" : "#080726"}
           color="#fff"
           text="Home"
           icon="/icons/home_white.svg"
