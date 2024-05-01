@@ -10,10 +10,12 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Context, { ContextType } from "@/context/Store";
-import local from "next/font/local";
+import { Poppins } from "next/font/google";
 
-const poppins = local({
-  src: "../fonts/POPPINS-SEMIBOLD.ttf",
+const poppins = Poppins({
+  weight: "600",
+
+  subsets: ["latin"],
 });
 
 const InvitationLandingPage: React.FC<{ data: WorkspaceType }> = (props) => {
@@ -57,7 +59,14 @@ const InvitationLandingPage: React.FC<{ data: WorkspaceType }> = (props) => {
             This is an invitation link to join workspace:
           </h2>{" "}
           <br />
-          <span className={[s.workspace_name, "bold", "big", poppins.className].join(" ")}>
+          <span
+            className={[
+              s.workspace_name,
+              "bold",
+              "big",
+              poppins.className,
+            ].join(" ")}
+          >
             {props.data.name}
           </span>
         </div>

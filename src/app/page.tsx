@@ -9,9 +9,11 @@ import Link from "next/link";
 import Context, { ContextType } from "@/context/Store";
 import local from "next/font/local";
 
-const poppins = local({
-  src: "../components/fonts/POPPINS-SEMIBOLD.ttf",
-});
+const poppins = Poppins({
+  weight: "600",
+  
+  subsets: ['latin'],
+})
 
 
 export default function Home() {
